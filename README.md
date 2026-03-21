@@ -4,6 +4,7 @@
 
 ![TypeScript](https://skillicons.dev/icons?i=ts)
 ![Next.js](https://skillicons.dev/icons?i=nextjs)
+![SASS](https://skillicons.dev/icons?i=sass)
 ![Tailwind](https://skillicons.dev/icons?i=tailwind)
 
 ## ⚙️ Back-end
@@ -12,8 +13,8 @@
 
 ## ✍️ Author
 
-[Illia Movchko](https://github.com/sacrificed666)
+**[Illia Movchko](https://github.com/sacrificed666)**
 
 ## 📝 License
 
-[MIT License](https://choosealicense.com/licenses/mit/)
+This project is licensed under the **[MIT License](https://choosealicense.com/licenses/mit/)**.

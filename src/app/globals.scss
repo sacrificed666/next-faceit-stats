@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@use "tailwindcss";
 
 @theme {
   --color-primary: #ff5500;
@@ -7,6 +7,9 @@
   --color-win: #16a34a;
   --color-loss: #dc2626;
 }
+
+$scrollbar-color: #333;
+$scrollbar-size: 6px;
 
 html,
 body {
@@ -27,23 +30,23 @@ body {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #333 transparent;
-}
+  scrollbar-color: $scrollbar-color transparent;
 
-*::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
+  &::-webkit-scrollbar {
+    width: $scrollbar-size;
+    height: $scrollbar-size;
 
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
+    &-track {
+      background: transparent;
+    }
 
-*::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 3px;
+    &-thumb {
+      background: $scrollbar-color;
+      border-radius: calc($scrollbar-size / 2);
+    }
+  }
 }
 
 .recharts-tooltip-cursor {
-  fill: rgba(255, 255, 255, 0.03);
+  fill: rgb(255 255 255 / 3%);
 }
