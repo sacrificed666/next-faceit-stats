@@ -1,0 +1,191 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "jsx-a11y", "import", "unicorn", "oxc", "vitest", "nextjs"],
+  "jsPlugins": ["./lint/no-comments.js"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "perf": "error"
+  },
+  "options": {
+    "typeAware": true
+  },
+  "env": {
+    "browser": true,
+    "es2024": true
+  },
+  "ignorePatterns": [".next", "coverage", "playwright-report", "test-results", "next-env.d.ts"],
+  "rules": {
+    "local/no-comments": "error",
+    "eqeqeq": "error",
+    "no-console": "error",
+    "prefer-const": "error",
+    "no-param-reassign": [
+      "error",
+      {
+        "props": false
+      }
+    ],
+    "import/no-cycle": "error",
+    "import/no-duplicates": "error",
+    "import/no-self-import": "error",
+    "import/no-unassigned-import": [
+      "error",
+      {
+        "allow": ["**/*.scss", "server-only", "@testing-library/jest-dom/vitest"]
+      }
+    ],
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "error",
+    "react/only-export-components": [
+      "error",
+      {
+        "allowConstantExport": true
+      }
+    ],
+    "react/button-has-type": "error",
+    "react/jsx-key": "error",
+    "react/jsx-no-useless-fragment": "error",
+    "react/self-closing-comp": "error",
+    "react/no-array-index-key": "error",
+    "react/purity": "error",
+    "react/refs": "error",
+    "react/immutability": "error",
+    "react/set-state-in-effect": "error",
+    "react/set-state-in-render": "error",
+    "react/static-components": "error",
+    "react/globals": "error",
+    "react/use-memo": "error",
+    "react/unsupported-syntax": "error",
+    "react/incompatible-library": "error",
+    "react/preserve-manual-memoization": "error",
+    "react/no-deriving-state-in-effects": "error",
+    "react/react-in-jsx-scope": "off",
+    "typescript/consistent-type-imports": "error",
+    "typescript/consistent-type-definitions": ["error", "interface"],
+    "typescript/no-explicit-any": "error",
+    "typescript/no-non-null-assertion": "error",
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/await-thenable": "error",
+    "typescript/switch-exhaustiveness-check": "error",
+    "typescript/no-unnecessary-type-assertion": "error",
+    "typescript/no-unnecessary-condition": "error",
+    "typescript/prefer-nullish-coalescing": "error",
+    "typescript/prefer-optional-chain": "error",
+    "typescript/restrict-template-expressions": "error",
+    "typescript/consistent-return": "off",
+    "unicorn/prefer-node-protocol": "error",
+    "unicorn/prefer-at": "error",
+    "unicorn/prefer-string-replace-all": "error",
+    "unicorn/no-useless-undefined": "error",
+    "unicorn/prefer-structured-clone": "error",
+    "vitest/no-focused-tests": "error",
+    "vitest/no-disabled-tests": "error",
+    "vitest/no-identical-title": "error",
+    "vitest/prefer-to-be": "error",
+    "vitest/prefer-to-have-length": "error",
+    "vitest/valid-title": "error"
+  },
+  "overrides": [
+    {
+      "files": [
+        "next.config.ts",
+        "vitest.config.mts",
+        "playwright.config.ts",
+        "e2e/**",
+        "lint/**",
+        "scripts/**",
+        "src/features/squad/api/**",
+        "src/features/seo/og/**"
+      ],
+      "env": {
+        "node": true
+      }
+    },
+    {
+      "files": ["src/app/**"],
+      "rules": {
+        "react/only-export-components": "off"
+      }
+    },
+    {
+      "files": ["src/app/**/opengraph-image.tsx", "src/app/**/apple-icon.tsx", "src/features/seo/og/**"],
+      "rules": {
+        "nextjs/no-img-element": "off"
+      }
+    },
+    {
+      "files": ["src/app/global-not-found.tsx"],
+      "rules": {
+        "nextjs/no-html-link-for-pages": "off"
+      }
+    },
+    {
+      "files": ["src/shared/lib/log.ts"],
+      "rules": {
+        "no-console": "off"
+      }
+    },
+    {
+      "files": ["src/shared/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/app/**", "@/features/**", "@/widgets/**"],
+                "message": "Shared code must not depend on the app, features or widgets layers."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/app/**"],
+                "message": "Features must not depend on routes."
+              },
+              {
+                "group": ["@/widgets/**"],
+                "message": "Features must not depend on widgets."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/widgets/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/app/**"],
+                "message": "Widgets must not depend on routes."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["**/*.test.ts", "**/*.test.tsx", "src/test/**"],
+      "rules": {
+        "typescript/no-non-null-assertion": "off",
+        "typescript/no-unnecessary-condition": "off",
+        "no-restricted-imports": "off"
+      }
+    }
+  ]
+}

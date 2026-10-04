@@ -1,0 +1,105 @@
+import type { Metadata } from "next";
+import { notFound, permanentRedirect } from "next/navigation";
+
+import { profileData } from "@/features/player/model/profile";
+import { PlayerProfile } from "@/features/player/ui/PlayerProfile";
+import { ProfileHero } from "@/features/player/ui/ProfileHero";
+import { alternates, playerSchema, social } from "@/features/seo/model/seo";
+import { JsonLd } from "@/features/seo/ui/JsonLd";
+import { getSquad, squadNicknames } from "@/features/squad/api/loader";
+import { decodeNickname, findPlayer } from "@/features/squad/model/players";
+import { DEFAULT_RANGE, selectMatches } from "@/features/squad/model/range";
+import { summarize } from "@/features/squad/model/stats";
+import { SquadLink } from "@/features/squad/ui/SquadLink";
+import { SquadStatus } from "@/features/squad/ui/SquadStatus";
+import { isLocale } from "@/shared/i18n/locales";
+import { getI18n } from "@/shared/i18n/server";
+import { siteUrl } from "@/shared/lib/site";
+import { playerPath } from "@/shared/lib/urls";
+import { Icon } from "@/shared/ui/Icon";
+
+const PLACEHOLDER = "__squad__";
+
+export async function generateStaticParams() {
+  const nicknames = await squadNicknames();
+  return nicknames.length > 0 ? nicknames.map((nickname) => ({ nickname })) : [{ nickname: PLACEHOLDER }];
+}
+
+export async function generateMetadata({ params }: PageProps<"/[locale]/players/[nickname]">): Promise<Metadata> {
+  const { locale, nickname } = await params;
+  if (!isLocale(locale)) return {};
+  const [squad, i18n] = await Promise.all([getSquad(), getI18n(locale)]);
+  const { t, format } = i18n;
+  const player = squad.status === "ready" ? findPlayer(squad.players, nickname) : null;
+  if (!player) return { title: t("player.notFound"), robots: { index: false, follow: true } };
+
+  const summary = summarize(
+    selectMatches(player.matches, DEFAULT_RANGE, squad.status === "ready" ? squad.updatedAt : 0),
+  );
+  const facts = { player: player.nickname, level: player.level, elo: format.integer(player.elo) };
+  const description =
+    summary.matches > 0
+      ? t("meta.player", {
+          ...facts,
+          count: summary.matches,
+          kd: format.decimal(summary.kd, 2),
+          adr: format.decimal(summary.adr, 1),
+          hs: format.percent(summary.hsPercent, 0),
+          win: format.percent(summary.winRate, 0),
+        })
+      : t("meta.playerShort", facts);
+  const links = alternates(locale, `/players/${encodeURIComponent(player.nickname)}`);
+  const title = `${player.nickname} · ${t("app.name")}`;
+
+  return {
+    title: player.nickname,
+    description,
+    alternates: links,
+    ...social(i18n, { url: links.canonical, title, description, profile: player.nickname }),
+  };
+}
+
+export default async function PlayerPage({ params }: PageProps<"/[locale]/players/[nickname]">) {
+  const { locale, nickname } = await params;
+  if (!isLocale(locale)) notFound();
+  const [squad, i18n] = await Promise.all([getSquad(), getI18n(locale)]);
+
+  if (squad.status !== "ready") return <SquadStatus problem={squad} i18n={i18n} />;
+  const player = findPlayer(squad.players, nickname);
+  if (!player) notFound();
+  if (decodeNickname(nickname) !== player.nickname) permanentRedirect(playerPath(locale, player.nickname));
+
+  return (
+    <div className="flex flex-col gap-8 pt-2 sm:gap-10">
+      <JsonLd data={playerSchema(player, siteUrl(), squad.updatedAt, i18n)} />
+      <nav aria-label={i18n.t("player.breadcrumb")}>
+        <ol className="flex items-center gap-1.5 text-sm text-ink-muted">
+          <li>
+            <SquadLink className="font-semibold text-ink-secondary hover:text-ink hover:underline">
+              {i18n.t("nav.squad")}
+            </SquadLink>
+          </li>
+          <li aria-hidden="true">
+            <Icon name="chevronRight" size={14} />
+          </li>
+          <li aria-current="page" className="truncate font-semibold text-ink">
+            {player.nickname}
+          </li>
+        </ol>
+      </nav>
+      <ProfileHero
+        player={{
+          nickname: player.nickname,
+          avatar: player.avatar,
+          country: player.country,
+          elo: player.elo,
+          level: player.level,
+          region: player.region,
+          regionRank: player.regionRank,
+          steamId: player.steamId,
+        }}
+      />
+      <PlayerProfile data={profileData(squad.players, player, squad.updatedAt)} />
+    </div>
+  );
+}

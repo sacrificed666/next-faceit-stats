@@ -1,0 +1,138 @@
+# 🏁 Getting started
+
+## 📋 Requirements
+
+| Tool              | Version                                                      |
+| ----------------- | ------------------------------------------------------------ |
+| 🟢 Node.js        | **24.15 or newer** (`.nvmrc` pins the active LTS line, `24`) |
+| 📦 npm            | 11 or newer (ships with Node 24)                             |
+| 🔑 FACEIT API key | A **server-side** key for the FACEIT Data API                |
+| 🌐 Browser        | Any evergreen browser                                        |
+
+> [!TIP]
+> With a version manager, run `nvm use` (or `fnm use`) in the project root to switch to the Node.js line from `.nvmrc`.
+
+## 🔑 Getting a FACEIT API key
+
+1. 🧑‍💻 Sign in at [developers.faceit.com](https://developers.faceit.com) with your FACEIT account.
+2. 📱 Create an app. Any name works, for example _Squad stats_.
+3. 🗝️ Open the app's **API keys** tab and create a key of type **Server side**.
+4. 📋 Copy the key into `FACEIT_API_KEY` in `.env` as it is: no quotes and no `Bearer` prefix.
+
+> [!IMPORTANT]
+> Use a **server-side** key. Client-side keys are bound to browser origins and FACEIT rejects them when the server calls the API.
+
+> [!CAUTION]
+> Never commit `.env` and never give the key a `NEXT_PUBLIC_` prefix. The key only lives on the server and is never sent to the browser, see [Security](./security.md#-the-api-key).
+
+## ⚙️ Environment variables
+
+Copy `.env.example` to `.env` and fill it in:
+
+```bash
+cp .env.example .env
+```
+
+| Variable            | Required | What it does                                                                                                                      |
+| ------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| 🔑 `FACEIT_API_KEY` | Required | Server-side FACEIT Data API key                                                                                                   |
+| 🧑‍🤝‍🧑 `FACEIT_PLAYERS` | Required | FACEIT nicknames separated by commas, spaces or new lines, up to 20                                                               |
+| 🌍 `SITE_URL`       | Optional | Public address used in canonical links, Open Graph cards and the sitemap. On Vercel the production domain is used automatically   |
+| 🛰️ `FACEIT_API_URL` | Optional | Base address of the FACEIT Data API, `https://open.faceit.com/data/v4/` by default. The end-to-end tests point it at a local mock |
+
+> [!NOTE]
+> FACEIT looks nicknames up **case-sensitively**: `JACKSONGG` and `jacksongg` are different players. Copy each nickname exactly as it appears on the FACEIT profile.
+
+Without the two required variables the app still starts and shows which ones are missing. Restart the server after changing `.env`.
+
+## 📦 Install and run
+
+```bash
+npm ci
+npm run dev
+```
+
+Open `http://localhost:3000`. It redirects to your browser's language, for example `/en` or `/uk`. The first page load fetches the whole squad from FACEIT, which takes a few seconds; after that the data is cached for five minutes.
+
+## 📜 npm scripts
+
+| Script                  | What it does                                                                              |
+| ----------------------- | ----------------------------------------------------------------------------------------- |
+| `npm run dev`           | 🔥 Starts the Next.js dev server with Turbopack                                           |
+| `npm run build`         | 📦 Type-checks and builds the production bundle, prerendering every page                  |
+| `npm start`             | 👀 Serves the production build                                                            |
+| `npm run typecheck`     | 🧠 Generates the route types and runs the TypeScript 7 compiler without emitting          |
+| `npm run lint`          | 🧹 Lints with Oxlint, including type-aware, React Compiler, Next.js, a11y and layer rules |
+| `npm run lint:fix`      | 🩹 Applies the automatic Oxlint fixes                                                     |
+| `npm run format`        | 🎨 Formats every supported file with Oxfmt                                                |
+| `npm run format:check`  | 🔎 Fails if a file is not formatted                                                       |
+| `npm test`              | 👁️ Starts Vitest in watch mode                                                            |
+| `npm run test:run`      | 🧪 Runs the whole unit test suite once                                                    |
+| `npm run test:coverage` | 📊 Runs the unit tests with V8 coverage and enforces the thresholds                       |
+| `npm run test:e2e`      | 🎭 Builds the app against a mock FACEIT API and runs Playwright, axe and Lighthouse       |
+| `npm run check`         | ✅ Lint, format check, type check and unit tests in one go; run it before pushing         |
+
+> [!TIP]
+> Install the browser for the end-to-end tests once with `npx playwright install chromium`.
+
+## 🗂️ Project layout
+
+```text
+next-faceit-stats/
+├── .github/
+│   ├── ISSUE_TEMPLATE/              Bug report and feature request forms
+│   ├── workflows/ci.yml             Lint, format, types, unit tests, build, end-to-end tests, dependency review
+│   ├── workflows/codeql.yml         CodeQL code scanning
+│   ├── dependabot.yml               Weekly dependency and GitHub Actions updates
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── SECURITY.md                  How to report vulnerabilities
+├── docs/                            This documentation and its screenshots
+├── e2e/                             Playwright specs and the mock FACEIT API they run against
+├── lint/no-comments.js              Custom Oxlint rule that forbids comments
+├── scripts/
+│   ├── build-report.mjs             Checks the production build and reports the bundle size in CI
+│   └── coverage-summary.mjs         Coverage table for the CI summary
+├── src/
+│   ├── app/                         Routes: overview, players and compare under [locale], 404, sitemap, robots, icons
+│   ├── widgets/
+│   │   ├── Header/                  Logo, navigation, language menu and theme switch
+│   │   └── Footer/                  Credits and links
+│   ├── features/
+│   │   ├── squad/                   api: FACEIT client, parser and cached loader; model: ranges, statistics, duos; ui: names, toolbar, badges
+│   │   ├── dashboard/               The squad overview sections, the recent matches feed and the records
+│   │   ├── player/                  The player page and its per-range context
+│   │   ├── compare/                 The comparison of two players
+│   │   └── seo/                     Structured data, social metadata and the share images
+│   ├── shared/
+│   │   ├── i18n/                    Languages, the eight catalogs, plurals, the provider and the server loader
+│   │   ├── lib/                     Formatting, scales, addresses, site settings, theme and the inline boot script
+│   │   ├── hooks/                   Address state, time zone, clock and sorting
+│   │   ├── ui/                      Building blocks: sections, tiles, bars, the line chart, tables, meters, icons
+│   │   └── assets/fonts/            Montserrat for the generated images
+│   ├── proxy.ts                     Language redirects, canonical nicknames and 404s before a page renders
+│   ├── test/                        Test setup, factories and FACEIT fixtures
+│   └── types/                       Global type augmentations
+├── next.config.ts                   Cache profiles, typed routes, images and security headers
+├── playwright.config.ts             Browsers, the mock API and the production server for end-to-end tests
+├── vitest.config.mts                Unit test environment and coverage thresholds
+├── .oxlintrc.json                   Lint rules, including the layer rules
+└── .oxfmtrc.json                    Formatting rules
+```
+
+Tests sit next to the code they cover as `*.test.ts(x)`. How the layers work together is explained in [Architecture](./architecture.md#-layers).
+
+## 💻 Editor setup
+
+Editor settings are not committed. For the best experience in VS Code, install:
+
+- 🦀 **Oxc**: inline Oxlint diagnostics and Oxfmt formatting on save
+- ⚡ **Vitest**: run and debug tests from the editor
+- 🎭 **Playwright Test for VS Code**: run end-to-end tests and record locators
+- 📝 **EditorConfig**: consistent whitespace settings (`.editorconfig` is part of the repository)
+- 🔷 Select **TypeScript: Use Workspace Version** so the editor uses the project's TypeScript and the Next.js plugin
+
+## 👉 Next steps
+
+- ✨ See what the dashboard can do in [Features](./features.md).
+- 🏗️ Follow a request from FACEIT to the page in [Architecture](./architecture.md).
+- 🚀 Put it online with [Deployment](./deployment.md).

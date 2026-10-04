@@ -1,0 +1,23 @@
+import type { MetadataRoute } from "next";
+
+import { en } from "@/shared/i18n/messages/en";
+import { SITE } from "@/shared/lib/site";
+
+export default function manifest(): MetadataRoute.Manifest {
+  return {
+    name: en["app.name"],
+    short_name: en["app.name"],
+    description: en["app.description"],
+    lang: "en",
+    start_url: "/",
+    scope: "/",
+    display: "standalone",
+    background_color: SITE.themeColor.dark,
+    theme_color: SITE.themeColor.dark,
+    categories: ["sports", "games", "entertainment"],
+    icons: [
+      { src: "/icon.svg", sizes: "any", type: "image/svg+xml" },
+      { src: "/apple-icon", sizes: "180x180", type: "image/png" },
+    ],
+  };
+}

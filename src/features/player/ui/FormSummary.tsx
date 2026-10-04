@@ -1,0 +1,91 @@
+"use client";
+
+import { formatMetric, METRICS, METRIC_KEYS, type MetricKey } from "@/features/squad/model/metrics";
+import type { PlayerView } from "@/features/squad/model/squad";
+import type { LifetimeStats } from "@/features/squad/model/types";
+import { FormGuide } from "@/features/squad/ui/ResultBadge";
+import { useI18n } from "@/shared/i18n/useI18n";
+import { Delta } from "@/shared/ui/Delta";
+import { EmptyState } from "@/shared/ui/EmptyState";
+import { Section } from "@/shared/ui/Section";
+import { StatTile } from "@/shared/ui/StatTile";
+
+interface FormSummaryProps {
+  view: PlayerView;
+  averages: Readonly<Record<MetricKey, number>>;
+}
+
+function lifetimeValue(lifetime: LifetimeStats | null, key: MetricKey): number | null {
+  if (!lifetime) return null;
+  switch (key) {
+    case "kd":
+      return lifetime.kd;
+    case "hsPercent":
+      return lifetime.hsPercent;
+    case "winRate":
+      return lifetime.winRate;
+    case "adr":
+      return lifetime.adr;
+    case "kr":
+      return null;
+  }
+}
+
+export function FormSummary({ view, averages }: FormSummaryProps) {
+  const { t, format } = useI18n();
+  const { summary, matches, streak, player } = view;
+  return (
+    <Section
+      id="form"
+      title={t("form.title")}
+      description={summary.matches > 0 ? t("form.description", { count: summary.matches }) : undefined}
+    >
+      {summary.matches === 0 ? (
+        <div className="panel">
+          <EmptyState title={t("form.empty")} />
+        </div>
+      ) : (
+        <div className="flex flex-col gap-4">
+          <dl className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-6">
+            {METRIC_KEYS.map((key) => {
+              const definition = METRICS[key];
+              const average = averages[key];
+              const lifetime = lifetimeValue(player.lifetime, key);
+              const squad = t("form.squad", { value: formatMetric(format, key, average) });
+              return (
+                <StatTile
+                  key={key}
+                  label={t(definition.name)}
+                  value={formatMetric(format, key, summary[key])}
+                  delta={
+                    <Delta value={summary[key] - average} digits={definition.digits} points={definition.percent} />
+                  }
+                  detail={
+                    lifetime === null
+                      ? squad
+                      : `${squad} · ${t("form.lifetime", { value: formatMetric(format, key, lifetime) })}`
+                  }
+                />
+              );
+            })}
+            <StatTile
+              label={t("form.record")}
+              value={
+                <span>
+                  <span aria-hidden="true">{`${summary.wins}-${summary.losses}`}</span>
+                  <span className="sr-only">{t("record.spoken", { wins: summary.wins, losses: summary.losses })}</span>
+                </span>
+              }
+              detail={streak ? t(streak.won ? "form.won" : "form.lost", { count: streak.length }) : undefined}
+            />
+          </dl>
+          <div className="panel flex flex-wrap items-center gap-3 p-4">
+            <span className="text-sm font-semibold text-ink-secondary">{t("form.last10")}</span>
+            <FormGuide matches={matches.slice(0, 10)} label={t("form.last10")} />
+            <span className="ml-auto text-xs text-ink-muted">{t("form.newest")}</span>
+          </div>
+        </div>
+      )}
+    </Section>
+  );
+}
