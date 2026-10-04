@@ -96,12 +96,25 @@ npm run test:e2e     # browsers, accessibility and Lighthouse against a mock FAC
 | 🤝 [Contributing](./docs/contributing.md)       | Workflow, code style and commit conventions                |
 | ❓ [FAQ](./docs/faq.md)                         | Common questions                                           |
 
+## 📌 Good to know
+
+- 🔤 **Nicknames are case-sensitive.** Copy them into `FACEIT_PLAYERS` exactly as they appear on FACEIT.
+- 🗃️ **Data refreshes every five minutes**, and one refresh serves every page, language and share card.
+- 🎮 **Only 5v5 matches count**, up to the last 100 of each player.
+- 🔒 **Nothing is tracked.** The only cookie remembers the language you picked, and the theme stays in your browser.
+
 > [!NOTE]
 > Data comes from the FACEIT Data API. This project is not affiliated with FACEIT.
 
 ## ✍️ Author
 
 **[Illia Movchko](https://github.com/sacrificed666)**
+
+## ✨ Credits
+
+- **[FACEIT Data API](https://docs.faceit.com/docs/data-api/data)**: players, matches, lifetime statistics and rankings
+- **[flagcdn](https://flagcdn.com)**: country and language flags
+- **[Montserrat](https://github.com/JulietaUla/Montserrat)**: the typeface, under the SIL Open Font License
 
 ## 📝 License
 

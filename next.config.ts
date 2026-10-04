@@ -35,6 +35,7 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   typedRoutes: true,
   poweredByHeader: false,
+  agentRules: false,
   experimental: {
     globalNotFound: true,
     staticGenerationMinPagesPerWorker: 500,

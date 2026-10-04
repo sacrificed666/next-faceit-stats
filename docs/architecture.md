@@ -211,4 +211,5 @@ When the address asks for something other than the prerendered default (`?range=
 - 🌍 **No i18n library**: typed catalogs, `Intl.PluralRules` and a few lines of interpolation cover everything, and a missing key is a type error.
 - 🗄️ **Cache Components** instead of route-level `revalidate`: caching sits next to the data it describes, and different outcomes can have different lifetimes.
 - 🎭 **Playwright with a mock API**: the end-to-end tests build the real app against `e2e/faceit-api.ts`, so they are fast, deterministic and never touch the real quota.
+- 🤖 **No agent files**: `agentRules: false` keeps `next dev` from adding AI agent instruction files to the repository.
 - 📦 **Explicit install scripts**: npm blocks dependency install scripts unless `allowScripts` in `package.json` approves them; the two that exist (`@parcel/watcher`, `fsevents`) are denied because both ship prebuilt binaries.
