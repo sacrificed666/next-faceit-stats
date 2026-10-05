@@ -8,7 +8,7 @@
 | 🧩 UI        | React 19 with the React Compiler, Server and Client Components                |
 | 🎨 Styling   | Tailwind CSS 4 utilities on top of Sass design tokens in `globals.scss`       |
 | 📈 Charts    | A hand-written SVG line chart and HTML bars, no chart library                 |
-| 🌍 Languages | Eight typed catalogs, `Intl` for plurals, numbers and dates, no i18n library  |
+| 🌍 Languages | Ten typed catalogs, `Intl` for plurals, numbers and dates, no i18n library    |
 | 🔷 Language  | TypeScript 7 in strict mode with `noUncheckedIndexedAccess`                   |
 | 🧹 Quality   | Oxlint (type-aware), Oxfmt, Vitest, Testing Library, Playwright, axe          |
 | 🌐 Data      | FACEIT Data API v4 with a server-side key                                     |
@@ -21,17 +21,17 @@ The source follows a feature-sliced layout of four layers. Each layer may only i
 flowchart TB
   App["🧭 app<br/>routes, layouts, metadata, share images"] --> Widgets["🧱 widgets<br/>Header, Footer"]
   App --> Features
-  Widgets --> Features["🧩 features<br/>squad · dashboard · player · compare · seo"]
+  Widgets --> Features["🧩 features<br/>squad · dashboard · player · compare · settings · seo"]
   Widgets --> Shared
   Features --> Shared["🧰 shared<br/>ui · lib · hooks · i18n · assets"]
 ```
 
-| Layer       | Folder                   | Holds                                                                                             |
-| ----------- | ------------------------ | ------------------------------------------------------------------------------------------------- |
-| 🧭 App      | `src/app`                | Next.js routes, layouts, loading and error states, metadata files and share images                |
-| 🧱 Widgets  | `src/widgets/<Name>`     | Page chrome built from features: the header with its navigation, language and theme menus, footer |
-| 🧩 Features | `src/features/<feature>` | One folder per domain area, split into `api`, `model` and `ui` segments                           |
-| 🧰 Shared   | `src/shared`             | Building blocks with no knowledge of the squad: UI kit, formatting, hooks, translations, fonts    |
+| Layer       | Folder                   | Holds                                                                                          |
+| ----------- | ------------------------ | ---------------------------------------------------------------------------------------------- |
+| 🧭 App      | `src/app`                | Next.js routes, layouts, loading and error states, metadata files and share images             |
+| 🧱 Widgets  | `src/widgets/<Name>`     | Page chrome built from features: the header with its navigation and settings, the footer       |
+| 🧩 Features | `src/features/<feature>` | One folder per domain area, split into `api`, `model` and `ui` segments                        |
+| 🧰 Shared   | `src/shared`             | Building blocks with no knowledge of the squad: UI kit, formatting, hooks, translations, fonts |
 
 | Feature        | Segments             | Responsibility                                                               |
 | -------------- | -------------------- | ---------------------------------------------------------------------------- |
@@ -39,10 +39,13 @@ flowchart TB
 | 📊 `dashboard` | `model`, `ui`        | The squad overview, the recent matches feed and the records                  |
 | 👤 `player`    | `model`, `ui`        | The player page and the per-range context it receives from the server        |
 | ⚔️ `compare`   | `model`, `ui`        | The comparison of two players                                                |
+| ⚙️ `settings`  | `model`, `ui`        | The settings panel: the theme in `localStorage` and the language links       |
 | 🔎 `seo`       | `model`, `og`, `ui`  | Structured data, social metadata and the generated share images              |
 
 > [!IMPORTANT]
 > The direction of imports is enforced by Oxlint's `no-restricted-imports` in `.oxlintrc.json`: shared code cannot import features, widgets or routes, and features cannot import widgets or routes. Features may use each other, so the pages build on the `squad` feature.
+
+Every component has its own folder named after it, with its tests next to it: `shared/ui/Avatar/Avatar.tsx`, `features/dashboard/ui/MapPool/MapPool.tsx`. Components are arrow functions with a default export; models, hooks and helpers use named exports.
 
 `src/proxy.ts` sits next to the layers because Next.js expects it there, and `src/test` holds the test setup and fixtures.
 
@@ -136,7 +139,7 @@ Three layers keep FACEIT traffic low:
 | 🔂 One load at a time | `getSquad()` joins a load that is already running | Until that load finishes                      |
 | 🗄️ `"use cache"`      | The snapshot of `getSquad()`                      | Depends on the outcome, see below             |
 
-`getSquad()` starts with `"use cache"`, so its result becomes part of each page's static shell and is shared by everything rendered in the same pass: the pages in all eight languages, their metadata, the sitemap and the share images.
+`getSquad()` starts with `"use cache"`, so its result becomes part of each page's static shell and is shared by everything rendered in the same pass: the pages in all ten languages, their metadata, the sitemap and the share images.
 
 | Outcome                                       | `cacheLife`                                           |
 | --------------------------------------------- | ----------------------------------------------------- |
@@ -153,7 +156,7 @@ When a page is older than its revalidation time, the next visitor still gets the
 
 | Route                                                         | Rendering                                                                     |
 | ------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `/[locale]`                                                   | 📄 Static for all eight languages, regenerated in the background              |
+| `/[locale]`                                                   | 📄 Static for all ten languages, regenerated in the background                |
 | `/[locale]/players/[nickname]`                                | 📄 Prerendered for every squad member and language via `generateStaticParams` |
 | `/[locale]/compare`                                           | 📄 Static; the pair comes from the address in the browser                     |
 | `/[locale]/**/opengraph-image/card`                           | 🖼️ Prerendered PNGs per page and language, regenerated with the data          |

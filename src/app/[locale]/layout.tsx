@@ -4,14 +4,14 @@ import { notFound } from "next/navigation";
 
 import { social } from "@/features/seo/model/seo";
 import { createI18n } from "@/shared/i18n/create";
-import { I18nProvider } from "@/shared/i18n/I18nProvider";
+import I18nProvider from "@/shared/i18n/I18nProvider";
 import { isLocale, LOCALES } from "@/shared/i18n/locales";
 import { getI18n, getMessages } from "@/shared/i18n/server";
 import { BOOT_SCRIPT } from "@/shared/lib/boot";
 import { isIndexable, SITE, siteUrl } from "@/shared/lib/site";
-import { QueryReady } from "@/shared/ui/QueryReady";
-import { Footer } from "@/widgets/Footer/Footer";
-import { Header } from "@/widgets/Header/Header";
+import QueryReady from "@/shared/ui/QueryReady/QueryReady";
+import Footer from "@/widgets/Footer/Footer";
+import Header from "@/widgets/Header/Header";
 
 import "@/app/globals.scss";
 
@@ -21,11 +21,9 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
 });
 
-export function generateStaticParams() {
-  return LOCALES.map((locale) => ({ locale }));
-}
+export const generateStaticParams = () => LOCALES.map((locale) => ({ locale }));
 
-export async function generateMetadata({ params }: LayoutProps<"/[locale]">): Promise<Metadata> {
+export const generateMetadata = async ({ params }: LayoutProps<"/[locale]">): Promise<Metadata> => {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
   const i18n = await getI18n(locale);
@@ -47,7 +45,7 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">): Pr
       : { index: false, follow: false },
     formatDetection: { telephone: false, address: false, email: false },
   };
-}
+};
 
 export const viewport: Viewport = {
   themeColor: [
@@ -57,7 +55,7 @@ export const viewport: Viewport = {
   colorScheme: "light dark",
 };
 
-export default async function LocaleLayout({ children, params }: LayoutProps<"/[locale]">) {
+const LocaleLayout = async ({ children, params }: LayoutProps<"/[locale]">) => {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const messages = await getMessages(locale);
@@ -90,4 +88,6 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
       </body>
     </html>
   );
-}
+};
+
+export default LocaleLayout;

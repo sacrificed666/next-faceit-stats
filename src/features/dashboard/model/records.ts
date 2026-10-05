@@ -32,7 +32,7 @@ const RULES: Record<MatchRecordKind, RecordRule> = {
   mvps: { value: (match) => match.mvps, eligible: () => true },
 };
 
-export function matchRecord(kind: MatchRecordKind, members: readonly SquadMember[]): MatchRecord | null {
+export const matchRecord = (kind: MatchRecordKind, members: readonly SquadMember[]): MatchRecord | null => {
   const rule = RULES[kind];
   let best: MatchRecord | null = null;
   for (const member of members) {
@@ -45,22 +45,22 @@ export function matchRecord(kind: MatchRecordKind, members: readonly SquadMember
     }
   }
   return best && best.value > 0 ? best : null;
-}
+};
 
-export function longestWinStreak(members: readonly SquadMember[]): PlayerRecord | null {
+export const longestWinStreak = (members: readonly SquadMember[]): PlayerRecord | null => {
   let best: PlayerRecord | null = null;
   for (const member of members) {
     const value = longestStreak(member.matches.toReversed(), true);
     if (value > 0 && (!best || value > best.value)) best = { playerId: member.id, value };
   }
   return best;
-}
+};
 
-export function mostAces(members: readonly SquadMember[]): PlayerRecord | null {
+export const mostAces = (members: readonly SquadMember[]): PlayerRecord | null => {
   let best: PlayerRecord | null = null;
   for (const member of members) {
     const value = member.matches.reduce((sum, match) => sum + match.pentaKills, 0);
     if (value > 0 && (!best || value > best.value)) best = { playerId: member.id, value };
   }
   return best;
-}
+};

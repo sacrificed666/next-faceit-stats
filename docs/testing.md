@@ -2,16 +2,16 @@
 
 ## 🧰 Stack
 
-| Tool                            | Role                                                        |
-| ------------------------------- | ----------------------------------------------------------- |
-| ⚡ Vitest 5                     | Unit and component tests, configured in `vitest.config.mts` |
-| 🌐 jsdom                        | Browser-like environment for component tests                |
-| 🐙 Testing Library + user-event | Rendering components and simulating real interactions       |
-| 🧩 jest-dom                     | Readable DOM assertions such as `toBeChecked()`             |
-| 📊 `@vitest/coverage-v8`        | Coverage reports and thresholds                             |
-| 🎭 Playwright                   | End-to-end tests in Chromium on desktop and phone screens   |
-| ♿ axe-core                     | Accessibility checks inside the end-to-end tests            |
-| 🚦 Lighthouse                   | Performance, accessibility, best practices and SEO budget   |
+| Tool                            | Role                                                       |
+| ------------------------------- | ---------------------------------------------------------- |
+| ⚡ Vitest 5                     | Unit and component tests, configured in `vitest.config.ts` |
+| 🌐 jsdom                        | Browser-like environment for component tests               |
+| 🐙 Testing Library + user-event | Rendering components and simulating real interactions      |
+| 🧩 jest-dom                     | Readable DOM assertions such as `toBeChecked()`            |
+| 📊 `@vitest/coverage-v8`        | Coverage reports and thresholds                            |
+| 🎭 Playwright                   | End-to-end tests in Chromium on desktop and phone screens  |
+| ♿ axe-core                     | Accessibility checks inside the end-to-end tests           |
+| 🚦 Lighthouse                   | Performance, accessibility, best practices and SEO budget  |
 
 ## ▶️ Running tests
 
@@ -31,10 +31,10 @@ The HTML coverage report is written to `coverage/index.html`, the Playwright rep
 
 ```mermaid
 flowchart TB
-  E2E["🎭 End to end<br/>routing and languages, overview, player page, compare, CSP and headers, axe, forced colours, reflow, SEO, Lighthouse"]
-  UI["🖥️ Components<br/>dashboard sections, player page, compare, header, footer, chart, UI kit, status screens"]
-  Data["🛰️ Data layer<br/>proxy, FACEIT client with retries, parser, cached squad loader, server translations"]
-  Lib["🧮 Pure logic<br/>statistics, ranges, streaks, duos, feed, comparisons, records, translations, formatting, SEO, boot script"]
+  E2E["🎭 End to end · ~39 tests per screen<br/>routing and languages, overview, player page, compare, CSP and headers, axe, forced colours, reflow, SEO, Lighthouse"]
+  UI["🖥️ Components · ~59 tests<br/>dashboard sections, player page, compare, header, settings, footer, chart, UI kit, status screens"]
+  Data["🛰️ Data layer · ~39 tests<br/>proxy, FACEIT client with retries, parser, cached squad loader, server translations, flags"]
+  Lib["🧮 Pure logic · ~99 tests<br/>statistics, ranges, streaks, duos, feed, comparisons, records, translations, formatting, SEO, boot script"]
   E2E --> UI --> Data --> Lib
 ```
 
@@ -44,18 +44,18 @@ Most behaviour is pinned down by fast tests of pure functions. Component tests r
 
 Tests sit next to the code they cover as `*.test.ts(x)`:
 
-| Area           | Files                                                                  | Covers                                                                                                                                                            |
-| -------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🚦 Proxy       | `src/proxy.test.ts`                                                    | Redirects to the browser or saved language, lowercase languages, canonical nicknames, 404 rewrites                                                                |
-| 🛰️ FACEIT      | `features/squad/api/client.test.ts`, `parse.test.ts`, `loader.test.ts` | Headers, 404s, rejected keys, retries with backoff, parsing every response, missing configuration, dead avatars, outages during builds and in production          |
-| 🧮 Squad logic | `features/squad/model/*.test.ts`                                       | Averages and ranks (ELO for every player), day and match ranges, streaks, lineups and duos, levels, maps, nicknames and configuration                             |
-| 📊 Overview    | `features/dashboard/**/*.test.ts(x)`                                   | Every section, sorting the leaderboard with inactive players last, the feed, records, the map pool and its pale small samples, rankings, the range in the address |
-| 👤 Player page | `features/player/**/*.test.ts(x)`                                      | The per-range context, current form, the trend metric, filtering the match history, teammates, lifetime meters, map cards, empty states                           |
-| ⚔️ Compare     | `features/compare/**/*.test.ts(x)`                                     | Shared matches, the default pair, the pair from the address, swapping, the leader of each row                                                                     |
-| 🔎 SEO         | `features/seo/**/*.test.ts(x)`                                         | Structured data, social metadata in every language, escaped JSON-LD                                                                                               |
-| 🧱 Widgets     | `widgets/Header/*.test.tsx`, `widgets/Footer/*.test.tsx`               | Navigation and the current page, the language menu and the saved choice, the theme switch and its browser colour, credits                                         |
-| 🌍 Languages   | `shared/i18n/*.test.ts`                                                | Every key, plural form and placeholder in every language, number parameters, `Accept-Language`, loading catalogs on the server                                    |
-| 🧰 Shared      | `shared/lib/*.test.ts`, `shared/ui/*.test.tsx`                         | Formatting, scales, the inline boot script, the line chart, radio groups, avatars, notices, loading states                                                        |
+| Area           | Files                                                                    | Covers                                                                                                                                                            |
+| -------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🚦 Proxy       | `src/proxy.test.ts`                                                      | Redirects to the browser or saved language, lowercase languages, canonical nicknames, 404 rewrites                                                                |
+| 🛰️ FACEIT      | `features/squad/api/client.test.ts`, `parse.test.ts`, `loader.test.ts`   | Headers, 404s, rejected keys, retries with backoff, parsing every response, missing configuration, dead avatars, outages during builds and in production          |
+| 🧮 Squad logic | `features/squad/model/*.test.ts`                                         | Averages and ranks (ELO for every player), day and match ranges, streaks, lineups and duos, levels, maps, nicknames and configuration                             |
+| 📊 Overview    | `features/dashboard/**/*.test.ts(x)`                                     | Every section, sorting the leaderboard with inactive players last, the feed, records, the map pool and its pale small samples, rankings, the range in the address |
+| 👤 Player page | `features/player/**/*.test.ts(x)`                                        | The per-range context, current form, the trend metric, filtering the match history, teammates, lifetime meters, map cards, empty states                           |
+| ⚔️ Compare     | `features/compare/**/*.test.ts(x)`                                       | Shared matches, the default pair, the pair from the address, swapping, the leader of each row                                                                     |
+| 🔎 SEO         | `features/seo/**/*.test.ts(x)`                                           | Structured data, social metadata in every language, escaped JSON-LD                                                                                               |
+| 🧱 Widgets     | `widgets/Header/*.test.tsx`, `widgets/Footer/*.test.tsx`, `SettingsMenu` | Navigation and the current page, the settings panel with the saved language and the theme and its browser colour, credits and the version                         |
+| 🌍 Languages   | `shared/i18n/*.test.ts`                                                  | Every key, plural form and placeholder in every language, number parameters, `Accept-Language`, loading catalogs on the server                                    |
+| 🧰 Shared      | `shared/lib/*.test.ts`, `shared/ui/**/*.test.tsx`                        | Formatting, scales, the inline boot script, the line chart, radio groups, avatars, notices, loading states                                                        |
 
 ## 🌐 Test environment
 
@@ -65,7 +65,7 @@ Tests sit next to the code they cover as `*.test.ts(x)`:
 - 🔗 `next/link` and `next/image` are replaced with plain `a` and `img` elements, and `usePathname()` reads the jsdom address, so components render without a Next.js router.
 - 🧹 After every test the DOM is unmounted, the address is reset to `/en`, `localStorage` is cleared and the theme attribute is removed.
 
-`vitest.config.mts` only collects `src/**/*.test.{ts,tsx}`, maps `@/` to `src/` and replaces `server-only` with an empty module, so server code can be tested directly.
+`vitest.config.ts` only collects `src/**/*.test.{ts,tsx}`, maps `@/` to `src/` and replaces `server-only` with an empty module, so server code can be tested directly.
 
 > [!NOTE]
 > A few Next.js modules only work inside a Next.js build. Tests replace them with `vi.mock`: `next/cache` for `cacheLife` in the loader and the footer, and `next/root-params` for the language of the current route.
@@ -99,16 +99,16 @@ flowchart LR
 > [!TIP]
 > Locally both servers are reused when they are already running, so after the first run a repeated `npx playwright test e2e/accessibility.spec.ts` takes seconds. Start them yourself with the same environment as in `playwright.config.ts` to keep them between runs.
 
-| Spec                       | Checks                                                                                                                                                |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🧭 `routing.spec.ts`       | Redirect to the browser language, the saved language winning, lowercase languages, filters kept, nickname case fixed, translated 404s with status 404 |
-| 🧑‍🤝‍🧑 `dashboard.spec.ts`     | The squad, day ranges in the address and after a reload, the theme and its browser colour, switching languages, the feed, player links                |
-| 👤 `player.spec.ts`        | Filtering the history, links to FACEIT and to the comparison, the empty lifetime state                                                                |
-| ⚔️ `compare.spec.ts`       | Picking, swapping and reloading a pair, shared matches with match rooms                                                                               |
-| ♿ `accessibility.spec.ts` | axe on seven pages in four languages, the dark theme, the 404 page, forced colours mode and no sideways scrolling at 320 px                           |
-| 🛡️ `security.spec.ts`      | No console errors or CSP violations while browsing three pages in three languages, and every security header in place                                 |
-| 🔎 `seo.spec.ts`           | Canonical and `hreflang` links, `og:locale`, JSON-LD, the sitemap and share images per language                                                       |
-| 🚦 `lighthouse.spec.ts`    | The Lighthouse budget below                                                                                                                           |
+| Spec                       | Checks                                                                                                                                                                                       |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🧭 `routing.spec.ts`       | Redirect to the browser language (Ukrainian and Czech with its plurals), the saved language winning, lowercase languages, filters kept, nickname case fixed, translated 404s with status 404 |
+| 🧑‍🤝‍🧑 `dashboard.spec.ts`     | The squad, day ranges in the address and after a reload, the theme and its browser colour from the settings, switching languages, the feed, player links                                     |
+| 👤 `player.spec.ts`        | Filtering the history, links to FACEIT and to the comparison, the empty lifetime state                                                                                                       |
+| ⚔️ `compare.spec.ts`       | Picking, swapping and reloading a pair, shared matches with match rooms                                                                                                                      |
+| ♿ `accessibility.spec.ts` | axe on seven pages in four languages, the dark theme, the 404 page, forced colours mode and no sideways scrolling at 320 px                                                                  |
+| 🛡️ `security.spec.ts`      | No console errors or CSP violations while browsing three pages in three languages and opening the settings with the app's own flags, and every security header in place                      |
+| 🔎 `seo.spec.ts`           | Canonical and `hreflang` links, `og:locale`, JSON-LD, the sitemap and share images per language                                                                                              |
+| 🚦 `lighthouse.spec.ts`    | The Lighthouse budget below                                                                                                                                                                  |
 
 Every spec except SEO and Lighthouse runs twice: in **Desktop Chrome** and on a **Pixel 7** screen. Flag images are answered by a local stub (`stubFlags()` in `e2e/helpers.ts`), so the tests never depend on another site. The accessibility checks run with reduced motion, so transitions never catch axe halfway, and they also enable axe's `label-content-name-mismatch` rule, so a visible label always matches what voice control users say.
 

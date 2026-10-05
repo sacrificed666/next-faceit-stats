@@ -20,12 +20,12 @@ export interface ProfileData {
   updatedAt: number;
 }
 
-function averages(views: Parameters<typeof squadAverage>[0]): Record<MetricKey, number> {
+const averages = (views: Parameters<typeof squadAverage>[0]): Record<MetricKey, number> => {
   const [kd, kr, adr, hsPercent, winRate] = METRIC_KEYS.map((key) => squadAverage(views, key));
   return { kd: kd ?? 0, kr: kr ?? 0, adr: adr ?? 0, hsPercent: hsPercent ?? 0, winRate: winRate ?? 0 };
-}
+};
 
-function rangeContext(players: readonly Player[], playerId: string, range: Range, updatedAt: number): RangeContext {
+const rangeContext = (players: readonly Player[], playerId: string, range: Range, updatedAt: number): RangeContext => {
   const views = viewPlayers(players, range, updatedAt);
   const lineupList = lineups(members(views));
   return {
@@ -38,32 +38,25 @@ function rangeContext(players: readonly Player[], playerId: string, range: Range
         : [],
     ),
   };
-}
+};
 
-export function profileData(players: readonly Player[], player: Player, updatedAt: number): ProfileData {
-  return {
-    player,
-    squad: players.map(({ id, nickname, avatar, country, elo, level }) => ({
-      id,
-      nickname,
-      avatar,
-      country,
-      elo,
-      level,
-    })),
-    ranges: RANGES.map((range) => rangeContext(players, player.id, range, updatedAt)),
-    updatedAt,
-  };
-}
+export const profileData = (players: readonly Player[], player: Player, updatedAt: number): ProfileData => ({
+  player,
+  squad: players.map(({ id, nickname, avatar, country, elo, level }) => ({
+    id,
+    nickname,
+    avatar,
+    country,
+    elo,
+    level,
+  })),
+  ranges: RANGES.map((range) => rangeContext(players, player.id, range, updatedAt)),
+  updatedAt,
+});
 
-export function contextFor(data: ProfileData, range: Range): RangeContext | undefined {
-  return data.ranges.find((entry) => entry.range === range);
-}
+export const contextFor = (data: ProfileData, range: Range): RangeContext | undefined =>
+  data.ranges.find((entry) => entry.range === range);
 
-export function withoutDetails(player: Player): Player {
-  return { ...player, lifetime: null, maps: [] };
-}
+export const withoutDetails = (player: Player): Player => ({ ...player, lifetime: null, maps: [] });
 
-export function withoutMaps(player: Player): Player {
-  return { ...player, maps: [] };
-}
+export const withoutMaps = (player: Player): Player => ({ ...player, maps: [] });

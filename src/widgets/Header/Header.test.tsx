@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import { i18nFor, renderWithI18n } from "@/test/render";
 
-import { Header } from "./Header";
+import Header from "./Header";
 
 describe("Header", () => {
   it("links home and to both pages in the language of the page, keeping the range", () => {
@@ -14,7 +14,8 @@ describe("Header", () => {
     expect(within(nav).getByRole("link", { name: "Сквад" })).toHaveAttribute("href", "/uk?range=50");
     expect(within(nav).getByRole("link", { name: "Сквад" })).toHaveAttribute("aria-current", "page");
     expect(within(nav).getByRole("link", { name: "Порівняння" })).toHaveAttribute("href", "/uk/compare?range=50");
-    expect(screen.getByRole("link", { name: /Вихідний код на GitHub/ })).toHaveAttribute("target", "_blank");
+    expect(screen.getByRole("button", { name: "Налаштування" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /GitHub/ })).not.toBeInTheDocument();
   });
 
   it("marks the comparison as the current page", () => {

@@ -5,14 +5,14 @@ export interface Streak {
   length: number;
 }
 
-export function currentStreak(matches: readonly Match[]): Streak | null {
+export const currentStreak = (matches: readonly Match[]): Streak | null => {
   const latest = matches[0];
   if (!latest) return null;
   const breakIndex = matches.findIndex((match) => match.won !== latest.won);
   return { won: latest.won, length: breakIndex === -1 ? matches.length : breakIndex };
-}
+};
 
-export function longestStreak(matches: readonly Match[], won: boolean): number {
+export const longestStreak = (matches: readonly Match[], won: boolean): number => {
   let longest = 0;
   let running = 0;
   for (const match of matches) {
@@ -20,4 +20,4 @@ export function longestStreak(matches: readonly Match[], won: boolean): number {
     longest = Math.max(longest, running);
   }
   return longest;
-}
+};

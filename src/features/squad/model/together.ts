@@ -32,11 +32,12 @@ export interface PartySize extends WinRecord {
   size: number;
 }
 
-function withWinRate<T extends { matches: number; wins: number }>(entry: T): T & { winRate: number } {
-  return { ...entry, winRate: entry.matches === 0 ? 0 : (entry.wins / entry.matches) * 100 };
-}
+const withWinRate = <T extends { matches: number; wins: number }>(entry: T): T & { winRate: number } => ({
+  ...entry,
+  winRate: entry.matches === 0 ? 0 : (entry.wins / entry.matches) * 100,
+});
 
-export function lineups(members: readonly SquadMember[]): Lineup[] {
+export const lineups = (members: readonly SquadMember[]): Lineup[] => {
   const byTeam = new Map<string, Lineup>();
   for (const member of members) {
     for (const match of member.matches) {
@@ -56,9 +57,9 @@ export function lineups(members: readonly SquadMember[]): Lineup[] {
     }
   }
   return [...byTeam.values()].toSorted((a, b) => b.finishedAt - a.finishedAt);
-}
+};
 
-export function duos(lineupList: readonly Lineup[]): Duo[] {
+export const duos = (lineupList: readonly Lineup[]): Duo[] => {
   const pairs = new Map<string, Omit<Duo, "winRate">>();
   for (const lineup of lineupList) {
     const ids = lineup.playerIds.toSorted();
@@ -76,10 +77,10 @@ export function duos(lineupList: readonly Lineup[]): Duo[] {
   return [...pairs.values()]
     .map((pair) => withWinRate(pair))
     .toSorted((a, b) => b.matches - a.matches || b.winRate - a.winRate || b.lastPlayedAt - a.lastPlayedAt);
-}
+};
 
-export function teammates(playerId: string, duoList: readonly Duo[]): Teammate[] {
-  return duoList
+export const teammates = (playerId: string, duoList: readonly Duo[]): Teammate[] =>
+  duoList
     .filter((duo) => duo.ids.includes(playerId))
     .map((duo) => ({
       id: duo.ids[0] === playerId ? duo.ids[1] : duo.ids[0],
@@ -87,9 +88,8 @@ export function teammates(playerId: string, duoList: readonly Duo[]): Teammate[]
       wins: duo.wins,
       winRate: duo.winRate,
     }));
-}
 
-export function partySizes(lineupList: readonly Lineup[]): PartySize[] {
+export const partySizes = (lineupList: readonly Lineup[]): PartySize[] => {
   const sizes = new Map<number, { size: number; matches: number; wins: number }>();
   for (const lineup of lineupList) {
     const size = lineup.playerIds.length;
@@ -99,4 +99,4 @@ export function partySizes(lineupList: readonly Lineup[]): PartySize[] {
     sizes.set(size, entry);
   }
   return [...sizes.values()].map((entry) => withWinRate(entry)).toSorted((a, b) => a.size - b.size);
-}
+};

@@ -16,38 +16,34 @@ export interface Profile {
   steamId: string | null;
 }
 
-function field(value: unknown, key: string): unknown {
+const field = (value: unknown, key: string): unknown => {
   if (typeof value !== "object" || value === null) return undefined;
   const result: unknown = Reflect.get(value, key);
   return result;
-}
+};
 
-function list(value: unknown): unknown[] {
-  return Array.isArray(value) ? value.map((entry: unknown) => entry) : [];
-}
+const list = (value: unknown): unknown[] => (Array.isArray(value) ? value.map((entry: unknown) => entry) : []);
 
-function text(value: unknown): string {
+const text = (value: unknown): string => {
   if (typeof value === "string") return value;
   return typeof value === "number" && Number.isFinite(value) ? String(value) : "";
-}
+};
 
-function optionalNumber(value: unknown): number | null {
+const optionalNumber = (value: unknown): number | null => {
   if (typeof value === "number") return Number.isFinite(value) ? value : null;
   if (typeof value !== "string" || value.trim() === "") return null;
   const parsed = Number.parseFloat(value);
   return Number.isFinite(parsed) ? parsed : null;
-}
+};
 
-function number(value: unknown): number {
-  return optionalNumber(value) ?? 0;
-}
+const number = (value: unknown): number => optionalNumber(value) ?? 0;
 
-function rate(value: unknown): number | null {
+const rate = (value: unknown): number | null => {
   const parsed = optionalNumber(value);
   return parsed === null ? null : parsed * 100;
-}
+};
 
-function imageUrl(value: unknown): string | null {
+const imageUrl = (value: unknown): string | null => {
   if (typeof value !== "string" || value === "") return null;
   try {
     const parsed = new URL(value);
@@ -55,9 +51,9 @@ function imageUrl(value: unknown): string | null {
   } catch {
     return null;
   }
-}
+};
 
-export function parseProfile(raw: unknown): Profile | null {
+export const parseProfile = (raw: unknown): Profile | null => {
   const id = text(field(raw, "player_id"));
   const nickname = text(field(raw, "nickname"));
   if (id === "" || nickname === "") return null;
@@ -75,9 +71,9 @@ export function parseProfile(raw: unknown): Profile | null {
     region: region === "" ? null : region,
     steamId: /^\d+$/.test(steamId) ? steamId : null,
   };
-}
+};
 
-function scores(stats: unknown, won: boolean): { teamScore: number; opponentScore: number } {
+const scores = (stats: unknown, won: boolean): { teamScore: number; opponentScore: number } => {
   const parts = text(field(stats, "Score"))
     .split("/")
     .flatMap((part) => {
@@ -88,9 +84,9 @@ function scores(stats: unknown, won: boolean): { teamScore: number; opponentScor
   const teamScore =
     optionalNumber(field(stats, "Final Score")) ?? (won ? Math.max(first, second) : Math.min(first, second));
   return { teamScore, opponentScore: first === teamScore ? second : first };
-}
+};
 
-export function parseMatch(stats: unknown): Match | null {
+export const parseMatch = (stats: unknown): Match | null => {
   const id = text(field(stats, "Match Id"));
   const finishedAt = optionalNumber(field(stats, "Match Finished At"));
   if (id === "" || finishedAt === null || text(field(stats, "Game Mode")) !== GAME_MODE) return null;
@@ -114,9 +110,9 @@ export function parseMatch(stats: unknown): Match | null {
     quadroKills: number(field(stats, "Quadro Kills")),
     pentaKills: number(field(stats, "Penta Kills")),
   };
-}
+};
 
-export function parseMatches(raw: unknown): Match[] {
+export const parseMatches = (raw: unknown): Match[] => {
   const seen = new Set<string>();
   const matches: Match[] = [];
   for (const item of list(field(raw, "items"))) {
@@ -126,9 +122,9 @@ export function parseMatches(raw: unknown): Match[] {
     matches.push(match);
   }
   return matches.toSorted((a, b) => b.finishedAt - a.finishedAt);
-}
+};
 
-export function parseLifetime(raw: unknown): LifetimeStats | null {
+export const parseLifetime = (raw: unknown): LifetimeStats | null => {
   const stats = field(raw, "lifetime");
   if (typeof stats !== "object" || stats === null) return null;
   return {
@@ -146,10 +142,10 @@ export function parseLifetime(raw: unknown): LifetimeStats | null {
     utilityDamagePerRound: optionalNumber(field(stats, "Utility Damage per Round")),
     sniperKillRate: rate(field(stats, "Sniper Kill Rate")),
   };
-}
+};
 
-export function parseMapSegments(raw: unknown): MapSegment[] {
-  return list(field(raw, "segments"))
+export const parseMapSegments = (raw: unknown): MapSegment[] =>
+  list(field(raw, "segments"))
     .filter((segment) => text(field(segment, "type")) === SEGMENT_TYPE && text(field(segment, "mode")) === GAME_MODE)
     .flatMap((segment) => {
       const label = text(field(segment, "label"));
@@ -169,12 +165,11 @@ export function parseMapSegments(raw: unknown): MapSegment[] {
       ];
     })
     .toSorted((a, b) => b.matches - a.matches);
-}
 
-export function parseRanking(raw: unknown): number | null {
+export const parseRanking = (raw: unknown): number | null => {
   const position = optionalNumber(field(raw, "position"));
   return position !== null && position > 0 ? position : null;
-}
+};
 
 export interface PlayerSources {
   matches: unknown;
@@ -182,12 +177,10 @@ export interface PlayerSources {
   ranking: unknown;
 }
 
-export function buildPlayer(profile: Profile, sources: PlayerSources): Player {
-  return {
-    ...profile,
-    regionRank: parseRanking(sources.ranking),
-    lifetime: parseLifetime(sources.lifetime),
-    maps: parseMapSegments(sources.lifetime),
-    matches: parseMatches(sources.matches),
-  };
-}
+export const buildPlayer = (profile: Profile, sources: PlayerSources): Player => ({
+  ...profile,
+  regionRank: parseRanking(sources.ranking),
+  lifetime: parseLifetime(sources.lifetime),
+  maps: parseMapSegments(sources.lifetime),
+  matches: parseMatches(sources.matches),
+});

@@ -28,18 +28,20 @@ test("filters by period and keeps the choice in the address", async ({ page }) =
 
 test("switches the theme and remembers it", async ({ page }) => {
   await page.goto("/en");
-  await option(page, "Dark theme").check();
+  await page.getByRole("button", { name: "Settings" }).click();
+  await expect(page.getByRole("dialog", { name: "Settings" })).toBeVisible();
+  await option(page, "Dark").check();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator('meta[name="theme-color"]').first()).toHaveAttribute("content", "#0f1011");
 
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await expect(page.getByRole("radio", { name: "Dark theme" })).toBeChecked();
+  await expect(page.getByRole("radio", { name: "Dark", includeHidden: true })).toBeChecked();
 });
 
 test("switches the language and keeps the filters", async ({ page }) => {
   await page.goto("/en?range=30d");
-  await page.getByRole("button", { name: "Language: English (EN)" }).click();
+  await page.getByRole("button", { name: "Settings" }).click();
   await page.getByRole("link", { name: "Deutsch" }).click();
   await expect(page).toHaveURL(/\/de\?range=30d$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "de");

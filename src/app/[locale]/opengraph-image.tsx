@@ -9,17 +9,15 @@ import { getI18n } from "@/shared/i18n/server";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
-export function generateStaticParams() {
-  return LOCALES.map((locale) => ({ locale }));
-}
+export const generateStaticParams = () => LOCALES.map((locale) => ({ locale }));
 
-export async function generateImageMetadata({ params }: { params: Promise<{ locale: string }> }) {
+export const generateImageMetadata = async ({ params }: { params: Promise<{ locale: string }> }) => {
   const { locale } = await params;
   const { t } = await getI18n(isLocale(locale) ? locale : DEFAULT_LOCALE);
   return [{ id: "card", alt: t("og.alt", { app: t("app.name") }), size, contentType }];
-}
+};
 
-export default async function Image({ params }: { params: Promise<{ locale: string }> }) {
+const Image = async ({ params }: { params: Promise<{ locale: string }> }) => {
   const { locale } = await params;
   const [squad, { t, format }] = await Promise.all([getSquad(), getI18n(isLocale(locale) ? locale : DEFAULT_LOCALE)]);
   const players = squad.status === "ready" ? squad.players.toSorted((a, b) => b.elo - a.elo) : [];
@@ -81,4 +79,6 @@ export default async function Image({ params }: { params: Promise<{ locale: stri
     </OgFrame>,
     { ...size, fonts: OG_FONTS },
   );
-}
+};
+
+export default Image;

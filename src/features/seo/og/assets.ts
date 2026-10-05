@@ -34,7 +34,7 @@ export const OG_FONTS = await Promise.all(
   ),
 );
 
-export async function imageDataUrl(url: string | null): Promise<string | null> {
+export const imageDataUrl = async (url: string | null): Promise<string | null> => {
   "use cache";
   cacheLife("days");
   if (!url) return null;
@@ -46,4 +46,4 @@ export async function imageDataUrl(url: string | null): Promise<string | null> {
   } catch {
     return null;
   }
-}
+};

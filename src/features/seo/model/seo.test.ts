@@ -63,12 +63,14 @@ describe("structured data", () => {
       languages: {
         en: "/en/players/z0nGa",
         uk: "/uk/players/z0nGa",
+        cs: "/cs/players/z0nGa",
         de: "/de/players/z0nGa",
         es: "/es/players/z0nGa",
         fr: "/fr/players/z0nGa",
         it: "/it/players/z0nGa",
         nl: "/nl/players/z0nGa",
         pl: "/pl/players/z0nGa",
+        pt: "/pt/players/z0nGa",
         "x-default": "/players/z0nGa",
       },
     });
@@ -83,7 +85,7 @@ describe("social", () => {
         type: "website",
         siteName: "Статистика",
         locale: "uk_UA",
-        alternateLocale: ["en_GB", "de_DE", "es_ES", "fr_FR", "it_IT", "nl_NL", "pl_PL"],
+        alternateLocale: ["en_GB", "cs_CZ", "de_DE", "es_ES", "fr_FR", "it_IT", "nl_NL", "pl_PL", "pt_PT"],
         url: "/uk/compare",
         title: "Порівняння",
         description: "Опис",

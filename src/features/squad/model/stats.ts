@@ -36,15 +36,13 @@ export const EMPTY_SUMMARY: Summary = {
   pentaKills: 0,
 };
 
-function average(matches: readonly Match[], pick: (match: Match) => number): number {
-  return matches.reduce((sum, match) => sum + pick(match), 0) / matches.length;
-}
+const average = (matches: readonly Match[], pick: (match: Match) => number): number =>
+  matches.reduce((sum, match) => sum + pick(match), 0) / matches.length;
 
-function total(matches: readonly Match[], pick: (match: Match) => number): number {
-  return matches.reduce((sum, match) => sum + pick(match), 0);
-}
+const total = (matches: readonly Match[], pick: (match: Match) => number): number =>
+  matches.reduce((sum, match) => sum + pick(match), 0);
 
-export function summarize(matches: readonly Match[]): Summary {
+export const summarize = (matches: readonly Match[]): Summary => {
   if (matches.length === 0) return EMPTY_SUMMARY;
   const wins = matches.filter((match) => match.won).length;
   return {
@@ -64,9 +62,9 @@ export function summarize(matches: readonly Match[]): Summary {
     quadroKills: total(matches, (match) => match.quadroKills),
     pentaKills: total(matches, (match) => match.pentaKills),
   };
-}
+};
 
-export function rank(entries: ReadonlyArray<{ id: string; value: number }>): Map<string, number> {
+export const rank = (entries: ReadonlyArray<{ id: string; value: number }>): Map<string, number> => {
   const sorted = entries.toSorted((a, b) => b.value - a.value);
   const ranks = new Map<string, number>();
   let previous: number | null = null;
@@ -77,9 +75,9 @@ export function rank(entries: ReadonlyArray<{ id: string; value: number }>): Map
     ranks.set(entry.id, current);
   });
   return ranks;
-}
+};
 
-export function rollingAverage(values: readonly number[], window: number): number[] {
+export const rollingAverage = (values: readonly number[], window: number): number[] => {
   const result: number[] = [];
   let sum = 0;
   values.forEach((value, index) => {
@@ -89,4 +87,4 @@ export function rollingAverage(values: readonly number[], window: number): numbe
     result.push(sum / Math.min(index + 1, window));
   });
   return result;
-}
+};

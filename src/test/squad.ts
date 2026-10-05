@@ -5,11 +5,10 @@ import { makeMatch, makePlayer, newestFirst } from "./factories";
 const DAY = 86_400_000;
 const START = Date.UTC(2026, 8, 10, 18, 0);
 
-function on(day: number, overrides: Partial<Match>): Match {
-  return makeMatch({ finishedAt: START + day * DAY, ...overrides });
-}
+const on = (day: number, overrides: Partial<Match>): Match =>
+  makeMatch({ finishedAt: START + day * DAY, ...overrides });
 
-export function sampleSquad(): Player[] {
+export const sampleSquad = (): Player[] => {
   const sharedWin = { id: "shared-win", map: "de_nuke", won: true };
   const sharedLoss = { id: "shared-loss", map: "de_mirage", won: false };
 
@@ -65,4 +64,4 @@ export function sampleSquad(): Player[] {
   });
 
   return [anna, bohdan, chris];
-}
+};

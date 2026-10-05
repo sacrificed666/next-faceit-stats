@@ -8,24 +8,24 @@ import { THEME_STORAGE_KEY } from "./theme";
 
 const FINISHED = "2026-10-03T21:30:00.000Z";
 
-function boot(): void {
+const boot = (): void => {
   const script = document.createElement("script");
   script.textContent = BOOT_SCRIPT;
   document.head.append(script);
   script.remove();
-}
+};
 
-function loaded(): void {
+const loaded = (): void => {
   document.dispatchEvent(new Event("DOMContentLoaded"));
-}
+};
 
-function time(format: string, dateTime: string): HTMLTimeElement {
+const time = (format: string, dateTime: string): HTMLTimeElement => {
   const element = document.createElement("time");
   element.dataset.format = format;
   element.dateTime = dateTime;
   element.textContent = "server";
   return element;
-}
+};
 
 afterEach(() => {
   loaded();

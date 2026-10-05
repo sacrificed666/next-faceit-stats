@@ -2,8 +2,9 @@ name: 🚀 FACEIT Stats | CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "staging", "development"]
   pull_request:
+    branches: ["main", "staging", "development"]
   workflow_dispatch:
 
 permissions:
@@ -12,6 +13,9 @@ permissions:
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  NEXT_TELEMETRY_DISABLED: 1
 
 jobs:
   verify:
@@ -35,6 +39,9 @@ jobs:
 
       - name: 🔏 NPM | Verify registry signatures
         run: npm audit signatures
+
+      - name: 🏷️ Release | Check the version and its changelog entry
+        run: node scripts/release-notes.mjs > /dev/null
 
       - name: 🧹 Oxlint | Lint code
         run: npm run lint -- --format github
@@ -81,8 +88,6 @@ jobs:
 
       - name: 🛠️ Next.js | Build without FACEIT credentials
         run: npm run build
-        env:
-          NEXT_TELEMETRY_DISABLED: "1"
 
       - name: 📏 Build | Verify output and report bundle size
         run: node scripts/build-report.mjs >> "$GITHUB_STEP_SUMMARY"
@@ -127,8 +132,6 @@ jobs:
 
       - name: 🧪 Playwright | Run against the mock FACEIT API
         run: npm run test:e2e
-        env:
-          NEXT_TELEMETRY_DISABLED: "1"
 
       - name: 📤 Playwright | Upload report
         if: ${{ !cancelled() }}

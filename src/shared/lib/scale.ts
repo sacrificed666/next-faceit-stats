@@ -5,13 +5,13 @@ export interface Scale {
 
 const STEPS = [1, 2, 2.5, 5, 10];
 
-function decimals(step: number): number {
+const decimals = (step: number): number => {
   const text = String(step);
   const dot = text.indexOf(".");
   return dot === -1 ? 0 : text.length - dot - 1;
-}
+};
 
-export function niceScale(values: readonly number[], count = 4, includeZero = true): Scale {
+export const niceScale = (values: readonly number[], count = 4, includeZero = true): Scale => {
   const finite = values.filter((value) => Number.isFinite(value));
   let min = includeZero ? 0 : Math.min(...finite);
   let max = Math.max(...finite);
@@ -29,8 +29,7 @@ export function niceScale(values: readonly number[], count = 4, includeZero = tr
   const ticks: number[] = [];
   for (let tick = start; tick <= end + step / 2; tick += step) ticks.push(Number(tick.toFixed(precision)));
   return { domain: [Number(start.toFixed(precision)), Number(end.toFixed(precision))], ticks };
-}
+};
 
-export function position(value: number, [min, max]: [number, number]): number {
-  return max === min ? 0.5 : (value - min) / (max - min);
-}
+export const position = (value: number, [min, max]: [number, number]): number =>
+  max === min ? 0.5 : (value - min) / (max - min);

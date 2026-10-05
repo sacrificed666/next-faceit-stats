@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { option, stubFlags } from "./helpers";
+import { option } from "./helpers";
 
 test("runs without console errors or policy violations", async ({ page }) => {
   const problems: string[] = [];
@@ -15,11 +15,11 @@ test("runs without console errors or policy violations", async ({ page }) => {
       violations.push(`${event.violatedDirective} ${event.blockedURI}`);
     });
   });
-  await stubFlags(page);
 
   await page.goto("/en");
   await option(page, "Last 30 days").check();
-  await page.getByRole("button", { name: /^Language: English/ }).click();
+  await page.getByRole("button", { name: "Settings" }).click();
+  await expect(page.locator('img[src="/flags/CZ"]')).toBeVisible();
   await page.goto("/uk/players/anna?range=50");
   await expect(page.getByRole("heading", { level: 1, name: "anna" })).toBeVisible();
   await page.goto("/pl/compare?a=chris&b=dana");

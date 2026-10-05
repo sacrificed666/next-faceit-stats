@@ -25,13 +25,12 @@ export class FaceitError extends Error {
 
 const startedAt: number[] = [];
 
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => {
+const sleep = (ms: number): Promise<void> =>
+  new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
-}
 
-async function acquireSlot(): Promise<void> {
+const acquireSlot = async (): Promise<void> => {
   const now = Date.now();
   while (startedAt.length > 0 && now - (startedAt[0] ?? now) >= WINDOW_MS) startedAt.shift();
   if (startedAt.length < REQUESTS_PER_SECOND) {
@@ -40,22 +39,22 @@ async function acquireSlot(): Promise<void> {
   }
   await sleep(WINDOW_MS - (now - (startedAt[0] ?? now)) + 5);
   return acquireSlot();
-}
+};
 
-function retryDelay(response: Response | null, attempt: number): number {
+const retryDelay = (response: Response | null, attempt: number): number => {
   const header = response?.headers.get("retry-after") ?? response?.headers.get("ratelimit-reset");
   const seconds = header ? Number.parseFloat(header) : Number.NaN;
   const backoff = Math.min(500 * 2 ** attempt, MAX_BACKOFF_MS) + Math.random() * 250;
   return Number.isFinite(seconds) && seconds > 0 ? Math.max(seconds * 1000, backoff) : backoff;
-}
+};
 
-export function baseUrl(env: Partial<Record<string, string>> = process.env): string {
+export const baseUrl = (env: Partial<Record<string, string>> = process.env): string => {
   const configured = env.FACEIT_API_URL?.trim();
   if (!configured) return DEFAULT_BASE_URL;
   return configured.endsWith("/") ? configured : `${configured}/`;
-}
+};
 
-async function send(path: string, apiKey: string): Promise<Response | null> {
+const send = async (path: string, apiKey: string): Promise<Response | null> => {
   await acquireSlot();
   try {
     return await fetch(`${baseUrl()}${path}`, {
@@ -67,9 +66,9 @@ async function send(path: string, apiKey: string): Promise<Response | null> {
   } catch {
     return null;
   }
-}
+};
 
-export async function request(path: string, apiKey: string, attempt = 0): Promise<unknown> {
+export const request = async (path: string, apiKey: string, attempt = 0): Promise<unknown> => {
   const response = await send(path, apiKey);
   if (response?.ok) {
     const body: unknown = await response.json();
@@ -85,24 +84,20 @@ export async function request(path: string, apiKey: string, attempt = 0): Promis
   }
   await sleep(retryDelay(response, attempt));
   return request(path, apiKey, attempt + 1);
-}
+};
 
-function playerPath(playerId: string): string {
-  return `players/${encodeURIComponent(playerId)}`;
-}
+const playerPath = (playerId: string): string => `players/${encodeURIComponent(playerId)}`;
 
-export function createFaceitClient(apiKey: string) {
-  return {
-    player: (nickname: string) => request(`players?nickname=${encodeURIComponent(nickname)}`, apiKey),
-    matches: (playerId: string) =>
-      request(`${playerPath(playerId)}/games/cs2/stats?offset=0&limit=${MATCH_LIMIT}`, apiKey),
-    lifetime: (playerId: string) => request(`${playerPath(playerId)}/stats/cs2`, apiKey),
-    ranking: (region: string, playerId: string) =>
-      request(
-        `rankings/games/cs2/regions/${encodeURIComponent(region)}/players/${encodeURIComponent(playerId)}?limit=1`,
-        apiKey,
-      ),
-  };
-}
+export const createFaceitClient = (apiKey: string) => ({
+  player: (nickname: string) => request(`players?nickname=${encodeURIComponent(nickname)}`, apiKey),
+  matches: (playerId: string) =>
+    request(`${playerPath(playerId)}/games/cs2/stats?offset=0&limit=${MATCH_LIMIT}`, apiKey),
+  lifetime: (playerId: string) => request(`${playerPath(playerId)}/stats/cs2`, apiKey),
+  ranking: (region: string, playerId: string) =>
+    request(
+      `rankings/games/cs2/regions/${encodeURIComponent(region)}/players/${encodeURIComponent(playerId)}?limit=1`,
+      apiKey,
+    ),
+});
 
 export type FaceitClient = ReturnType<typeof createFaceitClient>;

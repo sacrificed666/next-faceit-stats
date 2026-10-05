@@ -2,30 +2,30 @@ import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 
 import { profileData } from "@/features/player/model/profile";
-import { PlayerProfile } from "@/features/player/ui/PlayerProfile";
-import { ProfileHero } from "@/features/player/ui/ProfileHero";
+import PlayerProfile from "@/features/player/ui/PlayerProfile/PlayerProfile";
+import ProfileHero from "@/features/player/ui/ProfileHero/ProfileHero";
 import { alternates, playerSchema, social } from "@/features/seo/model/seo";
-import { JsonLd } from "@/features/seo/ui/JsonLd";
+import JsonLd from "@/features/seo/ui/JsonLd/JsonLd";
 import { getSquad, squadNicknames } from "@/features/squad/api/loader";
 import { decodeNickname, findPlayer } from "@/features/squad/model/players";
 import { DEFAULT_RANGE, selectMatches } from "@/features/squad/model/range";
 import { summarize } from "@/features/squad/model/stats";
-import { SquadLink } from "@/features/squad/ui/SquadLink";
-import { SquadStatus } from "@/features/squad/ui/SquadStatus";
+import SquadLink from "@/features/squad/ui/SquadLink/SquadLink";
+import SquadStatus from "@/features/squad/ui/SquadStatus/SquadStatus";
 import { isLocale } from "@/shared/i18n/locales";
 import { getI18n } from "@/shared/i18n/server";
 import { siteUrl } from "@/shared/lib/site";
 import { playerPath } from "@/shared/lib/urls";
-import { Icon } from "@/shared/ui/Icon";
+import Icon from "@/shared/ui/Icon/Icon";
 
 const PLACEHOLDER = "__squad__";
 
-export async function generateStaticParams() {
+export const generateStaticParams = async () => {
   const nicknames = await squadNicknames();
   return nicknames.length > 0 ? nicknames.map((nickname) => ({ nickname })) : [{ nickname: PLACEHOLDER }];
-}
+};
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/players/[nickname]">): Promise<Metadata> {
+export const generateMetadata = async ({ params }: PageProps<"/[locale]/players/[nickname]">): Promise<Metadata> => {
   const { locale, nickname } = await params;
   if (!isLocale(locale)) return {};
   const [squad, i18n] = await Promise.all([getSquad(), getI18n(locale)]);
@@ -57,9 +57,9 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/players/
     alternates: links,
     ...social(i18n, { url: links.canonical, title, description, profile: player.nickname }),
   };
-}
+};
 
-export default async function PlayerPage({ params }: PageProps<"/[locale]/players/[nickname]">) {
+const PlayerPage = async ({ params }: PageProps<"/[locale]/players/[nickname]">) => {
   const { locale, nickname } = await params;
   if (!isLocale(locale)) notFound();
   const [squad, i18n] = await Promise.all([getSquad(), getI18n(locale)]);
@@ -102,4 +102,6 @@ export default async function PlayerPage({ params }: PageProps<"/[locale]/player
       <PlayerProfile data={profileData(squad.players, player, squad.updatedAt)} />
     </div>
   );
-}
+};
+
+export default PlayerPage;

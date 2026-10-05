@@ -6,7 +6,7 @@ const contentSecurityPolicy = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://flagcdn.com https://distribution.faceit-cdn.net https://assets.faceit-cdn.net",
+  "img-src 'self' data: blob: https://distribution.faceit-cdn.net https://assets.faceit-cdn.net",
   "font-src 'self'",
   `connect-src 'self'${isDevelopment ? " ws: wss:" : ""}`,
   "manifest-src 'self'",
@@ -28,6 +28,11 @@ const securityHeaders = [
     value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()",
   },
   ...(isDevelopment ? [] : [{ key: "Strict-Transport-Security", value: "max-age=31536000" }]),
+];
+
+const flagHeaders = [
+  { key: "Content-Security-Policy", value: "default-src 'none'; style-src 'unsafe-inline'; sandbox" },
+  { key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" },
 ];
 
 const nextConfig: NextConfig = {
@@ -55,7 +60,10 @@ const nextConfig: NextConfig = {
     qualities: [75],
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      { source: "/flags/:path*", headers: flagHeaders },
+    ];
   },
 };
 

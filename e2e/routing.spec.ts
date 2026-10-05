@@ -18,6 +18,19 @@ test.describe("with a Ukrainian browser", () => {
   });
 });
 
+test.describe("with a Czech browser", () => {
+  test.use({ locale: "cs-CZ" });
+
+  test("opens the squad in Czech with Czech plurals", async ({ page }) => {
+    await page.goto("/");
+    await expect(page).toHaveURL(/\/cs$/);
+    await expect(page.locator("html")).toHaveAttribute("lang", "cs");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Statistiky týmu");
+    await expect(page.getByText(/4 hráči v porovnání za posledních 20 zápasů/)).toBeVisible();
+    await expect(page.getByRole("button", { name: "Nastavení" })).toBeVisible();
+  });
+});
+
 test("lowercases the language of an address", async ({ page }) => {
   await page.goto("/EN/compare?a=chris");
   await expect(page).toHaveURL(/\/en\/compare\?a=chris$/);

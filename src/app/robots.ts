@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 import { isIndexable, siteUrl } from "@/shared/lib/site";
 
-export default function robots(): MetadataRoute.Robots {
+const robots = (): MetadataRoute.Robots => {
   const base = siteUrl();
   if (!isIndexable()) return { rules: { userAgent: "*", disallow: "/" } };
   return {
@@ -10,4 +10,6 @@ export default function robots(): MetadataRoute.Robots {
     sitemap: new URL("/sitemap.xml", base).href,
     host: base.origin,
   };
-}
+};
+
+export default robots;

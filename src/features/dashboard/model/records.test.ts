@@ -33,9 +33,7 @@ describe("match records", () => {
   });
 });
 
-function fromResults(results: boolean[]) {
-  return results.map((won) => makeMatch({ won }));
-}
+const fromResults = (results: boolean[]) => results.map((won) => makeMatch({ won }));
 
 describe("player records", () => {
   it("finds the longest win streak", () => {

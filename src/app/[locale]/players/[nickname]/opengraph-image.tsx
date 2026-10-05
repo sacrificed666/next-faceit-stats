@@ -12,22 +12,22 @@ import { getI18n } from "@/shared/i18n/server";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
-export async function generateStaticParams() {
+export const generateStaticParams = async () => {
   const nicknames = await squadNicknames();
   return nicknames.length > 0 ? nicknames.map((nickname) => ({ nickname })) : [{ nickname: "__squad__" }];
-}
+};
 
 interface ImageProps {
   params: Promise<{ locale: string; nickname: string }>;
 }
 
-export async function generateImageMetadata({ params }: ImageProps) {
+export const generateImageMetadata = async ({ params }: ImageProps) => {
   const { locale } = await params;
   const { t } = await getI18n(isLocale(locale) ? locale : DEFAULT_LOCALE);
   return [{ id: "card", alt: t("og.playerAlt"), size, contentType }];
-}
+};
 
-export default async function Image({ params }: ImageProps) {
+const Image = async ({ params }: ImageProps) => {
   const { locale, nickname } = await params;
   const [squad, { t, format }] = await Promise.all([getSquad(), getI18n(isLocale(locale) ? locale : DEFAULT_LOCALE)]);
   const player = squad.status === "ready" ? findPlayer(squad.players, nickname) : null;
@@ -142,4 +142,6 @@ export default async function Image({ params }: ImageProps) {
     </OgFrame>,
     { ...size, fonts: OG_FONTS },
   );
-}
+};
+
+export default Image;

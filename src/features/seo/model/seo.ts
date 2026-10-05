@@ -13,9 +13,7 @@ export interface Alternates {
   languages: Record<string, string>;
 }
 
-export function serializeJsonLd(data: Schema): string {
-  return JSON.stringify(data).replaceAll("<", "\\u003c");
-}
+export const serializeJsonLd = (data: Schema): string => JSON.stringify(data).replaceAll("<", "\\u003c");
 
 export interface SocialPage {
   title: string;
@@ -24,16 +22,16 @@ export interface SocialPage {
   profile?: string;
 }
 
-export function alternates(locale: Locale, path = ""): Alternates {
+export const alternates = (locale: Locale, path = ""): Alternates => {
   const languages: Record<string, string> = Object.fromEntries(LOCALES.map((entry) => [entry, `/${entry}${path}`]));
   languages["x-default"] = path === "" ? "/" : path;
   return { canonical: `/${locale}${path}`, languages };
-}
+};
 
-export function social(
+export const social = (
   { locale, t }: Pick<I18n, "locale" | "t">,
   page: SocialPage,
-): Pick<Metadata, "openGraph" | "twitter"> {
+): Pick<Metadata, "openGraph" | "twitter"> => {
   const shared = {
     siteName: t("app.name"),
     locale: LOCALE_INFO[locale].openGraph,
@@ -46,9 +44,9 @@ export function social(
     openGraph: page.profile ? { ...shared, type: "profile", username: page.profile } : { ...shared, type: "website" },
     twitter: { card: "summary_large_image", title: page.title, description: page.description },
   };
-}
+};
 
-function person(player: Player, base: URL, { locale, format }: I18n): Schema {
+const person = (player: Player, base: URL, { locale, format }: I18n): Schema => {
   const url = new URL(playerPath(locale, player.nickname), base).href;
   const sameAs = [faceitProfileUrl(player.nickname)];
   if (player.steamId) sameAs.push(steamProfileUrl(player.steamId));
@@ -61,21 +59,19 @@ function person(player: Player, base: URL, { locale, format }: I18n): Schema {
     ...(player.country ? { nationality: { "@type": "Country", name: format.country(player.country) } } : {}),
     sameAs,
   };
-}
+};
 
-function website(base: URL, { locale, t }: I18n): Schema {
-  return {
-    "@type": "WebSite",
-    "@id": new URL(`${homePath(locale)}#website`, base).href,
-    name: t("app.name"),
-    url: new URL(homePath(locale), base).href,
-    description: t("app.description"),
-    inLanguage: locale,
-    author: { "@type": "Person", name: SITE.author.name, url: SITE.author.url },
-  };
-}
+const website = (base: URL, { locale, t }: I18n): Schema => ({
+  "@type": "WebSite",
+  "@id": new URL(`${homePath(locale)}#website`, base).href,
+  name: t("app.name"),
+  url: new URL(homePath(locale), base).href,
+  description: t("app.description"),
+  inLanguage: locale,
+  author: { "@type": "Person", name: SITE.author.name, url: SITE.author.url },
+});
 
-export function squadSchema(players: readonly Player[], base: URL, i18n: I18n): Schema {
+export const squadSchema = (players: readonly Player[], base: URL, i18n: I18n): Schema => {
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -94,9 +90,9 @@ export function squadSchema(players: readonly Player[], base: URL, i18n: I18n): 
       },
     ],
   };
-}
+};
 
-export function playerSchema(player: Player, base: URL, updatedAt: number, i18n: I18n): Schema {
+export const playerSchema = (player: Player, base: URL, updatedAt: number, i18n: I18n): Schema => {
   const url = new URL(playerPath(i18n.locale, player.nickname), base).href;
   return {
     "@context": "https://schema.org",
@@ -125,4 +121,4 @@ export function playerSchema(player: Player, base: URL, updatedAt: number, i18n:
       },
     ],
   };
-}
+};

@@ -20,11 +20,10 @@ export interface FeedEntry {
   sides: FeedSide[];
 }
 
-function bySize(a: FeedSide, b: FeedSide): number {
-  return b.players.length - a.players.length || Number(b.won) - Number(a.won);
-}
+const bySize = (a: FeedSide, b: FeedSide): number =>
+  b.players.length - a.players.length || Number(b.won) - Number(a.won);
 
-export function activityFeed(members: readonly SquadMember[]): FeedEntry[] {
+export const activityFeed = (members: readonly SquadMember[]): FeedEntry[] => {
   const entries = new Map<string, FeedEntry>();
   for (const member of members) {
     for (const match of member.matches) {
@@ -46,4 +45,4 @@ export function activityFeed(members: readonly SquadMember[]): FeedEntry[] {
   }
   for (const entry of entries.values()) entry.sides.sort(bySize);
   return [...entries.values()].toSorted((a, b) => b.finishedAt - a.finishedAt);
-}
+};

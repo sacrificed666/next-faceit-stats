@@ -56,11 +56,11 @@ From the lifetime map statistics of each player on FACEIT. Maps that are new to 
 
 ### 🚦 Can the app hit FACEIT's rate limit?
 
-FACEIT allows 20 requests per second. The app makes four requests per player when it refreshes, stays under 10 per second, keeps the answers for four minutes and backs off when FACEIT asks it to. With 10 players a refresh takes a few seconds, and all eight languages share it.
+FACEIT allows 20 requests per second. The app makes four requests per player when it refreshes, stays under 10 per second, keeps the answers for four minutes and backs off when FACEIT asks it to. With 10 players a refresh takes a few seconds, and all ten languages share it.
 
 ### 🌍 How is the language chosen?
 
-The first visit follows the browser's language, and English when it is not one of the eight. Pick another language in the header menu: the page switches, keeps its filters and the choice is remembered for the next visit. Every language has its own address, such as `/uk/players/sacrificed`, so a shared link opens in the sender's language.
+The first visit follows the browser's language, and English when it is not one of the ten. Pick another language in **Settings** in the header: the page switches, keeps its filters and the choice is remembered for the next visit. Every language has its own address, such as `/uk/players/sacrificed`, so a shared link opens in the sender's language.
 
 ### ➕ Can I add a language?
 

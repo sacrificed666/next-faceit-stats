@@ -7,32 +7,30 @@ export const PROFILE = {
   games: { cs2: { region: "EU", skill_level: 10, faceit_elo: 2404 } },
 };
 
-export function matchItem(overrides: Record<string, string | number> = {}) {
-  return {
-    stats: {
-      "Match Id": "1-194343b4-6a43-443b-87dd-5ae99b90ed13",
-      "Match Finished At": 1_789_811_099_000,
-      "Game Mode": "5v5",
-      Map: "de_ancient",
-      Result: "0",
-      Score: "13 / 10",
-      "Final Score": "10",
-      Rounds: "23",
-      Kills: "9",
-      Deaths: "21",
-      Assists: "4",
-      "K/D Ratio": "0.43",
-      "K/R Ratio": "0.39",
-      ADR: "56.3",
-      "Headshots %": "78",
-      MVPs: "0",
-      "Triple Kills": "0",
-      "Quadro Kills": "0",
-      "Penta Kills": "0",
-      ...overrides,
-    },
-  };
-}
+export const matchItem = (overrides: Record<string, string | number> = {}) => ({
+  stats: {
+    "Match Id": "1-194343b4-6a43-443b-87dd-5ae99b90ed13",
+    "Match Finished At": 1_789_811_099_000,
+    "Game Mode": "5v5",
+    Map: "de_ancient",
+    Result: "0",
+    Score: "13 / 10",
+    "Final Score": "10",
+    Rounds: "23",
+    Kills: "9",
+    Deaths: "21",
+    Assists: "4",
+    "K/D Ratio": "0.43",
+    "K/R Ratio": "0.39",
+    ADR: "56.3",
+    "Headshots %": "78",
+    MVPs: "0",
+    "Triple Kills": "0",
+    "Quadro Kills": "0",
+    "Penta Kills": "0",
+    ...overrides,
+  },
+});
 
 export const LIFETIME = {
   lifetime: {

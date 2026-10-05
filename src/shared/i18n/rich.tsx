@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from "react";
 
-export function rich(text: string, nodes: Readonly<Record<string, ReactNode>>): ReactNode[] {
+export const rich = (text: string, nodes: Readonly<Record<string, ReactNode>>): ReactNode[] => {
   let offset = 0;
   return text.split(/(\{\w+\})/g).flatMap<ReactNode>((part) => {
     const start = offset;
@@ -10,4 +10,4 @@ export function rich(text: string, nodes: Readonly<Record<string, ReactNode>>): 
     if (name === undefined || !(name in nodes)) return [part];
     return [<Fragment key={`${name}:${start}`}>{nodes[name]}</Fragment>];
   });
-}
+};

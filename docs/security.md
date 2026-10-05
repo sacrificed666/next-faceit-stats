@@ -7,10 +7,9 @@ flowchart LR
   Browser[🌐 Browser] -->|HTML, RSC, images| Server[🖥️ Next.js server]
   Server -->|"Bearer key, server only"| FACEIT[(🔶 FACEIT Data API)]
   Server -->|HEAD checks, image optimisation| CDN[(🖼️ FACEIT CDN)]
-  Browser -->|flags| Flags[(🏳️ flagcdn.com)]
 ```
 
-The browser never talks to the FACEIT API. It receives prerendered pages, optimised images from `/_next/image` and flag images from flagcdn.com.
+The browser never talks to the FACEIT API. It receives prerendered pages, optimised images from `/_next/image` and flags from `/flags/<code>`, prerendered by the app from the `country-flag-icons` package and served with their own `default-src 'none'; sandbox` policy.
 
 ## 🔑 The API key
 
@@ -29,15 +28,15 @@ The browser never talks to the FACEIT API. It receives prerendered pages, optimi
 
 Set for every route in `next.config.ts`:
 
-| Header                          | Value                                                                                                                                                                                 |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🧱 `Content-Security-Policy`    | `default-src 'self'`; images from self, FACEIT's CDN and flagcdn.com; no objects; no framing; `base-uri` and `form-action` limited to self; `upgrade-insecure-requests` in production |
-| 🖼️ `X-Frame-Options`            | `DENY`                                                                                                                                                                                |
-| 📄 `X-Content-Type-Options`     | `nosniff`                                                                                                                                                                             |
-| 🔗 `Referrer-Policy`            | `strict-origin-when-cross-origin`                                                                                                                                                     |
-| 🪟 `Cross-Origin-Opener-Policy` | `same-origin`                                                                                                                                                                         |
-| 🔒 `Strict-Transport-Security`  | `max-age=31536000` in production, so browsers only use HTTPS for a year after the first visit                                                                                         |
-| 🎛️ `Permissions-Policy`         | Camera, microphone, geolocation, payment, USB and topics switched off                                                                                                                 |
+| Header                          | Value                                                                                                                                                                    |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 🧱 `Content-Security-Policy`    | `default-src 'self'`; images from self and FACEIT's CDN; no objects; no framing; `base-uri` and `form-action` limited to self; `upgrade-insecure-requests` in production |
+| 🖼️ `X-Frame-Options`            | `DENY`                                                                                                                                                                   |
+| 📄 `X-Content-Type-Options`     | `nosniff`                                                                                                                                                                |
+| 🔗 `Referrer-Policy`            | `strict-origin-when-cross-origin`                                                                                                                                        |
+| 🪟 `Cross-Origin-Opener-Policy` | `same-origin`                                                                                                                                                            |
+| 🔒 `Strict-Transport-Security`  | `max-age=31536000` in production, so browsers only use HTTPS for a year after the first visit                                                                            |
+| 🎛️ `Permissions-Policy`         | Camera, microphone, geolocation, payment, USB and topics switched off                                                                                                    |
 
 `X-Powered-By` is removed. Scripts are allowed inline because static pages cannot carry per-request nonces; the only inline scripts are Next.js's own payload, the boot script (theme, dates and the browser colour), the language script of the 404 page and JSON-LD data.
 
@@ -69,7 +68,7 @@ FACEIT responses are treated as untrusted input:
 
 - 🌍 The only cookie is `locale`, set when a visitor picks a language: first party, `SameSite=Lax`, one year, and it holds nothing but a two-letter language code.
 - 🌗 The theme lives in `localStorage` and never leaves the browser.
-- 🙈 No analytics, no tracking and no third-party scripts. The only third-party requests are flag images from flagcdn.com, sent with `referrerpolicy="no-referrer"`.
+- 🙈 No analytics, no tracking and no third-party scripts. Flags come from the app itself, so a visit reveals nothing to another site.
 
 ## 🔗 Supply chain and CI
 

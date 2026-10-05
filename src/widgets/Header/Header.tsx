@@ -1,20 +1,17 @@
 import Link from "next/link";
 
+import SettingsMenu from "@/features/settings/ui/SettingsMenu/SettingsMenu";
 import type { I18n } from "@/shared/i18n/context";
-import { SITE } from "@/shared/lib/site";
 import { homePath } from "@/shared/lib/urls";
-import { Icon } from "@/shared/ui/Icon";
-import { Logo } from "@/shared/ui/Logo";
+import Logo from "@/shared/ui/Logo/Logo";
 
-import { HeaderNav } from "./HeaderNav";
-import { LanguageMenu } from "./LanguageMenu";
-import { ThemeToggle } from "./ThemeToggle";
+import HeaderNav from "./HeaderNav";
 
 interface HeaderProps {
   i18n: I18n;
 }
 
-export function Header({ i18n: { locale, t } }: HeaderProps) {
+const Header = ({ i18n: { locale, t } }: HeaderProps) => {
   const name = t("app.name");
   return (
     <header className="relative z-30">
@@ -30,20 +27,12 @@ export function Header({ i18n: { locale, t } }: HeaderProps) {
           </Link>
         </div>
         <HeaderNav className="order-last w-full sm:order-none sm:ml-4 sm:w-auto" />
-        <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
-          <LanguageMenu />
-          <ThemeToggle />
-          <a
-            href={SITE.repository}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden size-9 items-center justify-center rounded-full text-ink-secondary transition-colors hover:bg-hover hover:text-ink xs:inline-flex"
-          >
-            <Icon name="github" size={18} />
-            <span className="sr-only">{t("external.label", { label: t("nav.source") })}</span>
-          </a>
+        <div className="ml-auto flex items-center">
+          <SettingsMenu />
         </div>
       </div>
     </header>
   );
-}
+};
+
+export default Header;

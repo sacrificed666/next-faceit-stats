@@ -6,11 +6,11 @@ import { LOCALES } from "./locales";
 import { en } from "./messages/en";
 import { pluralCategory, translate, type Message } from "./translate";
 
-function placeholders(message: Message): string[] {
+const placeholders = (message: Message): string[] => {
   const texts = typeof message === "string" ? [message] : Object.values(message);
   const names = texts.flatMap((text) => Array.from(text.matchAll(/\{(\w+)\}/g), (match) => match[1] ?? ""));
   return [...new Set(names)].toSorted();
-}
+};
 
 describe("translate", () => {
   it("interpolates parameters and formats numbers for each language", () => {
@@ -38,6 +38,10 @@ describe("translate", () => {
     expect(translate("fr", CATALOG.fr, "count.matches", { count: 0 })).toBe("0 match");
     expect(translate("fr", CATALOG.fr, "count.matches", { count: 2 })).toBe("2 matchs");
     expect(translate("de", CATALOG.de, "count.matches", { count: 1 })).toBe("1 Match");
+    expect(translate("cs", CATALOG.cs, "count.matches", { count: 3 })).toBe("3 zápasy");
+    expect(translate("cs", CATALOG.cs, "count.matches", { count: 12 })).toBe("12 zápasů");
+    expect(translate("pt", CATALOG.pt, "count.matches", { count: 1 })).toBe("1 partida");
+    expect(translate("pt", CATALOG.pt, "count.matches", { count: 0 })).toBe("0 partidas");
   });
 
   it("translates every message in every language", () => {

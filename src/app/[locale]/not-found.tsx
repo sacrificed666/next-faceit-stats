@@ -4,14 +4,14 @@ import Link from "next/link";
 import { rich } from "@/shared/i18n/rich";
 import { currentLocale, getI18n } from "@/shared/i18n/server";
 import { homePath } from "@/shared/lib/urls";
-import { Icon } from "@/shared/ui/Icon";
+import Icon from "@/shared/ui/Icon/Icon";
 
-export async function generateMetadata(): Promise<Metadata> {
+export const generateMetadata = async (): Promise<Metadata> => {
   const { t } = await getI18n(await currentLocale());
   return { title: t("notFound.meta"), robots: { index: false, follow: true } };
-}
+};
 
-export default async function NotFound() {
+const NotFound = async () => {
   const locale = await currentLocale();
   const { t } = await getI18n(locale);
   return (
@@ -38,4 +38,6 @@ export default async function NotFound() {
       </Link>
     </div>
   );
-}
+};
+
+export default NotFound;

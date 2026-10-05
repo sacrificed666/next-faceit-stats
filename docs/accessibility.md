@@ -4,14 +4,14 @@ The goal is **WCAG 2.2 AA**: everything works with a keyboard, reads well with a
 
 ## 🧭 Structure
 
-| Element      | Implementation                                                                                                          |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| 🏠 Landmarks | `header`, `main`, `footer` and labelled `nav` elements for sections and breadcrumbs                                     |
-| ⏭️ Skip link | **Skip to content** appears on the first <kbd>Tab</kbd> and moves focus to `main`                                       |
-| 🏷️ Headings  | One `h1` per page, an `h2` per section, `h3` inside cards                                                               |
-| 🗂️ Regions   | Every section is a `section` labelled by its heading                                                                    |
-| 📋 Tables    | Real tables with captions, `scope` on headers and a row header for every player                                         |
-| 🌍 Language  | `lang` on the document matches the page language; each entry of the language menu carries its own `lang` and `hreflang` |
+| Element      | Implementation                                                                                                        |
+| ------------ | --------------------------------------------------------------------------------------------------------------------- |
+| 🏠 Landmarks | `header`, `main`, `footer` and labelled `nav` elements for sections and breadcrumbs                                   |
+| ⏭️ Skip link | **Skip to content** appears on the first <kbd>Tab</kbd> and moves focus to `main`                                     |
+| 🏷️ Headings  | One `h1` per page, an `h2` per section, `h3` inside cards                                                             |
+| 🗂️ Regions   | Every section is a `section` labelled by its heading                                                                  |
+| 📋 Tables    | Real tables with captions, `scope` on headers and a row header for every player                                       |
+| 🌍 Language  | `lang` on the document matches the page language; each language in the settings carries its own `lang` and `hreflang` |
 
 ## ⌨️ Keyboard
 
@@ -25,7 +25,7 @@ Every control is a native element, so it behaves the way browsers and assistive 
 | 📋 Data tables                   | `details` and `summary`                            | <kbd>Enter</kbd>                                  |
 | 📈 Charts                        | `input type="range"` over the plot                 | Arrows, <kbd>Home</kbd>, <kbd>End</kbd>           |
 | 🃏 Player cards                  | One link that covers the card                      | <kbd>Enter</kbd>                                  |
-| 🌍 Language menu                 | `button` that opens a native popover of links      | <kbd>Enter</kbd> to open, <kbd>Esc</kbd> to close |
+| ⚙️ Settings                      | `button` that opens a native `<dialog popover>`    | <kbd>Enter</kbd> to open, <kbd>Esc</kbd> to close |
 | ⚔️ Compared players              | Two labelled `select` elements and a swap `button` | Arrows, <kbd>Enter</kbd>                          |
 | 🕹️ Recent matches                | **Show more matches** `button`                     | <kbd>Enter</kbd> or <kbd>Space</kbd>              |
 

@@ -13,6 +13,8 @@ interface I18nProviderProps {
   children: ReactNode;
 }
 
-export function I18nProvider({ locale, messages, children }: I18nProviderProps) {
-  return <I18nContext value={createI18n(locale, messages)}>{children}</I18nContext>;
-}
+const I18nProvider = ({ locale, messages, children }: I18nProviderProps) => (
+  <I18nContext value={createI18n(locale, messages)}>{children}</I18nContext>
+);
+
+export default I18nProvider;

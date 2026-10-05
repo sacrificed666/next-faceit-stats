@@ -5,9 +5,8 @@ import { proxy } from "./proxy";
 
 const ORIGIN = "https://stats.example.com";
 
-function visit(path: string, headers: Record<string, string> = {}) {
-  return proxy(new NextRequest(new URL(path, ORIGIN), { headers }));
-}
+const visit = (path: string, headers: Record<string, string> = {}) =>
+  proxy(new NextRequest(new URL(path, ORIGIN), { headers }));
 
 describe("proxy", () => {
   beforeEach(() => {
@@ -27,7 +26,7 @@ describe("proxy", () => {
   });
 
   it("ignores a cookie with an unknown language", () => {
-    const response = visit("/compare", { cookie: "locale=pt", "accept-language": "fr" });
+    const response = visit("/compare", { cookie: "locale=ru", "accept-language": "fr" });
     expect(response.headers.get("location")).toBe(`${ORIGIN}/fr/compare`);
   });
 

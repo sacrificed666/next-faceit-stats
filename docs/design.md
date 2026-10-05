@@ -113,7 +113,7 @@ The numbers are OKLab distances between the two poles after simulating each kind
 | `CompareRows`              | Two players per row with mirrored bars and the leader named |
 | `MapPool`                  | Diverging heatmap with a squad row and a legend             |
 | `Skeleton`                 | Pulsing placeholders and a spoken loading message           |
-| `LanguageMenu`             | Flag and code button with a native popover of languages     |
+| `SettingsMenu`             | Sliders button with a popover: appearance and languages     |
 | `Avatar`, `BackdropImage`  | Images that fall back gracefully when the CDN fails         |
 
 ## 📐 Layout
@@ -122,7 +122,7 @@ The numbers are OKLab distances between the two poles after simulating each kind
 - 🧱 Grids step up from one column on phones to two, three and five columns.
 - 📊 Wide tables scroll sideways inside their card with the first column pinned; the page itself never scrolls horizontally.
 - 📌 The range toolbar is a floating pill that sticks to the top while scrolling; days and matches are two clusters of one radio group, and on screens narrower than about 360 px the matches move to a second row.
-- 🧭 On phones the navigation moves to its own row under the logo, and the language menu opens under its button with CSS anchor positioning where supported.
+- 🧭 On phones the navigation moves to its own row under the logo. The settings panel opens under its button with CSS anchor positioning where supported, and as a bottom sheet below 640 px.
 - 🌍 Long words in German, Dutch or Polish wrap instead of widening the page; every page is checked for sideways scrolling at 320 px, the width of a 1280 px window zoomed to 400 %.
 
 ## 🌊 Motion

@@ -6,12 +6,12 @@ import { isLocale, LOCALE_COOKIE, negotiateLocale, type Locale } from "@/shared/
 
 const MISSING = "__missing__";
 
-function preferredLocale(request: NextRequest): Locale {
+const preferredLocale = (request: NextRequest): Locale => {
   const saved = request.cookies.get(LOCALE_COOKIE)?.value;
   return isLocale(saved) ? saved : negotiateLocale(request.headers.get("accept-language"));
-}
+};
 
-export function proxy(request: NextRequest) {
+export const proxy = (request: NextRequest) => {
   const { pathname } = request.nextUrl;
   const segments = pathname.split("/").filter(Boolean);
   const [first, ...rest] = segments;
@@ -49,8 +49,8 @@ export function proxy(request: NextRequest) {
   }
 
   return NextResponse.next();
-}
+};
 
 export const config = {
-  matcher: ["/((?!_next/|api/|apple-icon|icon|favicon|manifest|robots|sitemap|.*\\.[a-zA-Z0-9]+$).*)"],
+  matcher: ["/((?!_next/|api/|flags/|apple-icon|icon|favicon|manifest|robots|sitemap|.*\\.[a-zA-Z0-9]+$).*)"],
 };

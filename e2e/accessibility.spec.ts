@@ -13,11 +13,10 @@ const PAGES = [
 
 test.use({ reducedMotion: "reduce" });
 
-function background(locator: Locator): Promise<string> {
-  return locator.evaluate((element) => getComputedStyle(element).backgroundColor);
-}
+const background = (locator: Locator): Promise<string> =>
+  locator.evaluate((element) => getComputedStyle(element).backgroundColor);
 
-async function violations(page: Page) {
+const violations = async (page: Page) => {
   await page.locator("html:not([data-pending])").waitFor();
   const results = await new AxeBuilder({ page })
     .options({ rules: { "label-content-name-mismatch": { enabled: true } } })
@@ -26,7 +25,7 @@ async function violations(page: Page) {
     rule: violation.id,
     targets: violation.nodes.map((node) => node.target.join(" ")),
   }));
-}
+};
 
 for (const path of PAGES) {
   test(`has no detectable accessibility issues on ${path}`, async ({ page }) => {

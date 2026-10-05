@@ -80,7 +80,7 @@ const PLAYERS: MockPlayer[] = [
   },
 ];
 
-function random(seed: number): () => number {
+const random = (seed: number): (() => number) => {
   let state = seed;
   return () => {
     state = (state + 0x6d2b79f5) | 0;
@@ -88,15 +88,15 @@ function random(seed: number): () => number {
     value = (value + Math.imul(value ^ (value >>> 7), 61 | value)) ^ value;
     return ((value ^ (value >>> 14)) >>> 0) / 4_294_967_296;
   };
-}
+};
 
-function pick<T>(items: readonly T[], next: () => number): T {
+const pick = <T>(items: readonly T[], next: () => number): T => {
   const item = items[Math.floor(next() * items.length)];
   if (item === undefined) throw new Error("Cannot pick from an empty list");
   return item;
-}
+};
 
-function shuffle<T>(items: readonly T[], next: () => number): T[] {
+const shuffle = <T>(items: readonly T[], next: () => number): T[] => {
   const pool = [...items];
   const result: T[] = [];
   while (pool.length > 0) {
@@ -104,9 +104,9 @@ function shuffle<T>(items: readonly T[], next: () => number): T[] {
     if (item !== undefined) result.push(item);
   }
   return result;
-}
+};
 
-function schedule(): Map<string, Appearance[]> {
+const schedule = (): Map<string, Appearance[]> => {
   const next = random(2026);
   const appearances = new Map<string, Appearance[]>(PLAYERS.map((player) => [player.id, []]));
   for (let slot = 0; slot < SLOTS; slot += 1) {
@@ -131,11 +131,11 @@ function schedule(): Map<string, Appearance[]> {
     }
   }
   return appearances;
-}
+};
 
 const APPEARANCES = schedule();
 
-function matchStats(player: MockPlayer, appearance: Appearance, index: number) {
+const matchStats = (player: MockPlayer, appearance: Appearance, index: number) => {
   const next = random(appearance.slot * 31 + player.id.length * 7 + index);
   const rounds = appearance.teamScore + appearance.opponentScore;
   const form = player.skill * (appearance.won ? 1.1 : 0.85) * (0.75 + next() * 0.5);
@@ -163,9 +163,9 @@ function matchStats(player: MockPlayer, appearance: Appearance, index: number) {
     "Quadro Kills": String(next() < 0.08 ? 1 : 0),
     "Penta Kills": String(ace),
   };
-}
+};
 
-function lifetime(player: MockPlayer) {
+const lifetime = (player: MockPlayer) => {
   const segments = MAPS.slice(0, 5).map((map, index) => ({
     type: "Map",
     mode: "5v5",
@@ -196,12 +196,12 @@ function lifetime(player: MockPlayer) {
     },
     segments,
   };
-}
+};
 
-function send(response: ServerResponse, status: number, body: unknown): void {
+const send = (response: ServerResponse, status: number, body: unknown): void => {
   response.writeHead(status, { "Content-Type": "application/json", "Cache-Control": "no-store" });
   response.end(JSON.stringify(body));
-}
+};
 
 const server = createServer((request, response) => {
   const url = new URL(request.url ?? "/", `http://127.0.0.1:${PORT}`);

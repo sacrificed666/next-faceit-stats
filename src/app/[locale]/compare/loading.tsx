@@ -1,7 +1,7 @@
 import { currentLocale, getI18n } from "@/shared/i18n/server";
-import { Skeleton } from "@/shared/ui/Skeleton";
+import Skeleton from "@/shared/ui/Skeleton/Skeleton";
 
-export default async function CompareLoading() {
+const CompareLoading = async () => {
   const { t } = await getI18n(await currentLocale());
   return (
     <Skeleton label={t("loading.compare")}>
@@ -13,4 +13,6 @@ export default async function CompareLoading() {
       <div className="panel h-96" />
     </Skeleton>
   );
-}
+};
+
+export default CompareLoading;

@@ -2,25 +2,28 @@
 
 ## 🔁 Pipeline
 
+CI runs on pushes to `main`, `staging` and `development`, on pull requests into them and on demand. Version tags start the release workflow described in [Releases](./releases.md).
+
 ```mermaid
 flowchart LR
-  Push[📤 Push or pull request] --> Verify[🔍 Lint · format · types · tests]
+  Push[📤 Push or pull request] --> Verify[🔍 Changelog · lint · format · types · tests]
   Push --> Build[🛠️ Production build without credentials]
   Push --> E2E[🎭 Browsers · axe · Lighthouse]
   Push --> Review[🛡️ Dependency review]
   Push --> CodeQL[🔬 CodeQL]
-  Verify --> Vercel[▲ Vercel deploys main]
+  Verify --> Vercel[▲ Vercel deploys main, staging and development]
   Build --> Vercel
   E2E --> Vercel
 ```
 
-| Job                  | Workflow     | What it does                                                                                                                                                                                                            |
-| -------------------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🔍 Verify            | `ci.yml`     | Install, registry signatures, Oxlint, Oxfmt, types, unit tests with coverage, a coverage summary and the HTML report                                                                                                    |
-| 🛠️ Build             | `ci.yml`     | `next build` without FACEIT credentials, then `scripts/build-report.mjs` checks every language, the 404 page, sitemap, robots, icons and security headers and reports the bundle size                                   |
-| 🎭 E2E               | `ci.yml`     | Chromium from a cache keyed by the Playwright version, a production build against the mock FACEIT API, Playwright on desktop and phone, axe, forced colours, reflow and the Lighthouse budget, with the report uploaded |
-| 🛡️ Dependency review | `ci.yml`     | Pull requests fail on new dependencies with high-severity advisories                                                                                                                                                    |
-| 🔬 CodeQL            | `codeql.yml` | `security-extended` queries for TypeScript and the workflows on every change and every Monday                                                                                                                           |
+| Job                  | Workflow      | What it does                                                                                                                                                                                                            |
+| -------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🔍 Verify            | `ci.yml`      | Install, registry signatures, a changelog section for the current version, Oxlint, Oxfmt, types, unit tests with coverage, a coverage summary and the HTML report                                                       |
+| 🛠️ Build             | `ci.yml`      | `next build` without FACEIT credentials, then `scripts/build-report.mjs` checks every language, the 404 page, sitemap, robots, icons and security headers and reports the bundle size                                   |
+| 🎭 E2E               | `ci.yml`      | Chromium from a cache keyed by the Playwright version, a production build against the mock FACEIT API, Playwright on desktop and phone, axe, forced colours, reflow and the Lighthouse budget, with the report uploaded |
+| 🛡️ Dependency review | `ci.yml`      | Pull requests fail on new dependencies with high-severity advisories                                                                                                                                                    |
+| 🔬 CodeQL            | `codeql.yml`  | `security-extended` queries for TypeScript and the workflows on every change and every Monday                                                                                                                           |
+| 🏷️ Release           | `release.yml` | On a `v*.*.*` tag: checks that the tag matches `package.json` and sits on `main`, then publishes the GitHub release with the notes from `CHANGELOG.md`                                                                  |
 
 The build job proves that the app builds without secrets: with no key, every page prerenders the setup screen.
 
@@ -35,7 +38,7 @@ The build job proves that the app builds without secrets: with no key, every pag
    | `FACEIT_PLAYERS` | The squad, for example `sacrificed,Nitron` |
    | `SITE_URL`       | Only for a custom domain                   |
 
-3. 🚀 Deploy. Pushes to `main` deploy to production, pull requests get previews.
+3. 🚀 Deploy. `main` is the production branch; `staging`, `development` and every pull request get preview deployments, see [Environments](./releases.md#️-environments).
 
 Without `SITE_URL` the production domain from `VERCEL_PROJECT_PRODUCTION_URL` is used for canonical links and Open Graph cards.
 
@@ -45,7 +48,7 @@ Without `SITE_URL` the production domain from `VERCEL_PROJECT_PRODUCTION_URL` is
 > [!WARNING]
 > Changing an environment variable on Vercel needs a new deployment, because the player pages are prerendered from the squad at build time.
 
-All eight languages are part of every deployment; there is nothing to configure. The proxy that picks the language runs on the Node.js runtime next to the pages.
+All ten languages are part of every deployment; there is nothing to configure. The proxy that picks the language runs on the Node.js runtime next to the pages.
 
 ## 🖥️ Self-hosting
 
@@ -75,7 +78,7 @@ See [Architecture](./architecture.md#-caching) for the details.
 
 ## 🤖 Dependency updates
 
-Dependabot opens grouped pull requests every Monday: minor and patch updates for runtime and development dependencies, and one for GitHub Actions. Major updates arrive one by one. CI, the dependency review and CodeQL run on each of them.
+Dependabot opens grouped pull requests against `development` every Monday: minor and patch updates for runtime and development dependencies, and one for GitHub Actions. Major updates arrive one by one. CI, the dependency review and CodeQL run on each of them, and the updates reach production with the next release.
 
 ## 🖐️ Checking a build locally
 

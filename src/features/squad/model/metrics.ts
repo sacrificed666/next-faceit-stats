@@ -25,6 +25,5 @@ export const METRIC_KEYS: readonly MetricKey[] = ["kd", "kr", "adr", "hsPercent"
 
 export const MATCH_METRIC_KEYS: readonly MatchMetricKey[] = ["kd", "kr", "adr", "hsPercent"];
 
-export function formatMetric(format: Formatter, key: MetricKey, value: number, digits = METRICS[key].digits): string {
-  return METRICS[key].percent ? format.percent(value, digits) : format.decimal(value, digits);
-}
+export const formatMetric = (format: Formatter, key: MetricKey, value: number, digits = METRICS[key].digits): string =>
+  METRICS[key].percent ? format.percent(value, digits) : format.decimal(value, digits);

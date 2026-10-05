@@ -83,6 +83,7 @@ next-faceit-stats/
 │   ├── ISSUE_TEMPLATE/              Bug report and feature request forms
 │   ├── workflows/ci.yml             Lint, format, types, unit tests, build, end-to-end tests, dependency review
 │   ├── workflows/codeql.yml         CodeQL code scanning
+│   ├── workflows/release.yml        GitHub release for every version tag
 │   ├── dependabot.yml               Weekly dependency and GitHub Actions updates
 │   ├── PULL_REQUEST_TEMPLATE.md
 │   └── SECURITY.md                  How to report vulnerabilities
@@ -91,20 +92,22 @@ next-faceit-stats/
 ├── lint/no-comments.js              Custom Oxlint rule that forbids comments
 ├── scripts/
 │   ├── build-report.mjs             Checks the production build and reports the bundle size in CI
-│   └── coverage-summary.mjs         Coverage table for the CI summary
+│   ├── coverage-summary.mjs         Coverage table for the CI summary
+│   └── release-notes.mjs            Checks the version and prints its notes from the changelog
 ├── src/
-│   ├── app/                         Routes: overview, players and compare under [locale], 404, sitemap, robots, icons
+│   ├── app/                         Routes: overview, players and compare under [locale], flags, 404, sitemap, robots, icons
 │   ├── widgets/
-│   │   ├── Header/                  Logo, navigation, language menu and theme switch
-│   │   └── Footer/                  Credits and links
+│   │   ├── Header/                  Logo, navigation and the settings button
+│   │   └── Footer/                  Author, version, data source and the source code
 │   ├── features/
 │   │   ├── squad/                   api: FACEIT client, parser and cached loader; model: ranges, statistics, duos; ui: names, toolbar, badges
 │   │   ├── dashboard/               The squad overview sections, the recent matches feed and the records
 │   │   ├── player/                  The player page and its per-range context
 │   │   ├── compare/                 The comparison of two players
+│   │   ├── settings/                    The settings panel: theme and language
 │   │   └── seo/                     Structured data, social metadata and the share images
 │   ├── shared/
-│   │   ├── i18n/                    Languages, the eight catalogs, plurals, the provider and the server loader
+│   │   ├── i18n/                    Languages, the ten catalogs, plurals, the provider and the server loader
 │   │   ├── lib/                     Formatting, scales, addresses, site settings, theme and the inline boot script
 │   │   ├── hooks/                   Address state, time zone, clock and sorting
 │   │   ├── ui/                      Building blocks: sections, tiles, bars, the line chart, tables, meters, icons
@@ -112,14 +115,15 @@ next-faceit-stats/
 │   ├── proxy.ts                     Language redirects, canonical nicknames and 404s before a page renders
 │   ├── test/                        Test setup, factories and FACEIT fixtures
 │   └── types/                       Global type augmentations
+├── CHANGELOG.md                     Every release, newest first
 ├── next.config.ts                   Cache profiles, typed routes, images and security headers
 ├── playwright.config.ts             Browsers, the mock API and the production server for end-to-end tests
-├── vitest.config.mts                Unit test environment and coverage thresholds
+├── vitest.config.ts                 Unit test environment and coverage thresholds
 ├── .oxlintrc.json                   Lint rules, including the layer rules
 └── .oxfmtrc.json                    Formatting rules
 ```
 
-Tests sit next to the code they cover as `*.test.ts(x)`. How the layers work together is explained in [Architecture](./architecture.md#-layers).
+Every component has its own folder, for example `features/dashboard/ui/MapPool/MapPool.tsx`, and tests sit next to the code they cover as `*.test.ts(x)`. How the layers work together is explained in [Architecture](./architecture.md#️-layers).
 
 ## 💻 Editor setup
 

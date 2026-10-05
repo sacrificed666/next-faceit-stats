@@ -5,7 +5,7 @@ const HOUR = 3_600_000;
 
 let sequence = 0;
 
-export function makeMatch(overrides: Partial<Match> = {}): Match {
+export const makeMatch = (overrides: Partial<Match> = {}): Match => {
   sequence += 1;
   return {
     id: `1-match-${sequence}`,
@@ -28,13 +28,11 @@ export function makeMatch(overrides: Partial<Match> = {}): Match {
     pentaKills: 0,
     ...overrides,
   };
-}
+};
 
-export function newestFirst(matches: Match[]): Match[] {
-  return matches.toSorted((a, b) => b.finishedAt - a.finishedAt);
-}
+export const newestFirst = (matches: Match[]): Match[] => matches.toSorted((a, b) => b.finishedAt - a.finishedAt);
 
-export function makePlayer(overrides: Partial<Player> = {}): Player {
+export const makePlayer = (overrides: Partial<Player> = {}): Player => {
   sequence += 1;
   return {
     id: `player-${sequence}`,
@@ -51,4 +49,4 @@ export function makePlayer(overrides: Partial<Player> = {}): Player {
     matches: [],
     ...overrides,
   };
-}
+};

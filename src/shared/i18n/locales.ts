@@ -1,4 +1,4 @@
-export const LOCALES = ["en", "uk", "de", "es", "fr", "it", "nl", "pl"] as const;
+export const LOCALES = ["en", "uk", "cs", "de", "es", "fr", "it", "nl", "pl", "pt"] as const;
 
 export type Locale = (typeof LOCALES)[number];
 
@@ -14,21 +14,22 @@ interface LocaleInfo {
 }
 
 export const LOCALE_INFO: Readonly<Record<Locale, LocaleInfo>> = {
-  en: { name: "English", flag: "gb", intl: "en-GB", openGraph: "en_GB" },
-  uk: { name: "Українська", flag: "ua", intl: "uk-UA", openGraph: "uk_UA" },
-  de: { name: "Deutsch", flag: "de", intl: "de-DE", openGraph: "de_DE" },
-  es: { name: "Español", flag: "es", intl: "es-ES", openGraph: "es_ES" },
-  fr: { name: "Français", flag: "fr", intl: "fr-FR", openGraph: "fr_FR" },
-  it: { name: "Italiano", flag: "it", intl: "it-IT", openGraph: "it_IT" },
-  nl: { name: "Nederlands", flag: "nl", intl: "nl-NL", openGraph: "nl_NL" },
-  pl: { name: "Polski", flag: "pl", intl: "pl-PL", openGraph: "pl_PL" },
+  en: { name: "English", flag: "GB", intl: "en-GB", openGraph: "en_GB" },
+  uk: { name: "Українська", flag: "UA", intl: "uk-UA", openGraph: "uk_UA" },
+  cs: { name: "Čeština", flag: "CZ", intl: "cs-CZ", openGraph: "cs_CZ" },
+  de: { name: "Deutsch", flag: "DE", intl: "de-DE", openGraph: "de_DE" },
+  es: { name: "Español", flag: "ES", intl: "es-ES", openGraph: "es_ES" },
+  fr: { name: "Français", flag: "FR", intl: "fr-FR", openGraph: "fr_FR" },
+  it: { name: "Italiano", flag: "IT", intl: "it-IT", openGraph: "it_IT" },
+  nl: { name: "Nederlands", flag: "NL", intl: "nl-NL", openGraph: "nl_NL" },
+  pl: { name: "Polski", flag: "PL", intl: "pl-PL", openGraph: "pl_PL" },
+  pt: { name: "Português", flag: "PT", intl: "pt-PT", openGraph: "pt_PT" },
 };
 
-export function isLocale(value: unknown): value is Locale {
-  return typeof value === "string" && (LOCALES as readonly string[]).includes(value);
-}
+export const isLocale = (value: unknown): value is Locale =>
+  typeof value === "string" && (LOCALES as readonly string[]).includes(value);
 
-export function negotiateLocale(acceptLanguage: string | null | undefined): Locale {
+export const negotiateLocale = (acceptLanguage: string | null | undefined): Locale => {
   const ranked = (acceptLanguage ?? "")
     .split(",")
     .map((part, index) => {
@@ -40,8 +41,6 @@ export function negotiateLocale(acceptLanguage: string | null | undefined): Loca
     .filter((entry) => entry.language !== "" && entry.weight > 0)
     .toSorted((a, b) => b.weight - a.weight || a.index - b.index);
   return ranked.map((entry) => entry.language).find(isLocale) ?? DEFAULT_LOCALE;
-}
+};
 
-export function localePath(locale: Locale, path = "/"): string {
-  return path === "/" ? `/${locale}` : `/${locale}${path}`;
-}
+export const localePath = (locale: Locale, path = "/"): string => (path === "/" ? `/${locale}` : `/${locale}${path}`);

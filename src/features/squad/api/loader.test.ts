@@ -10,16 +10,15 @@ vi.mock("next/cache", () => ({
   cacheTag: vi.fn<(tag: string) => void>(),
 }));
 
-function respond(status: number, body: unknown = {}): Response {
-  return new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } });
-}
+const respond = (status: number, body: unknown = {}): Response =>
+  new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } });
 
 interface FaceitMock {
   status?: number;
   avatarStatus?: number;
 }
 
-function mockFaceit({ status, avatarStatus = 200 }: FaceitMock = {}) {
+const mockFaceit = ({ status, avatarStatus = 200 }: FaceitMock = {}) => {
   const fetchMock = vi.fn<(input: string, init?: RequestInit) => Promise<Response>>(async (input, init) => {
     if (init?.method === "HEAD") return new Response(null, { status: avatarStatus });
     if (status) return respond(status);
@@ -35,15 +34,15 @@ function mockFaceit({ status, avatarStatus = 200 }: FaceitMock = {}) {
   });
   vi.stubGlobal("fetch", fetchMock);
   return fetchMock;
-}
+};
 
-async function settled<T>(promise: Promise<T>): Promise<T> {
+const settled = async <T>(promise: Promise<T>): Promise<T> => {
   const outcome = Promise.allSettled([promise]);
   await vi.runAllTimersAsync();
   const [result] = await outcome;
   if (result?.status !== "fulfilled") throw new Error("The squad could not be loaded");
   return result.value;
-}
+};
 
 describe("getSquad", () => {
   beforeEach(() => {

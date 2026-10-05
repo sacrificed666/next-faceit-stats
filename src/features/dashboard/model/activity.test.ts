@@ -4,9 +4,8 @@ import { makeMatch } from "@/test/factories";
 
 import { activityFeed } from "./activity";
 
-function sides(feed: ReturnType<typeof activityFeed>) {
-  return feed.map((entry) => entry.sides.map((side) => [side.won, side.players.map((player) => player.playerId)]));
-}
+const sides = (feed: ReturnType<typeof activityFeed>) =>
+  feed.map((entry) => entry.sides.map((side) => [side.won, side.players.map((player) => player.playerId)]));
 
 describe("activityFeed", () => {
   it("shows a match played together once, newest first", () => {

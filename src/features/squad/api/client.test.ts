@@ -4,17 +4,16 @@ import { createFaceitClient, FaceitError, request } from "./client";
 
 type Fetch = (input: string, init?: RequestInit) => Promise<Response>;
 
-function respond(status: number, body: unknown = {}): Response {
-  return new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } });
-}
+const respond = (status: number, body: unknown = {}): Response =>
+  new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } });
 
-async function settle<T>(promise: Promise<T>): Promise<PromiseSettledResult<T>> {
+const settle = async <T>(promise: Promise<T>): Promise<PromiseSettledResult<T>> => {
   const outcome = Promise.allSettled([promise]);
   await vi.runAllTimersAsync();
   const [result] = await outcome;
   if (!result) throw new Error("The promise did not settle");
   return result;
-}
+};
 
 describe("FACEIT client", () => {
   beforeEach(() => {

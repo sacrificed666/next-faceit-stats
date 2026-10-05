@@ -4,20 +4,21 @@
 
 ```mermaid
 flowchart LR
-  Branch[🌿 Branch from main] --> Code[✏️ Change + tests + docs]
+  Branch[🌿 Branch from development] --> Code[✏️ Change + tests + docs]
   Code --> Check[✅ npm run check]
   Check --> E2E[🎭 npm run test:e2e]
-  E2E --> PR[📬 Pull request]
+  E2E --> PR[📬 Pull request into development]
   PR --> CI[🔍 CI · 🔬 CodeQL · 🛡️ dependency review]
   CI --> Merge[🔀 Merge]
-  Merge --> Deploy[▲ Automatic deploy]
+  Merge --> Deploy[▲ Development preview]
 ```
 
-1. 🌿 Create a branch from `main`.
+1. 🌿 Create a branch from `development`, named after the change: `feat/player-heatmap`, `fix/compare-swap`.
 2. ✅ Make your changes, add tests and run `npm run check`.
 3. 🎭 For anything visitors see, run `npm run test:e2e` as well: it covers redirects, accessibility, phones and the Lighthouse budget.
-4. 📬 Open a pull request and fill in the checklist from the template.
-5. ▲ Merge once everything is green; `main` deploys automatically.
+4. 📝 Describe a user-visible change in one line under **Unreleased** in `CHANGELOG.md`.
+5. 📬 Open a pull request into `development` and fill in the checklist from the template.
+6. 🔀 Merge once everything is green. `development` reaches `staging` and `main` through the release flow in [Releases](./releases.md).
 
 Bugs and ideas go through the issue forms in `.github/ISSUE_TEMPLATE`; security problems are reported privately as described in the [security policy](../.github/SECURITY.md).
 
@@ -61,16 +62,16 @@ Styles, configuration, workflows and templates follow the same convention. If so
 
 ### 📐 Conventions
 
-| Topic            | Convention                                                                                                                                                                               |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🧩 Components    | One component per file, a named `function` export, PascalCase file names; `"use client"` only where hooks or events are needed                                                           |
-| 🧮 Logic         | Pure functions in a `model/` or `lib/` folder that take plain data and return plain data, tested next to them                                                                            |
-| 🎨 Styles        | Tailwind utilities with the design tokens (`bg-surface`, `text-ink-muted`, `bg-data`); raw colours only for levels, medals and the brand mark                                            |
-| 🖍️ Data marks    | Bars and legend swatches carry the `mark`, `mark-muted` or `mark-line` class, selectable options the `choice` class, so they stay visible in forced colours mode                         |
-| ✍️ Text          | Every UI text in all eight catalogs, never in a component; no em or en dashes, use commas, colons or plain hyphens such as `12-8`; gaming terms such as ELO, K/D and ADR stay in English |
-| ♿ Accessibility | Native elements first, a label for every control, colour never alone                                                                                                                     |
-| 📥 Imports       | The `@/` alias for anything outside the current folder, relative paths inside it                                                                                                         |
-| 🧪 Tests         | Next to the code as `*.test.ts(x)`; query by role and accessible name                                                                                                                    |
+| Topic            | Convention                                                                                                                                                                             |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🧩 Components    | One component per file, a named `function` export, PascalCase file names; `"use client"` only where hooks or events are needed                                                         |
+| 🧮 Logic         | Pure functions in a `model/` or `lib/` folder that take plain data and return plain data, tested next to them                                                                          |
+| 🎨 Styles        | Tailwind utilities with the design tokens (`bg-surface`, `text-ink-muted`, `bg-data`); raw colours only for levels, medals and the brand mark                                          |
+| 🖍️ Data marks    | Bars and legend swatches carry the `mark`, `mark-muted` or `mark-line` class, selectable options the `choice` class, so they stay visible in forced colours mode                       |
+| ✍️ Text          | Every UI text in all ten catalogs, never in a component; no em or en dashes, use commas, colons or plain hyphens such as `12-8`; gaming terms such as ELO, K/D and ADR stay in English |
+| ♿ Accessibility | Native elements first, a label for every control, colour never alone                                                                                                                   |
+| 📥 Imports       | The `@/` alias for anything outside the current folder, relative paths inside it                                                                                                       |
+| 🧪 Tests         | Next to the code as `*.test.ts(x)`; query by role and accessible name                                                                                                                  |
 
 ## ➕ Adding a metric
 

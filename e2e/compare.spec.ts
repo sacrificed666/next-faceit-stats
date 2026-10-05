@@ -1,9 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
 
-function pair(page: Page) {
+const pair = (page: Page) => {
   const query = new URL(page.url()).searchParams;
   return [query.get("a"), query.get("b")];
-}
+};
 
 test("compares two players and keeps them in the address", async ({ page }) => {
   await page.goto("/en/compare");

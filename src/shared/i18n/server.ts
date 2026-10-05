@@ -9,23 +9,21 @@ import type { Messages } from "./translate";
 const LOADERS: Readonly<Record<Locale, () => Promise<Messages>>> = {
   en: async () => (await import("./messages/en")).en,
   uk: async () => (await import("./messages/uk")).uk,
+  cs: async () => (await import("./messages/cs")).cs,
   de: async () => (await import("./messages/de")).de,
   es: async () => (await import("./messages/es")).es,
   fr: async () => (await import("./messages/fr")).fr,
   it: async () => (await import("./messages/it")).it,
   nl: async () => (await import("./messages/nl")).nl,
   pl: async () => (await import("./messages/pl")).pl,
+  pt: async () => (await import("./messages/pt")).pt,
 };
 
-export function getMessages(locale: Locale): Promise<Messages> {
-  return LOADERS[locale]();
-}
+export const getMessages = (locale: Locale): Promise<Messages> => LOADERS[locale]();
 
-export async function getI18n(locale: Locale): Promise<I18n> {
-  return createI18n(locale, await getMessages(locale));
-}
+export const getI18n = async (locale: Locale): Promise<I18n> => createI18n(locale, await getMessages(locale));
 
-export async function currentLocale(): Promise<Locale> {
+export const currentLocale = async (): Promise<Locale> => {
   const value = await rootLocale();
   return isLocale(value) ? value : DEFAULT_LOCALE;
-}
+};

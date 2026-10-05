@@ -11,7 +11,7 @@ interface HeaderNavProps {
   className?: string;
 }
 
-export function HeaderNav({ className = "" }: HeaderNavProps) {
+const HeaderNav = ({ className = "" }: HeaderNavProps) => {
   const { locale, t } = useI18n();
   const pathname = usePathname();
   const range = useRange();
@@ -37,4 +37,6 @@ export function HeaderNav({ className = "" }: HeaderNavProps) {
       </ul>
     </nav>
   );
-}
+};
+
+export default HeaderNav;

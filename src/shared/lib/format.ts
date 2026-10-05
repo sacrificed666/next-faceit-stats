@@ -31,7 +31,7 @@ export interface Formatter {
   country: (code: string) => string;
 }
 
-function memo<K, V>(create: (key: K) => V): (key: K) => V {
+const memo = <K, V>(create: (key: K) => V): ((key: K) => V) => {
   const cache = new Map<K, V>();
   return (key) => {
     let value = cache.get(key);
@@ -41,13 +41,11 @@ function memo<K, V>(create: (key: K) => V): (key: K) => V {
     }
     return value;
   };
-}
+};
 
-function minus(text: string): string {
-  return text.replaceAll("-", MINUS);
-}
+const minus = (text: string): string => text.replaceAll("-", MINUS);
 
-export function createFormatter(locale: Locale): Formatter {
+export const createFormatter = (locale: Locale): Formatter => {
   const tag = LOCALE_INFO[locale].intl;
   const decimals = memo(
     (digits: number) => new Intl.NumberFormat(tag, { minimumFractionDigits: digits, maximumFractionDigits: digits }),
@@ -92,4 +90,4 @@ export function createFormatter(locale: Locale): Formatter {
       }
     },
   };
-}
+};

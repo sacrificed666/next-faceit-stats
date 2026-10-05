@@ -2,7 +2,7 @@
 
 ## 🧭 Layout
 
-Every page shares one header with the logo, the **Squad** and **Compare** links, the language menu, the theme switch and a link to the source code:
+Every page shares one header with the logo, the **Squad** and **Compare** links and the **Settings** button, and one footer with the author, the version, the data source and a link to the source code:
 
 | Page                                  | What it shows                                            |
 | ------------------------------------- | -------------------------------------------------------- |
@@ -148,7 +148,7 @@ Each row draws two bars from the centre and highlights the better value; screen 
 
 ## 🌍 Languages
 
-English, Ukrainian, German, Spanish, French, Italian, Dutch and Polish. The language menu in the header switches the page and keeps the range and the players. Numbers, dates and relative times follow the language and the visitor's time zone. See [Localization](./i18n.md).
+English, Ukrainian, Czech, German, Spanish, French, Italian, Dutch, Polish and Portuguese. The **Settings** panel in the header switches the page and keeps the range and the players. Numbers, dates and relative times follow the language and the visitor's time zone. See [Localization](./i18n.md).
 
 ## 🌗 Appearance
 

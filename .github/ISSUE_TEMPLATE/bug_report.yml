@@ -41,6 +41,12 @@ body:
     validations:
       required: true
   - type: input
+    id: version
+    attributes:
+      label: 🏷️ Version
+      description: Shown in the footer of the app.
+      placeholder: v1.0.0
+  - type: input
     id: environment
     attributes:
       label: 💻 Browser and device

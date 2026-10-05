@@ -13,17 +13,15 @@ interface ImageProps {
   params: Promise<{ locale: string }>;
 }
 
-export function generateStaticParams() {
-  return LOCALES.map((locale) => ({ locale }));
-}
+export const generateStaticParams = () => LOCALES.map((locale) => ({ locale }));
 
-export async function generateImageMetadata({ params }: ImageProps) {
+export const generateImageMetadata = async ({ params }: ImageProps) => {
   const { locale } = await params;
   const { t } = await getI18n(isLocale(locale) ? locale : DEFAULT_LOCALE);
   return [{ id: "card", alt: t("og.compareAlt"), size, contentType }];
-}
+};
 
-export default async function Image({ params }: ImageProps) {
+const Image = async ({ params }: ImageProps) => {
   const { locale } = await params;
   const [squad, { t, format }] = await Promise.all([getSquad(), getI18n(isLocale(locale) ? locale : DEFAULT_LOCALE)]);
   const [first, second] = squad.status === "ready" ? squad.players.toSorted((a, b) => b.elo - a.elo) : [];
@@ -77,4 +75,6 @@ export default async function Image({ params }: ImageProps) {
     </OgFrame>,
     { ...size, fonts: OG_FONTS },
   );
-}
+};
+
+export default Image;

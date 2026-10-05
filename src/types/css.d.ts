@@ -1,7 +1,7 @@
-export type CssVariable = `--${string}`;
+export type CustomPropertyName = `--${string}`;
 
 declare module "react" {
   interface CSSProperties {
-    [property: CssVariable]: string | number | undefined;
+    [property: CustomPropertyName]: string | number | undefined;
   }
 }

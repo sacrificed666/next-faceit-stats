@@ -7,7 +7,7 @@ import { siteUrl } from "@/shared/lib/site";
 
 type Entry = MetadataRoute.Sitemap[number];
 
-function localized(path: string, base: URL, entry: Omit<Entry, "url" | "alternates">): Entry[] {
+const localized = (path: string, base: URL, entry: Omit<Entry, "url" | "alternates">): Entry[] => {
   const { languages } = alternates("en", path);
   const absolute = Object.fromEntries(
     Object.entries(languages).map(([language, href]) => [language, new URL(href, base).href]),
@@ -15,9 +15,9 @@ function localized(path: string, base: URL, entry: Omit<Entry, "url" | "alternat
   return LOCALES.map((locale) =>
     Object.assign({}, entry, { url: new URL(`/${locale}${path}`, base).href, alternates: { languages: absolute } }),
   );
-}
+};
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   const base = siteUrl();
   const squad = await getSquad();
   const lastModified = squad.status === "ready" ? new Date(squad.updatedAt) : undefined;
@@ -37,4 +37,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }),
     ),
   ];
-}
+};
+
+export default sitemap;

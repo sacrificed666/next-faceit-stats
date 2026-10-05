@@ -28,19 +28,17 @@ export const LEVELS: readonly Level[] = [
   TOP_LEVEL,
 ];
 
-export function levelOf(level: number): Level {
-  return LEVELS.find((entry) => entry.level === level) ?? (level > TOP_LEVEL.level ? TOP_LEVEL : FIRST_LEVEL);
-}
+export const levelOf = (level: number): Level =>
+  LEVELS.find((entry) => entry.level === level) ?? (level > TOP_LEVEL.level ? TOP_LEVEL : FIRST_LEVEL);
 
-export function levelForElo(elo: number): Level {
-  return LEVELS.find((entry) => entry.max === null || elo <= entry.max) ?? TOP_LEVEL;
-}
+export const levelForElo = (elo: number): Level =>
+  LEVELS.find((entry) => entry.max === null || elo <= entry.max) ?? TOP_LEVEL;
 
-export function levelProgress(elo: number): LevelProgress {
+export const levelProgress = (elo: number): LevelProgress => {
   const current = levelForElo(elo);
   const next = LEVELS.find((entry) => entry.level === current.level + 1) ?? null;
   if (!next || current.max === null) return { current, next: null, progress: 1, eloToNext: null };
   const span = next.min - current.min;
   const progress = Math.min(Math.max((elo - current.min) / span, 0), 1);
   return { current, next, progress, eloToNext: Math.max(next.min - elo, 0) };
-}
+};

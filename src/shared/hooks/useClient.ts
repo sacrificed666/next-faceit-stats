@@ -4,42 +4,30 @@ import { useSyncExternalStore } from "react";
 
 const MINUTE = 60_000;
 
-function subscribeNever(): () => void {
-  return () => {};
-}
+const subscribeNever = (): (() => void) => () => {};
 
-function browserTimeZone(): string {
-  return Intl.DateTimeFormat().resolvedOptions().timeZone;
-}
+const browserTimeZone = (): string => Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-function serverTimeZone(): string {
-  return "UTC";
-}
+const serverTimeZone = (): string => "UTC";
 
-export function useTimeZone(): string {
-  return useSyncExternalStore(subscribeNever, browserTimeZone, serverTimeZone);
-}
+export const useTimeZone = (): string => useSyncExternalStore(subscribeNever, browserTimeZone, serverTimeZone);
 
 let now = 0;
 
-function subscribeMinutes(listener: () => void): () => void {
+const subscribeMinutes = (listener: () => void): (() => void) => {
   now = Date.now();
   const timer = window.setInterval(() => {
     now = Date.now();
     listener();
   }, MINUTE);
   return () => window.clearInterval(timer);
-}
+};
 
-function clientNow(): number {
+const clientNow = (): number => {
   if (now === 0) now = Date.now();
   return now;
-}
+};
 
-function serverNow(): null {
-  return null;
-}
+const serverNow = (): null => null;
 
-export function useNow(): number | null {
-  return useSyncExternalStore(subscribeMinutes, clientNow, serverNow);
-}
+export const useNow = (): number | null => useSyncExternalStore(subscribeMinutes, clientNow, serverNow);

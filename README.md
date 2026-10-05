@@ -3,7 +3,7 @@
 [![CI](https://github.com/sacrificed666/next-faceit-stats/actions/workflows/ci.yml/badge.svg)](https://github.com/sacrificed666/next-faceit-stats/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/sacrificed666/next-faceit-stats/actions/workflows/codeql.yml/badge.svg)](https://github.com/sacrificed666/next-faceit-stats/actions/workflows/codeql.yml)
 
-A dashboard that puts a squad of friends side by side on **FACEIT CS2**: ELO and levels, form, K/D, ADR and headshots, map pools, the duos that queue together, the latest matches and the best single games, over the last days or the last matches of every player. Two players can be compared head to head on their own page. Built with Next.js 16, React 19 and TypeScript 7, prerendered and refreshed every five minutes, in eight languages, accessible, light or dark.
+A dashboard that puts a squad of friends side by side on **FACEIT CS2**: ELO and levels, form, K/D, ADR and headshots, map pools, the duos that queue together, the latest matches and the best single games, over the last days or the last matches of every player. Two players can be compared head to head on their own page. Built with Next.js 16, React 19 and TypeScript 7, prerendered and refreshed every five minutes, in ten languages, accessible, light or dark.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./docs/images/desktop-dark.png" />
@@ -24,8 +24,8 @@ A dashboard that puts a squad of friends side by side on **FACEIT CS2**: ELO and
 - 👤 **Player pages**: current form against the squad, a trend chart, maps with all-time numbers, a filterable match history with FACEIT match rooms, teammates, lifetime and playstyle statistics
 - ⚔️ **Compare**: two players side by side with form, lifetime numbers, maps and every match they played together or against each other
 - 🎚️ **One range for everything**: the last 7, 30 or 90 days, or the last 20, 50 or 100 matches, kept in the address so it can be shared
-- 🌍 **Eight languages**: English, Ukrainian, German, Spanish, French, Italian, Dutch and Polish, each under its own address, with correct plurals, numbers and dates
-- 🌗 **Light and dark**: follows the system or a saved choice, without a flash on load
+- 🌍 **Ten languages**: English, Ukrainian, Czech, German, Spanish, French, Italian, Dutch, Polish and Portuguese, each under its own address, with correct plurals, numbers and dates
+- ⚙️ **Your way**: a settings panel with the theme (follows the system or a saved choice, without a flash on load) and the language
 - ♿ **Accessible**: WCAG AA contrast, landmarks, sortable table headers, native radio groups and meters, keyboard-readable charts with data tables, checked with axe in every build
 - 🔎 **Search-friendly**: canonical and `hreflang` links, generated Open Graph cards for every page and language, sitemap, robots rules and JSON-LD
 - ⚡ **Fast and frugal**: prerendered pages, a shared cache for FACEIT responses, throttled and retried requests and a Lighthouse budget in CI
@@ -93,6 +93,7 @@ npm run test:e2e     # browsers, accessibility and Lighthouse against a mock FAC
 | 🛡️ [Security](./docs/security.md)               | API key, headers, validation and supply chain              |
 | 🧪 [Testing](./docs/testing.md)                 | Unit and browser tests, the mock API, axe and Lighthouse   |
 | 🚀 [Deployment](./docs/deployment.md)           | Vercel, self-hosting, caching and CI                       |
+| 🏷️ [Releases](./docs/releases.md)               | Versions, branches, the changelog and environments         |
 | 🤝 [Contributing](./docs/contributing.md)       | Workflow, code style and commit conventions                |
 | ❓ [FAQ](./docs/faq.md)                         | Common questions                                           |
 
@@ -113,7 +114,7 @@ npm run test:e2e     # browsers, accessibility and Lighthouse against a mock FAC
 ## ✨ Credits
 
 - **[FACEIT Data API](https://docs.faceit.com/docs/data-api/data)**: players, matches, lifetime statistics and rankings
-- **[flagcdn](https://flagcdn.com)**: country and language flags
+- **[country-flag-icons](https://gitlab.com/catamphetamine/country-flag-icons)**: country and language flags, served by the app itself
 - **[Montserrat](https://github.com/JulietaUla/Montserrat)**: the typeface, under the SIL Open Font License
 
 ## 📝 License

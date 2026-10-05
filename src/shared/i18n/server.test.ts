@@ -23,7 +23,7 @@ describe("server translations", () => {
   it("reads the language of the current route", async () => {
     vi.mocked(rootLocale).mockResolvedValueOnce("de");
     expect(await currentLocale()).toBe("de");
-    vi.mocked(rootLocale).mockResolvedValueOnce("pt");
+    vi.mocked(rootLocale).mockResolvedValueOnce("ru");
     expect(await currentLocale()).toBe("en");
   });
 });

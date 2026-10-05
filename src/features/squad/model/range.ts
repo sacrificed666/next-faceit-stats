@@ -15,23 +15,19 @@ export interface RangeSpec {
   count: number;
 }
 
-export function isRange(value: unknown): value is Range {
-  return typeof value === "string" && (RANGES as readonly string[]).includes(value);
-}
+export const isRange = (value: unknown): value is Range =>
+  typeof value === "string" && (RANGES as readonly string[]).includes(value);
 
-export function parseRange(value: string | null | undefined): Range | null {
-  return isRange(value) ? value : null;
-}
+export const parseRange = (value: string | null | undefined): Range | null => (isRange(value) ? value : null);
 
-export function rangeSpec(range: Range): RangeSpec {
-  return range.endsWith("d")
+export const rangeSpec = (range: Range): RangeSpec =>
+  range.endsWith("d")
     ? { unit: "days", count: Number.parseInt(range, 10) }
     : { unit: "matches", count: Number.parseInt(range, 10) };
-}
 
-export function selectMatches(matches: readonly Match[], range: Range, reference: number): Match[] {
+export const selectMatches = (matches: readonly Match[], range: Range, reference: number): Match[] => {
   const { unit, count } = rangeSpec(range);
   if (unit === "matches") return matches.slice(0, count);
   const since = reference - count * DAY;
   return matches.filter((match) => match.finishedAt >= since);
-}
+};

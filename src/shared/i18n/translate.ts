@@ -11,16 +11,16 @@ export type Translate = (key: MessageKey, params?: TranslationParams) => string;
 const pluralRules = new Map<Locale, Intl.PluralRules>();
 const numberFormats = new Map<Locale, Intl.NumberFormat>();
 
-export function pluralCategory(locale: Locale, count: number): Intl.LDMLPluralRule {
+export const pluralCategory = (locale: Locale, count: number): Intl.LDMLPluralRule => {
   let rules = pluralRules.get(locale);
   if (!rules) {
     rules = new Intl.PluralRules(LOCALE_INFO[locale].intl);
     pluralRules.set(locale, rules);
   }
   return rules.select(count);
-}
+};
 
-function formatParameter(locale: Locale, value: string | number): string {
+const formatParameter = (locale: Locale, value: string | number): string => {
   if (typeof value === "string") return value;
   let format = numberFormats.get(locale);
   if (!format) {
@@ -28,9 +28,14 @@ function formatParameter(locale: Locale, value: string | number): string {
     numberFormats.set(locale, format);
   }
   return format.format(value);
-}
+};
 
-export function translate(locale: Locale, messages: Messages, key: MessageKey, params: TranslationParams = {}): string {
+export const translate = (
+  locale: Locale,
+  messages: Messages,
+  key: MessageKey,
+  params: TranslationParams = {},
+): string => {
   const message = messages[key];
   const template =
     typeof message === "string"
@@ -40,8 +45,9 @@ export function translate(locale: Locale, messages: Messages, key: MessageKey, p
     const value = params[name];
     return value === undefined ? placeholder : formatParameter(locale, value);
   });
-}
+};
 
-export function createTranslator(locale: Locale, messages: Messages): Translate {
-  return (key, params) => translate(locale, messages, key, params);
-}
+export const createTranslator =
+  (locale: Locale, messages: Messages): Translate =>
+  (key, params) =>
+    translate(locale, messages, key, params);

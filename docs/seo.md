@@ -7,7 +7,7 @@
 | 🏷️ Title                 | `Stats` (the in-app name of the language)   | `sacrificed · Stats`                               | `Compare players · Stats`               |
 | 📝 Description           | What the dashboard compares                 | Level, ELO and the last 20 matches in one sentence | What the comparison shows               |
 | 🔗 Canonical             | `/en`                                       | `/en/players/<exact nickname>`                     | `/en/compare`                           |
-| 🌐 Alternates            | All eight languages and `x-default`         | The same                                           | The same                                |
+| 🌐 Alternates            | All ten languages and `x-default`           | The same                                           | The same                                |
 | 🖼️ Open Graph and X card | Generated squad card, `summary_large_image` | Generated player card, Open Graph type `profile`   | Generated card with the two top players |
 | 🤖 Robots                | `index, follow`, large image previews       | The same                                           | The same                                |
 
@@ -18,7 +18,7 @@ The defaults live in `src/app/[locale]/layout.tsx`. Every page builds its Open G
 Each language version is a separate page with its own address, title, description and card, see [Localization](./i18n.md).
 
 - 🔗 `<link rel="canonical">` points to the page in its own language.
-- 🌐 `<link rel="alternate" hreflang>` lists all eight versions, and `x-default` points to the address without a language, which redirects by browser language.
+- 🌐 `<link rel="alternate" hreflang>` lists all ten versions, and `x-default` points to the address without a language, which redirects by browser language.
 - 🏷️ `og:locale` names the language (`uk_UA`), `og:locale:alternate` the other seven.
 - 📄 `<html lang>` matches the page.
 
@@ -44,7 +44,7 @@ The cards use Montserrat from `src/shared/assets/fonts` in the Latin, Latin Exte
 
 ## 🗺️ Sitemap and robots
 
-- 🗺️ `/sitemap.xml` lists the overview, the compare page and every player page in all eight languages, each with its `hreflang` alternates, the time of the last update and the player's avatar as an image entry.
+- 🗺️ `/sitemap.xml` lists the overview, the compare page and every player page in all ten languages, each with its `hreflang` alternates, the time of the last update and the player's avatar as an image entry.
 - 🤖 `/robots.txt` allows everything in production and points to the sitemap.
 
 > [!NOTE]

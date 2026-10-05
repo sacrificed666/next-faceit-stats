@@ -4,14 +4,14 @@ import Link from "next/link";
 
 import { useI18n } from "@/shared/i18n/useI18n";
 import { homePath } from "@/shared/lib/urls";
-import { Icon } from "@/shared/ui/Icon";
+import Icon from "@/shared/ui/Icon/Icon";
 
 interface ErrorPageProps {
   error: Error & { digest?: string };
   retry: () => void;
 }
 
-export default function ErrorPage({ error, retry }: ErrorPageProps) {
+const ErrorPage = ({ error, retry }: ErrorPageProps) => {
   const { locale, t } = useI18n();
   return (
     <div className="flex flex-col items-start gap-6 pt-10 sm:pt-16">
@@ -44,4 +44,6 @@ export default function ErrorPage({ error, retry }: ErrorPageProps) {
       </div>
     </div>
   );
-}
+};
+
+export default ErrorPage;

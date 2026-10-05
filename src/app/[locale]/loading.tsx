@@ -1,7 +1,7 @@
 import { currentLocale, getI18n } from "@/shared/i18n/server";
-import { Skeleton } from "@/shared/ui/Skeleton";
+import Skeleton from "@/shared/ui/Skeleton/Skeleton";
 
-export default async function Loading() {
+const Loading = async () => {
   const { t } = await getI18n(await currentLocale());
   return (
     <Skeleton label={t("loading.squad")}>
@@ -22,4 +22,6 @@ export default async function Loading() {
       </div>
     </Skeleton>
   );
-}
+};
+
+export default Loading;
