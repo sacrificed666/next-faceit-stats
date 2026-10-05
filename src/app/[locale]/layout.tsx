@@ -78,7 +78,7 @@ const LocaleLayout = async ({ children, params }: LayoutProps<"/[locale]">) => {
           <main
             id="main"
             tabIndex={-1}
-            className="mx-auto w-full max-w-7xl flex-1 px-4 pb-20 outline-none sm:px-6 lg:px-8"
+            className="mx-auto w-full max-w-7xl flex-1 px-4 pb-12 outline-none sm:px-6 lg:px-8"
           >
             {children}
           </main>

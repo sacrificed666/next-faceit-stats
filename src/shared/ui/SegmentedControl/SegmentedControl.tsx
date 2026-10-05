@@ -16,6 +16,7 @@ interface SegmentedControlProps<T extends string | number> {
   size?: "sm" | "md";
   hideLabel?: boolean;
   fill?: boolean;
+  description?: string;
   className?: string;
 }
 
@@ -27,12 +28,14 @@ const SegmentedControl = <T extends string | number>({
   size = "md",
   hideLabel = true,
   fill = false,
+  description,
   className = "",
 }: SegmentedControlProps<T>) => {
   const name = useId();
+  const descriptionId = useId();
   const pad = size === "sm" ? "px-2 py-1 text-xs sm:px-2.5" : "px-3 py-1.5 text-sm";
   return (
-    <fieldset className={`min-w-0 ${className}`}>
+    <fieldset className={`min-w-0 ${className}`} aria-describedby={description ? descriptionId : undefined}>
       <legend className={hideLabel ? "sr-only" : "mb-1.5 text-xs font-semibold text-ink-muted"}>{label}</legend>
       <div className="scrollbar-thin relative flex max-w-full gap-0.5 overflow-x-auto rounded-full bg-inset p-1">
         {options.map((option) => (
@@ -57,6 +60,11 @@ const SegmentedControl = <T extends string | number>({
           </label>
         ))}
       </div>
+      {description && (
+        <p id={descriptionId} className="mt-1.5 text-xs text-ink-muted">
+          {description}
+        </p>
+      )}
     </fieldset>
   );
 };

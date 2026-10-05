@@ -98,4 +98,6 @@ On Vercel, the production branch is `main`. `staging` and `development` get prev
 | 🧪 Development | `development` | 🚫 `noindex`, robots block all |
 
 > [!NOTE]
-> `isIndexable()` in `shared/lib/site.ts` allows indexing only when `VERCEL_ENV` is `production`, so staging and previews never compete with the real site in search results. Give each environment its own `FACEIT_API_KEY` if you want to keep their rate limits apart; `FACEIT_PLAYERS` can differ too, for example a smaller squad on development.
+> `isIndexable()` in `shared/lib/site.ts` allows indexing only when `APP_ENV` (Docker) or `VERCEL_ENV` (Vercel) is `production` or neither is set, so staging and previews never compete with the real site in search results. Give each environment its own `FACEIT_API_KEY` if you want to keep their rate limits apart; `FACEIT_PLAYERS` can differ too, for example a smaller squad on development.
+
+The same three environments also run in Docker: `docker/development.yaml`, `docker/staging.yaml` and `docker/production.yaml` set `APP_ENV` and read `.env`, `.env.staging` and `.env.production`, see [Deployment](./deployment.md#-docker).

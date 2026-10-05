@@ -27,7 +27,7 @@ const securityHeaders = [
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()",
   },
-  ...(isDevelopment ? [] : [{ key: "Strict-Transport-Security", value: "max-age=31536000" }]),
+  ...(isDevelopment ? [] : [{ key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" }]),
 ];
 
 const flagHeaders = [
@@ -36,6 +36,8 @@ const flagHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Docker ships a self-contained server, see docker/Dockerfile
+  output: process.env.NEXT_OUTPUT === "standalone" ? "standalone" : undefined,
   reactCompiler: true,
   cacheComponents: true,
   typedRoutes: true,

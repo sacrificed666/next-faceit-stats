@@ -17,6 +17,11 @@ export const en = {
   "settings.theme.system": "Auto",
   "settings.theme.light": "Light",
   "settings.theme.dark": "Dark",
+  "settings.effects": "Effects",
+  "settings.effects.auto": "Auto",
+  "settings.effects.full": "Full",
+  "settings.effects.reduced": "Reduced",
+  "settings.effects.device": "On this device: {mode}",
   "settings.language": "Language",
   "settings.close": "Close",
 

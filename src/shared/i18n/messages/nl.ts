@@ -19,6 +19,11 @@ export const nl: Messages = {
   "settings.theme.system": "Auto",
   "settings.theme.light": "Licht",
   "settings.theme.dark": "Donker",
+  "settings.effects": "Effecten",
+  "settings.effects.auto": "Auto",
+  "settings.effects.full": "Volledig",
+  "settings.effects.reduced": "Beperkt",
+  "settings.effects.device": "Op dit apparaat: {mode}",
   "settings.language": "Taal",
   "settings.close": "Sluiten",
 

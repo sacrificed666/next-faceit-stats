@@ -1,14 +1,14 @@
 {
-  "name": "next-faceit-stats",
+  "name": "faceit-stats",
   "version": "1.0.0",
   "private": true,
   "description": "A FACEIT CS2 stats dashboard for a squad of friends, built with Next.js and React, in ten languages.",
-  "homepage": "https://next-faceit-stats.vercel.app",
+  "homepage": "https://faceit-stats.vercel.app",
   "license": "MIT",
   "author": "Illia Movchko (https://github.com/sacrificed666)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sacrificed666/next-faceit-stats.git"
+    "url": "git+https://github.com/sacrificed666/faceit-stats.git"
   },
   "type": "module",
   "scripts": {

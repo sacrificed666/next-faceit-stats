@@ -30,7 +30,7 @@ const Roster = ({ views }: RosterProps) => {
           const latest = player.matches[0];
           return (
             <li key={player.id} className="h-full">
-              <article className="panel group relative isolate flex h-full flex-col overflow-hidden transition-[border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-line-strong has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-accent">
+              <article className="panel group relative isolate flex h-full flex-col overflow-hidden transition-[border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-line-strong reduced:hover:translate-y-0 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-accent">
                 <div className="flex flex-1 flex-col gap-4 p-4">
                   <div className="flex items-center gap-3">
                     <Avatar src={player.avatar} name={player.nickname} size={52} />

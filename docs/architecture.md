@@ -198,6 +198,7 @@ FACEIT's match statistics contain a match id per player. Squad members who share
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 🎚️ Range and compared pair   | The `range`, `a` and `b` search parameters, read with `useSyncExternalStore` and updated with `history.replaceState`, so the pages stay static    |
 | 🌗 Theme                     | `localStorage` and `data-theme` on `<html>`, applied by an inline script in `<head>` before the first paint, together with the `theme-color` meta |
+| ⚡ Effects                   | `localStorage` and `data-effects` on `<html>`, resolved by the same script from the saved choice or the device, switched by `setEffects()`        |
 | 🕒 Time zone, clock          | `useSyncExternalStore` with a UTC server snapshot; the inline script already rewrites `<time>` elements in the visitor's zone before hydration    |
 | 🔀 Sorting, metrics, filters | Plain `useState` inside each section                                                                                                              |
 
@@ -208,7 +209,7 @@ When the address asks for something other than the prerendered default (`?range=
 
 ## 🛠️ Tooling decisions
 
-- 🦀 **Oxlint and Oxfmt** replace ESLint and Prettier: one fast tool each, with type-aware rules through `oxlint-tsgolint`, the Next.js, React Compiler and jsx-a11y rule sets, the layer rules and the custom `local/no-comments` rule.
+- 🦀 **Oxlint and Oxfmt** replace ESLint and Prettier: one fast tool each, with type-aware rules through `oxlint-tsgolint`, the Next.js, React Compiler and jsx-a11y rule sets, the layer rules and the custom `local/short-comments` rule.
 - 🔷 **TypeScript 7**: `next build` runs the project's `tsc` CLI, which is the native compiler.
 - 📈 **No chart library**: the only chart is a line chart; drawing it as SVG on the server gives charts that render without JavaScript, never shift the layout and weigh a few kilobytes.
 - 🌍 **No i18n library**: typed catalogs, `Intl.PluralRules` and a few lines of interpolation cover everything, and a missing key is a type error.

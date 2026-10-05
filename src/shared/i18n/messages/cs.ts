@@ -19,6 +19,11 @@ export const cs: Messages = {
   "settings.theme.system": "Auto",
   "settings.theme.light": "Světlý",
   "settings.theme.dark": "Tmavý",
+  "settings.effects": "Efekty",
+  "settings.effects.auto": "Auto",
+  "settings.effects.full": "Plné",
+  "settings.effects.reduced": "Omezené",
+  "settings.effects.device": "Na tomto zařízení: {mode}",
   "settings.language": "Jazyk",
   "settings.close": "Zavřít",
 

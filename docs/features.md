@@ -150,9 +150,14 @@ Each row draws two bars from the centre and highlights the better value; screen 
 
 English, Ukrainian, Czech, German, Spanish, French, Italian, Dutch, Polish and Portuguese. The **Settings** panel in the header switches the page and keeps the range and the players. Numbers, dates and relative times follow the language and the visitor's time zone. See [Localization](./i18n.md).
 
-## 🌗 Appearance
+## ⚙️ Appearance and effects
 
-The theme switch in the header offers **System**, **Light** and **Dark**. The choice is stored in the browser and applied before the first paint, so pages never flash in the wrong theme, and the browser's address bar takes the same colour. See [Design system](./design.md).
+The **Settings** panel in the header has three sections: **Appearance**, **Effects** and **Language**.
+
+- 🌗 **Appearance**: **Auto**, **Light** or **Dark**. Auto follows the operating system. The choice is stored in the browser and applied before the first paint, so pages never flash in the wrong theme, and the browser's address bar takes the same colour.
+- ⚡ **Effects**: **Auto**, **Full** or **Reduced**. Full adds the blurred, translucent range toolbar and profile panels and the cards that lift under the pointer; Reduced keeps the panels opaque and still for smooth scrolling on any computer. Auto picks Full on recent Macs and Reduced everywhere else, and the panel shows which one is in use.
+
+See [Design system](./design.md#-effects-and-performance).
 
 ## 🔄 Data freshness
 

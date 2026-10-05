@@ -33,4 +33,5 @@ afterEach(() => {
   window.history.replaceState(null, "", "/en");
   localStorage.clear();
   delete document.documentElement.dataset.theme;
+  delete document.documentElement.dataset.effects;
 });

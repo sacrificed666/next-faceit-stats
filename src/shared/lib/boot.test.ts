@@ -2,6 +2,7 @@ import { waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { BOOT_SCRIPT } from "./boot";
+import { EFFECTS_STORAGE_KEY } from "./effects";
 import { DATE_FORMATS } from "./format";
 import { SITE } from "./site";
 import { THEME_STORAGE_KEY } from "./theme";
@@ -45,6 +46,19 @@ describe("boot script", () => {
     localStorage.setItem(THEME_STORAGE_KEY, "purple");
     boot();
     expect(document.documentElement.dataset.theme).toBeUndefined();
+  });
+
+  it("applies the saved effects level or picks one for the device", () => {
+    boot();
+    expect(document.documentElement.dataset.effects).toBe("reduced");
+
+    localStorage.setItem(EFFECTS_STORAGE_KEY, "full");
+    boot();
+    expect(document.documentElement.dataset.effects).toBe("full");
+
+    localStorage.setItem(EFFECTS_STORAGE_KEY, "turbo");
+    boot();
+    expect(document.documentElement.dataset.effects).toBe("reduced");
   });
 
   it("marks the page as pending while the address selects other data", () => {

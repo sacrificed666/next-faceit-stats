@@ -129,6 +129,19 @@ The numbers are OKLab distances between the two poles after simulating each kind
 
 Motion is limited to short colour and lift transitions on hover, and a quick fade-in of the data when the address asks for a range or players other than the prerendered default. With `prefers-reduced-motion: reduce`, transitions, the fade and the skeleton pulse are switched off and smooth scrolling becomes instant.
 
+## ⚡ Effects and performance
+
+The design is flat on purpose, so only a few things are expensive for a weak GPU: the translucent, blurred range toolbar that sticks to the top while scrolling, the blurred panels of the profile header and the player cards that lift under the pointer. The **Effects** setting decides whether the page uses them:
+
+| Level      | Range toolbar and profile panels   | Player cards  | Panel shadows             |
+| ---------- | ---------------------------------- | ------------- | ------------------------- |
+| ✨ Full    | Translucent with `backdrop-filter` | Lift on hover | A soft, deep `--shadow`   |
+| 🍃 Reduced | Opaque `surface`, no blur          | Stay in place | One short `--shadow-flat` |
+
+**Auto** resolves to Full on Apple devices with at least eight cores and to Reduced everywhere else. The boot script in `shared/lib/boot.ts` applies the saved choice or the device default to `<html data-effects>` before the first paint, and `setEffects()` in `features/settings/model/useEffects.ts` switches it at once and keeps an explicit choice in `localStorage`. Components opt out with the `reduced:` Tailwind variant declared in `globals.scss`, and panels follow the `--shadow` token.
+
+Measured in headless Chrome without a GPU, with the CPU slowed down four times and a Windows user agent, scrolling the overview: the compositor's work fell from 59 to 34 ms per second and rasterizing from 117 to 80, and every page keeps 60 fps.
+
 ## 🔶 Brand mark
 
 The logo is a rounded square with an orange gradient from `#ff9a4d` to `#ff4a00`, a soft white sheen across the top and a bold near-black **F**. The glyph is drawn from rectangles instead of a font, so the favicon, the header, the Apple touch icon and the Open Graph cards look the same everywhere. It deliberately does not reuse FACEIT's own logo.

@@ -17,33 +17,33 @@ interface FooterProps {
 
 const Footer = async ({ i18n: { t } }: FooterProps) => {
   const year = await currentYear();
+  const link = "min-h-6 text-ink underline decoration-line-strong underline-offset-4 hover:text-accent-text";
   return (
-    <footer className="border-t border-line">
-      <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-8 text-sm text-ink-muted sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-        <p className="flex flex-wrap items-center gap-x-1.5">
-          <span className="font-semibold text-ink-secondary">{`© ${year} ${SITE.author.name}`}</span>
-          <span aria-hidden="true">·</span>
-          <ExternalLink href={SITE.changelog} icon={false} className="min-h-6 hover:text-ink">
+    <footer className="mx-auto w-full max-w-7xl px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-6 lg:px-8">
+      <div className="panel flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-4 text-sm">
+        <p className="flex flex-wrap items-center gap-x-1.5 font-semibold text-ink">
+          {`© ${year} ${SITE.author.name}`}
+          <span aria-hidden="true" className="text-ink-muted">
+            ·
+          </span>
+          <ExternalLink href={SITE.changelog} icon={false} className={`${link} font-medium text-ink-secondary`}>
             {`v${SITE.version}`}
           </ExternalLink>
-          <span aria-hidden="true">·</span>
+        </p>
+        <p className="flex flex-wrap items-center gap-x-4 gap-y-0.5 font-medium text-ink-secondary">
           <span>
             {rich(t("footer.data"), {
               api: (
-                <ExternalLink
-                  href="https://docs.faceit.com/docs/data-api/data"
-                  icon={false}
-                  className="underline decoration-line-strong underline-offset-4 hover:text-ink"
-                >
+                <ExternalLink href="https://docs.faceit.com/docs/data-api/data" icon={false} className={link}>
                   {t("footer.api")}
                 </ExternalLink>
               ),
             })}
           </span>
+          <ExternalLink href={SITE.repository} icon={false} className={link}>
+            {t("footer.source")}
+          </ExternalLink>
         </p>
-        <ExternalLink href={SITE.repository} className="min-h-6 font-semibold text-ink-secondary hover:text-ink">
-          {t("footer.source")}
-        </ExternalLink>
       </div>
     </footer>
   );

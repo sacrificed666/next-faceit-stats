@@ -19,7 +19,7 @@ Each language version is a separate page with its own address, title, descriptio
 
 - 🔗 `<link rel="canonical">` points to the page in its own language.
 - 🌐 `<link rel="alternate" hreflang>` lists all ten versions, and `x-default` points to the address without a language, which redirects by browser language.
-- 🏷️ `og:locale` names the language (`uk_UA`), `og:locale:alternate` the other seven.
+- 🏷️ `og:locale` names the language (`uk_UA`), `og:locale:alternate` the other nine.
 - 📄 `<html lang>` matches the page.
 
 ## 🌍 The public address

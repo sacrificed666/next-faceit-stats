@@ -45,7 +45,7 @@ const RangeToolbar = ({ sections = NO_SECTIONS }: RangeToolbarProps) => {
 
   return (
     <div className="sticky top-3 z-20 flex justify-center">
-      <div className="flex max-w-full items-center gap-2 rounded-[1.375rem] border border-line bg-surface/85 py-1 pr-1 pl-3 shadow-card backdrop-blur-md">
+      <div className="flex max-w-full items-center gap-2 rounded-[1.375rem] border border-line bg-surface/85 py-1 pr-1 pl-3 shadow-card backdrop-blur-md reduced:bg-surface reduced:backdrop-blur-none">
         <fieldset className="flex min-w-0 flex-wrap items-center justify-center gap-x-1.5 gap-y-1">
           <legend className="sr-only">{t("range.legend")}</legend>
           <span aria-hidden="true" className="text-sm font-semibold text-ink-muted max-sm:hidden">

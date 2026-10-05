@@ -12,7 +12,7 @@
 > [!TIP]
 > With a version manager, run `nvm use` (or `fnm use`) in the project root to switch to the Node.js line from `.nvmrc`.
 
-## 🔑 Getting a FACEIT API key
+## 🗝️ Getting a FACEIT API key
 
 1. 🧑‍💻 Sign in at [developers.faceit.com](https://developers.faceit.com) with your FACEIT account.
 2. 📱 Create an app. Any name works, for example _Squad stats_.
@@ -25,7 +25,7 @@
 > [!CAUTION]
 > Never commit `.env` and never give the key a `NEXT_PUBLIC_` prefix. The key only lives on the server and is never sent to the browser, see [Security](./security.md#-the-api-key).
 
-## ⚙️ Environment variables
+## 🔑 Environment variables
 
 Copy `.env.example` to `.env` and fill it in:
 
@@ -54,6 +54,14 @@ npm run dev
 
 Open `http://localhost:3000`. It redirects to your browser's language, for example `/en` or `/uk`. The first page load fetches the whole squad from FACEIT, which takes a few seconds; after that the data is cached for five minutes.
 
+### 🐳 In Docker
+
+```bash
+docker compose -f compose.yaml -f docker/development.yaml up --watch
+```
+
+The same dev server runs in a container on port 3000 with the variables from `.env` (and `.env.local`, if present), and Compose Watch copies every change into it. Staging and production images are described in [Deployment](./deployment.md#-docker).
+
 ## 📜 npm scripts
 
 | Script                  | What it does                                                                              |
@@ -78,18 +86,19 @@ Open `http://localhost:3000`. It redirects to your browser's language, for examp
 ## 🗂️ Project layout
 
 ```text
-next-faceit-stats/
+faceit-stats/
 ├── .github/
 │   ├── ISSUE_TEMPLATE/              Bug report and feature request forms
-│   ├── workflows/ci.yml             Lint, format, types, unit tests, build, end-to-end tests, dependency review
+│   ├── workflows/ci.yml             CI: verify, build with a report, end-to-end tests, Docker image, dependency review
 │   ├── workflows/codeql.yml         CodeQL code scanning
 │   ├── workflows/release.yml        GitHub release for every version tag
-│   ├── dependabot.yml               Weekly dependency and GitHub Actions updates
+│   ├── dependabot.yml               Weekly npm, GitHub Actions and Docker updates
 │   ├── PULL_REQUEST_TEMPLATE.md
 │   └── SECURITY.md                  How to report vulnerabilities
+├── docker/                          Multi-stage Dockerfile and the development, staging and production overlays
 ├── docs/                            This documentation and its screenshots
 ├── e2e/                             Playwright specs and the mock FACEIT API they run against
-├── lint/no-comments.js              Custom Oxlint rule that forbids comments
+├── lint/comments.js                 Custom Oxlint rule that keeps comments to one short line
 ├── scripts/
 │   ├── build-report.mjs             Checks the production build and reports the bundle size in CI
 │   ├── coverage-summary.mjs         Coverage table for the CI summary
@@ -116,9 +125,11 @@ next-faceit-stats/
 │   ├── test/                        Test setup, factories and FACEIT fixtures
 │   └── types/                       Global type augmentations
 ├── CHANGELOG.md                     Every release, newest first
+├── compose.yaml                     The Docker Compose service shared by every environment
 ├── next.config.ts                   Cache profiles, typed routes, images and security headers
 ├── playwright.config.ts             Browsers, the mock API and the production server for end-to-end tests
 ├── vitest.config.ts                 Unit test environment and coverage thresholds
+├── .dockerignore                    Keeps dependencies, build output and secrets out of the image
 ├── .oxlintrc.json                   Lint rules, including the layer rules
 └── .oxfmtrc.json                    Formatting rules
 ```

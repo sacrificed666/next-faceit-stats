@@ -34,7 +34,7 @@ test("sends the security headers", async ({ request }) => {
   const headers = response.headers();
   expect(headers["content-security-policy"]).toContain("frame-ancestors 'none'");
   expect(headers["content-security-policy"]).toContain("object-src 'none'");
-  expect(headers["strict-transport-security"]).toBe("max-age=31536000");
+  expect(headers["strict-transport-security"]).toBe("max-age=63072000; includeSubDomains");
   expect(headers["x-content-type-options"]).toBe("nosniff");
   expect(headers["x-frame-options"]).toBe("DENY");
   expect(headers["x-powered-by"]).toBeUndefined();

@@ -72,11 +72,19 @@ Open **Compare** in the header or the **Compare** button on a player page, then 
 
 ### 🌗 How do I switch between light and dark mode?
 
-Use the switch in the header: **System**, **Light** or **Dark**. The choice is stored in the browser.
+Open **Settings** in the header and pick **Auto**, **Light** or **Dark** under **Appearance**. The choice is stored in the browser.
 
 > [!TIP]
-> **System** follows the operating system, including a change at sunset, while **Light** and **Dark** stay as they are.
+> **Auto** follows the operating system, including a change at sunset, while **Light** and **Dark** stay as they are.
+
+### 🐢 Why are the panels not blurred on my computer?
+
+On Windows, Linux and Android the app starts with **Reduced** effects: the range toolbar and the profile panels are opaque instead of blurred and the player cards do not lift under the pointer, which keeps scrolling smooth on computers without a strong graphics chip. Recent Macs get the **Full** effects. Open **Settings** and choose **Effects: Full** or **Reduced** to change it; the choice is stored in the browser.
 
 ### 🎯 Does it work for other games?
 
 No, the app reads CS2 statistics only.
+
+### 🐳 Can I run it in Docker?
+
+Yes. `docker compose -f compose.yaml -f docker/development.yaml up --watch` starts the dev server in a container with the variables from `.env`, and `docker/staging.yaml` and `docker/production.yaml` build the small production image for a server. See [Deployment](./deployment.md#-docker).

@@ -24,7 +24,7 @@ interface ProfileHeroProps {
 }
 
 const BUTTON =
-  "inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface/80 px-3.5 py-2 text-sm font-semibold text-ink backdrop-blur transition-colors hover:border-accent hover:text-accent-text";
+  "inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface/80 px-3.5 py-2 text-sm font-semibold text-ink backdrop-blur reduced:bg-surface reduced:backdrop-blur-none transition-colors hover:border-accent hover:text-accent-text";
 
 const ProfileHero = ({ player }: ProfileHeroProps) => {
   const { locale, t, format } = useI18n();
@@ -76,7 +76,7 @@ const ProfileHero = ({ player }: ProfileHeroProps) => {
             </div>
           </div>
         </div>
-        <div className="flex w-full flex-col gap-3 rounded-2xl border border-line bg-surface/85 p-4 backdrop-blur lg:w-80">
+        <div className="flex w-full flex-col gap-3 rounded-2xl border border-line bg-surface/85 p-4 backdrop-blur reduced:bg-surface reduced:backdrop-blur-none lg:w-80">
           <div className="flex items-center gap-3">
             <LevelBadge level={player.level} size={52} />
             <div>

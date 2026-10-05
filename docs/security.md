@@ -72,16 +72,17 @@ FACEIT responses are treated as untrusted input:
 
 ## 🔗 Supply chain and CI
 
-| Measure                  | Where                                                                                            |
-| ------------------------ | ------------------------------------------------------------------------------------------------ |
-| 🔏 Registry signatures   | `npm audit signatures` in CI                                                                     |
-| 🛡️ Dependency review     | Pull requests fail on new dependencies with high-severity advisories                             |
-| 🔬 CodeQL                | `security-extended` queries for TypeScript and the workflows, weekly and on every change         |
-| 🤖 Dependabot            | Weekly grouped updates for npm and GitHub Actions                                                |
-| 🔐 Least privilege       | Workflows run with `contents: read` and checkout without persisted credentials                   |
-| 📦 Reproducible installs | `npm ci` from the committed lockfile                                                             |
-| 🧾 Install scripts       | npm only runs dependency install scripts listed in `allowScripts`; both existing ones are denied |
-| 🎭 No secrets in tests   | The end-to-end tests run against a local mock API with a dummy key, bound to `127.0.0.1`         |
+| Measure                  | Where                                                                                              |
+| ------------------------ | -------------------------------------------------------------------------------------------------- |
+| 🔏 Registry signatures   | `npm audit signatures` in CI                                                                       |
+| 🛡️ Dependency review     | Pull requests fail on new dependencies with high-severity advisories                               |
+| 🔬 CodeQL                | `security-extended` queries for TypeScript and the workflows, weekly and on every change           |
+| 🤖 Dependabot            | Weekly grouped updates for npm and GitHub Actions, and Docker base images                          |
+| 🐳 Docker                | A non-root runtime, `.env*` files kept out of the context, the key passed to the build as a secret |
+| 🔐 Least privilege       | Workflows run with `contents: read` and checkout without persisted credentials                     |
+| 📦 Reproducible installs | `npm ci` from the committed lockfile                                                               |
+| 🧾 Install scripts       | npm only runs dependency install scripts listed in `allowScripts`; both existing ones are denied   |
+| 🎭 No secrets in tests   | The end-to-end tests run against a local mock API with a dummy key, bound to `127.0.0.1`           |
 
 ## ☑️ Checklist for contributors
 

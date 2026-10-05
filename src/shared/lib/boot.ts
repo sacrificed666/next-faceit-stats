@@ -1,5 +1,6 @@
 import { LOCALE_INFO } from "@/shared/i18n/locales";
 
+import { EFFECTS_STORAGE_KEY, RICH_EFFECTS_DEVICES } from "./effects";
 import { DATE_FORMATS, RELATIVE_UNITS } from "./format";
 import { SITE } from "./site";
 import { THEME_STORAGE_KEY } from "./theme";
@@ -7,9 +8,11 @@ import { THEME_STORAGE_KEY } from "./theme";
 const TAGS = Object.fromEntries(Object.entries(LOCALE_INFO).map(([locale, info]) => [locale, info.intl]));
 
 const SOURCE = `
-var d = document.documentElement, theme = null, cache = {}, relative = null;
-try { theme = localStorage.getItem(STORAGE); } catch (e) {}
+var d = document.documentElement, theme = null, effects = null, cache = {}, relative = null;
+try { theme = localStorage.getItem(STORAGE); effects = localStorage.getItem(EFFECTS); } catch (e) {}
 if (theme === "light" || theme === "dark") d.dataset.theme = theme;
+var rich = new RegExp(RICH).test(navigator.userAgent) && navigator.hardwareConcurrency >= 8;
+d.dataset.effects = effects === "full" || effects === "reduced" ? effects : rich ? "full" : "reduced";
 if (/[?&](?:range|a|b)=/.test(location.search)) d.dataset.pending = "";
 var tag = TAGS[d.lang] || "en-GB";
 function dateFormat(style) { return cache[style] || (cache[style] = new Intl.DateTimeFormat(tag, FORMATS[style])); }
@@ -46,8 +49,10 @@ observer.observe(d, { childList: true, subtree: true });
 document.addEventListener("DOMContentLoaded", function () { scan(d); observer.disconnect(); });
 `;
 
-export const BOOT_SCRIPT = `(function(STORAGE, COLORS, FORMATS, UNITS, TAGS){${SOURCE.replaceAll(/\s*\n\s*/g, "")}})(${[
+export const BOOT_SCRIPT = `(function(STORAGE, EFFECTS, RICH, COLORS, FORMATS, UNITS, TAGS){${SOURCE.replaceAll(/\s*\n\s*/g, "")}})(${[
   JSON.stringify(THEME_STORAGE_KEY),
+  JSON.stringify(EFFECTS_STORAGE_KEY),
+  JSON.stringify(RICH_EFFECTS_DEVICES.source),
   JSON.stringify(SITE.themeColor),
   JSON.stringify(DATE_FORMATS),
   JSON.stringify(RELATIVE_UNITS),

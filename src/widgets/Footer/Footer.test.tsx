@@ -20,4 +20,12 @@ describe("Footer", () => {
     expect(screen.getByRole("link", { name: /^v1\.0\.0/ })).toHaveAttribute("href", SITE.changelog);
     expect(screen.queryByRole("link", { name: /Illia Movchko/ })).not.toBeInTheDocument();
   });
+
+  it("tells screen readers that the links open a new tab", async () => {
+    renderWithI18n(await Footer({ i18n: i18nFor("en") }));
+    for (const link of screen.getAllByRole("link")) {
+      expect(link).toHaveAttribute("target", "_blank");
+      expect(link).toHaveTextContent("(opens in a new tab)");
+    }
+  });
 });

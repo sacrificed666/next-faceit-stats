@@ -19,6 +19,11 @@ export const it: Messages = {
   "settings.theme.system": "Auto",
   "settings.theme.light": "Chiaro",
   "settings.theme.dark": "Scuro",
+  "settings.effects": "Effetti",
+  "settings.effects.auto": "Auto",
+  "settings.effects.full": "Completi",
+  "settings.effects.reduced": "Ridotti",
+  "settings.effects.device": "Su questo dispositivo: {mode}",
   "settings.language": "Lingua",
   "settings.close": "Chiudi",
 

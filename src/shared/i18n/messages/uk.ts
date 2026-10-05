@@ -19,6 +19,11 @@ export const uk: Messages = {
   "settings.theme.system": "Авто",
   "settings.theme.light": "Світла",
   "settings.theme.dark": "Темна",
+  "settings.effects": "Ефекти",
+  "settings.effects.auto": "Авто",
+  "settings.effects.full": "Повні",
+  "settings.effects.reduced": "Спрощені",
+  "settings.effects.device": "На цьому пристрої: {mode}",
   "settings.language": "Мова",
   "settings.close": "Закрити",
 

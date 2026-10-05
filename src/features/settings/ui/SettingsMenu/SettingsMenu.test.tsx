@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -9,6 +9,9 @@ import SettingsMenu from "./SettingsMenu";
 afterEach(() => {
   document.cookie = "locale=; path=/; max-age=0";
 });
+
+const choice = (group: string, name: string) =>
+  within(screen.getByRole("group", { name: group, hidden: true })).getByRole("radio", { name, hidden: true });
 
 describe("SettingsMenu", () => {
   it("opens a labelled panel from the settings button", () => {
@@ -53,21 +56,37 @@ describe("SettingsMenu", () => {
 
   it("follows the system theme by default", () => {
     renderWithI18n(<SettingsMenu />);
-    expect(screen.getByRole("radio", { name: "Auto", hidden: true })).toBeChecked();
+    expect(choice("Appearance", "Auto")).toBeChecked();
   });
 
   it("stores an explicit theme and returns to the system theme", async () => {
     const user = userEvent.setup();
     renderWithI18n(<SettingsMenu />);
 
-    await user.click(screen.getByRole("radio", { name: "Dark", hidden: true }));
+    await user.click(choice("Appearance", "Dark"));
     expect(document.documentElement.dataset.theme).toBe("dark");
     expect(localStorage.getItem("theme")).toBe("dark");
-    expect(screen.getByRole("radio", { name: "Dark", hidden: true })).toBeChecked();
+    expect(choice("Appearance", "Dark")).toBeChecked();
 
-    await user.click(screen.getByRole("radio", { name: "Auto", hidden: true }));
+    await user.click(choice("Appearance", "Auto"));
     expect(document.documentElement.dataset.theme).toBeUndefined();
     expect(localStorage.getItem("theme")).toBeNull();
+  });
+
+  it("picks the effects level for the device and stores an explicit one", async () => {
+    const user = userEvent.setup();
+    renderWithI18n(<SettingsMenu />);
+    expect(choice("Effects", "Auto")).toBeChecked();
+    expect(screen.getByText("On this device: Reduced")).toBeInTheDocument();
+
+    await user.click(choice("Effects", "Full"));
+    expect(document.documentElement.dataset.effects).toBe("full");
+    expect(localStorage.getItem("effects")).toBe("full");
+    expect(screen.queryByText("On this device: Reduced")).not.toBeInTheDocument();
+
+    await user.click(choice("Effects", "Auto"));
+    expect(document.documentElement.dataset.effects).toBe("reduced");
+    expect(localStorage.getItem("effects")).toBeNull();
   });
 
   it("keeps the browser theme color in sync with an explicit choice", async () => {
@@ -85,10 +104,10 @@ describe("SettingsMenu", () => {
     document.head.append(light, dark);
     renderWithI18n(<SettingsMenu />);
 
-    await user.click(screen.getByRole("radio", { name: "Dark", hidden: true }));
+    await user.click(choice("Appearance", "Dark"));
     expect([light.content, dark.content]).toEqual(["#0f1011", "#0f1011"]);
 
-    await user.click(screen.getByRole("radio", { name: "Auto", hidden: true }));
+    await user.click(choice("Appearance", "Auto"));
     expect([light.content, dark.content]).toEqual(["#f3f3f0", "#0f1011"]);
     light.remove();
     dark.remove();
