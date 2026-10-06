@@ -11,7 +11,9 @@ import {
   type MetricKey,
 } from "@/features/squad/model/metrics";
 import { ROLLING_WINDOW, trendSeries, type PlayerView } from "@/features/squad/model/squad";
+import MapThumb from "@/features/squad/ui/MapThumb/MapThumb";
 import MetricValue from "@/features/squad/ui/MetricValue/MetricValue";
+import ResultBadge from "@/features/squad/ui/ResultBadge/ResultBadge";
 import { useTimeZone } from "@/shared/hooks/useClient";
 import { useI18n } from "@/shared/i18n/useI18n";
 import { niceScale } from "@/shared/lib/scale";
@@ -79,19 +81,28 @@ const PlayerTrend = ({ view, averages }: PlayerTrendProps) => {
             />
             <DataTable
               caption={t("trend.caption", { metric: t(definition.name), player: view.player.nickname })}
-              columns={[t("trend.date"), t("trend.map"), t("trend.result"), t(definition.label), rolling]}
-              rows={trend.matches.map((match, index) => ({
-                key: match.id,
-                header: <LocalDate timestamp={match.finishedAt} />,
-                cells: [
-                  mapName(match.map),
-                  <span key="result" className={match.won ? "text-good" : "text-bad"}>
-                    {result(match.won, `${match.teamScore}:${match.opponentScore}`)}
-                  </span>,
-                  <MetricValue key="match" metric={metric} value={trend.perMatch[index] ?? 0} />,
-                  <MetricValue key="rolling" metric={metric} value={trend.rolling[index] ?? 0} />,
-                ],
-              }))}
+              columns={[
+                { label: t("trend.date") },
+                { label: t("trend.map"), align: "start" },
+                { label: t("trend.result"), align: "start" },
+                { label: t(definition.label) },
+                { label: rolling },
+              ]}
+              rows={trend.matches
+                .map((match, index) => ({
+                  key: match.id,
+                  header: <LocalDate timestamp={match.finishedAt} format="datetime" />,
+                  cells: [
+                    <span key="map" className="inline-flex items-center gap-2 font-medium text-ink">
+                      <MapThumb map={match.map} size="xs" />
+                      {mapName(match.map)}
+                    </span>,
+                    <ResultBadge key="result" won={match.won} score={`${match.teamScore}:${match.opponentScore}`} />,
+                    <MetricValue key="match" metric={metric} value={trend.perMatch[index] ?? 0} />,
+                    <MetricValue key="rolling" metric={metric} value={trend.rolling[index] ?? 0} />,
+                  ],
+                }))
+                .toReversed()}
             />
           </>
         )}

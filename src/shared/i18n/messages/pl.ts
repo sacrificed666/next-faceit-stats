@@ -239,6 +239,7 @@ export const pl: Messages = {
   "trends.last": "Ostatnie {count}",
 
   "table.show": "Pokaż tabelę danych",
+  "table.hide": "Ukryj tabelę danych",
 
   "maps.title": "Pula map",
   "maps.metric": "Wskaźnik puli map",
@@ -296,7 +297,6 @@ export const pl: Messages = {
   "records.aces": "Klub ace’ów",
   "records.acesHint": "Pięć zabójstw w jednej rundzie",
   "records.empty": "Brak rekordów",
-  "records.room": "Pokój meczowy",
 
   "player.breadcrumb": "Ścieżka nawigacji",
   "player.kicker": "FACEIT · CS2",

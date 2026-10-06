@@ -103,15 +103,15 @@ const Trends = ({ views }: TrendsProps) => {
           <DataTable
             caption={t("trends.caption", { metric: t(definition.name) })}
             columns={[
-              t("leaderboard.player"),
-              t("trends.average"),
-              t("trends.best"),
-              t("trends.worst"),
-              t("trends.last", { count: ROLLING_WINDOW }),
+              { label: t("leaderboard.player") },
+              { label: t("trends.average") },
+              { label: t("trends.best") },
+              { label: t("trends.worst") },
+              { label: t("trends.last", { count: ROLLING_WINDOW }) },
             ]}
             rows={panels.map(({ view, trend }) => ({
               key: view.player.id,
-              header: view.player.nickname,
+              header: <PlayerName player={view.player} size={22} />,
               cells: [
                 <MetricValue key="average" metric={metric} value={view.summary[metric]} />,
                 <MetricValue key="best" metric={metric} value={Math.max(...trend.perMatch)} />,

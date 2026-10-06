@@ -240,6 +240,7 @@ export const uk: Messages = {
   "trends.last": "Останні {count}",
 
   "table.show": "Показати таблицю даних",
+  "table.hide": "Сховати таблицю даних",
 
   "maps.title": "Мапи",
   "maps.metric": "Показник для мап",
@@ -296,7 +297,6 @@ export const uk: Messages = {
   "records.aces": "Клуб ейсів",
   "records.acesHint": "П’ять вбивств за один раунд",
   "records.empty": "Рекордів ще немає",
-  "records.room": "Кімната матчу",
 
   "player.breadcrumb": "Навігаційний ланцюжок",
   "player.kicker": "FACEIT · CS2",

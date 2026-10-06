@@ -6,6 +6,7 @@ import { longestWinStreak, matchRecord, mostAces, type MatchRecordKind } from "@
 import { mapName } from "@/features/squad/model/maps";
 import { members, playerById, type PlayerView } from "@/features/squad/model/squad";
 import type { Match, Player } from "@/features/squad/model/types";
+import MapThumb from "@/features/squad/ui/MapThumb/MapThumb";
 import PlayerName from "@/features/squad/ui/PlayerName/PlayerName";
 import ResultBadge from "@/features/squad/ui/ResultBadge/ResultBadge";
 import type { MessageKey } from "@/shared/i18n/translate";
@@ -37,45 +38,51 @@ interface RecordCardProps {
   icon: IconName;
   value: string;
   player: Player;
+  match?: Match;
   children?: ReactNode;
 }
 
-// One record: what it is, the value and who set it
-const RecordCard = ({ title, icon, value, player, children }: RecordCardProps) => (
-  <li className="panel flex flex-col gap-3 p-4">
-    <p className="flex items-center gap-2 text-xs font-bold tracking-wide text-ink-muted uppercase">
-      <span className="inline-flex size-7 items-center justify-center rounded-full bg-accent-soft text-accent-text">
-        <Icon name={icon} size={15} />
-      </span>
-      {title}
-    </p>
-    <p className="text-3xl font-extrabold tracking-tight text-ink">{value}</p>
-    <PlayerName player={player} size={26} />
-    {children ? (
-      <div className="mt-auto flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-ink-muted">{children}</div>
-    ) : null}
-  </li>
-);
-
-// The result, map and date of the match that set a record, with its room
-const MatchContext = ({ match }: { match: Match }) => {
+// One record: what it is, the value, who set it and a link to the match room
+const RecordCard = ({ title, icon, value, player, match, children }: RecordCardProps) => {
   const { t } = useI18n();
   return (
-    <>
-      <ResultBadge won={match.won} score={`${match.teamScore}:${match.opponentScore}`} size="sm" />
-      <span>{mapName(match.map)}</span>
-      <span aria-hidden="true">·</span>
-      <LocalDate timestamp={match.finishedAt} format="short" />
-      <ExternalLink
-        href={faceitMatchUrl(match.id)}
-        context={mapName(match.map)}
-        className="ml-auto font-semibold text-accent-text hover:underline"
-      >
-        {t("records.room")}
-      </ExternalLink>
-    </>
+    <li className="panel flex flex-col gap-3 p-4">
+      <div className="flex items-center gap-2">
+        <p className="flex min-w-0 flex-1 items-center gap-2 text-xs font-bold tracking-wide text-ink-muted uppercase">
+          <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent-text">
+            <Icon name={icon} size={15} />
+          </span>
+          {title}
+        </p>
+        {match ? (
+          <ExternalLink
+            href={faceitMatchUrl(match.id)}
+            label={t("activity.roomFor", { map: mapName(match.map) })}
+            className="-my-1 -mr-1 shrink-0 rounded-full p-1.5 text-ink-muted hover:bg-hover hover:text-accent-text"
+          />
+        ) : null}
+      </div>
+      <p className="text-3xl font-extrabold tracking-tight text-ink">{value}</p>
+      <PlayerName player={player} size={26} />
+      {children ? (
+        <div className="mt-auto flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs text-ink-muted">
+          {children}
+        </div>
+      ) : null}
+    </li>
   );
 };
+
+// The result, map and date of the match that set a record
+const MatchContext = ({ match }: { match: Match }) => (
+  <>
+    <ResultBadge won={match.won} score={`${match.teamScore}:${match.opponentScore}`} size="sm" />
+    <MapThumb map={match.map} size="xs" />
+    <span>{mapName(match.map)}</span>
+    <span aria-hidden="true">·</span>
+    <LocalDate timestamp={match.finishedAt} format="short" />
+  </>
+);
 
 interface HighlightsProps {
   views: readonly PlayerView[];
@@ -112,6 +119,7 @@ const Highlights = ({ views }: HighlightsProps) => {
               icon={definition.icon}
               value={definition.format(format, record.value)}
               player={player}
+              match={record.match}
             >
               <MatchContext match={record.match} />
             </RecordCard>

@@ -191,6 +191,7 @@ export const de: Messages = {
   "trends.last": "Letzte {count}",
 
   "table.show": "Datentabelle anzeigen",
+  "table.hide": "Datentabelle ausblenden",
 
   "maps.title": "Map-Pool",
   "maps.metric": "Wert für den Map-Pool",
@@ -248,7 +249,6 @@ export const de: Messages = {
   "records.aces": "Ace-Club",
   "records.acesHint": "Fünf Kills in einer Runde",
   "records.empty": "Noch keine Rekorde",
-  "records.room": "Matchraum",
 
   "player.breadcrumb": "Brotkrümelnavigation",
   "player.kicker": "FACEIT · CS2",

@@ -111,7 +111,8 @@ The numbers are OKLab distances between the two poles after simulating each kind
 | `LevelProgress`, `Meter`   | Native `<meter>` styled with tokens                         |
 | `BarList`                  | Ranked bars with an optional reference line                 |
 | `LineChart`                | SVG line chart with crosshair, tooltip and slider           |
-| `DataTable`                | Collapsible table behind every chart                        |
+| `DataTable`                | Collapsible table behind every chart, header kept in view   |
+| `Select`                   | Native select as a pill with a chevron and a picture        |
 | `ResultBadge`, `FormGuide` | W/L badges and the last results                             |
 | `RankMedal`                | Gold, silver and bronze place for the top three             |
 | `CompareRows`              | Two players per row with mirrored bars and the leader named |

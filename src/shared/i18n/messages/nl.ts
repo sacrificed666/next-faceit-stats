@@ -190,6 +190,7 @@ export const nl: Messages = {
   "trends.last": "Laatste {count}",
 
   "table.show": "Gegevenstabel tonen",
+  "table.hide": "Gegevenstabel verbergen",
 
   "maps.title": "Mappool",
   "maps.metric": "Cijfer voor de mappool",
@@ -247,7 +248,6 @@ export const nl: Messages = {
   "records.aces": "Aceclub",
   "records.acesHint": "Vijf kills in één ronde",
   "records.empty": "Nog geen records",
-  "records.room": "Wedstrijdkamer",
 
   "player.breadcrumb": "Kruimelpad",
   "player.kicker": "FACEIT · CS2",

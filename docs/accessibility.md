@@ -37,7 +37,7 @@ Focus is always visible: a 2 px accent outline with an offset, and a ring around
 - ✅ Win and loss badges are letters for sighted users (**W** and **L** in English, **В** and **П** in Ukrainian) and whole words for screen readers; the form guide reads as one sentence, newest first.
 - 🥇 Medals say _1st place_, level badges say _Level 10_, and records such as `12-8` are read as _Wins: 12, losses: 8_.
 - 🎚️ Level progress and playstyle bars are native `<meter>` elements with a spoken value, for example _63 ELO to level 9_.
-- 📈 Each chart is a slider: moving it announces the date, map, result and every value of that match. A **Show data table** button below every chart offers the same numbers as a table.
+- 📈 Each chart is a slider: moving it announces the date, map, result and every value of that match. A **Show data table** button below every chart offers the same numbers as a table, with real column and row headers, and turns into **Hide data table** while it is open.
 - ⚔️ Every row of the comparison tells screen readers who is ahead, for example _Kills per death, anna is ahead_, because the highlight alone is visual.
 - 🕹️ The feed reads K-D-A as _Kills: 20, deaths: 15, assists: 4_, and **Showing 16 of 40** is announced politely after **Show more matches**.
 - 🌍 The language button says _Language: English (EN)_, so its name contains the visible code and voice control users can say what they see.

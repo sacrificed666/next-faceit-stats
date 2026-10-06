@@ -75,11 +75,11 @@ One compact card per player, sorted by ELO, four in a row on wide screens: avata
 
 ### 🕹️ Recent matches
 
-The latest matches of the whole squad in one compact list, a row per match, newest first:
+The latest matches of the whole squad in one table, newest first, with columns for the map, the result, the player, K-D-A, rating, K/D and ADR, so every number lines up with the ones above it:
 
-- 🫂 A match that several squad members played is shown **once** and marked **Together**, with everyone who played, their K-D-A, rating, K/D and ADR.
-- ⚔️ When squad members met on opposite teams, both sides are listed with their own result and the match is marked **Squad vs squad**.
-- 🔗 Every entry has the map with its picture, how long ago it was, the result and score of each side and a link to the FACEIT match room.
+- 🫂 A match that several squad members played is shown **once** and marked **Together**: the map, the result and the match room span a row for everyone who played.
+- ⚔️ When squad members met on opposite teams, each side gets its own result and the match is marked **Squad vs squad**.
+- 🔗 Every match has the map with its picture, how long ago it was and a link to the FACEIT match room; on phones the table scrolls sideways with the map column pinned.
 - ➕ Eight matches are shown at first, **Show more matches** adds eight more.
 
 ![Recent matches, with matches played together shown once with both players](./images/activity-light.png)
@@ -100,7 +100,7 @@ Horizontal bars for one metric at a time (Rating, K/D, K/R, ADR, HS % or Win %),
 
 ### 📈 Trends
 
-Small multiples: one chart per player, four in a row on wide screens, all on the same scale and ordered from the best average down, so the shapes can be compared directly. Each chart shows the value of every match (Rating, K/D, K/R, ADR or HS %) and a **five-match rolling average**, with the squad average as a dashed reference. Hover, tap or use the arrow keys to read a single match, and open **Show data table** for the highlighted numbers.
+Small multiples: one chart per player, four in a row on wide screens, all on the same scale and ordered from the best average down, so the shapes can be compared directly. Each chart shows the value of every match (Rating, K/D, K/R, ADR or HS %) and a **five-match rolling average**, with the squad average as a dashed reference. Hover, tap or use the arrow keys to read a single match, and open **Show data table** for the highlighted numbers: every player with their avatar, the average, the best and worst match and the last five, under a header that stays in view while the table scrolls.
 
 ![Trend charts for every player on a shared scale](./images/trends-dark.png)
 
@@ -129,7 +129,7 @@ Only matches inside both players' ranges count, so a larger range finds more sha
 
 ### 🏅 Records
 
-The best performances in the range, each with the player, the map, the score, the date and a link to the FACEIT match room:
+The best performances in the range, each with the player and the result, map picture and date of the match on one line; the link to the FACEIT match room sits in the corner of the card:
 
 | Record                | Rule                                         |
 | --------------------- | -------------------------------------------- |
@@ -159,7 +159,7 @@ Scores always show the player's team first. Nicknames in the address are matched
 
 ## ⚔️ Compare
 
-Two squad members side by side, picked from two lists or opened from a player's **Compare** button. The pair is kept in the address (`?a=anna&b=Bohdan`), together with the range.
+Two squad members side by side, picked from two lists that show each player's avatar and ELO, or opened from a player's **Compare** button. The pair is kept in the address (`?a=anna&b=Bohdan`), together with the range.
 
 | Part              | Content                                                                                                              |
 | ----------------- | -------------------------------------------------------------------------------------------------------------------- |

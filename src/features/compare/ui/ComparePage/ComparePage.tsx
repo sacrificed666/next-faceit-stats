@@ -20,6 +20,7 @@ import type { Formatter } from "@/shared/lib/format";
 import Avatar from "@/shared/ui/Avatar/Avatar";
 import Icon from "@/shared/ui/Icon/Icon";
 import Section from "@/shared/ui/Section/Section";
+import Select from "@/shared/ui/Select/Select";
 
 import CompareRows, { type CompareRow } from "../CompareRows/CompareRows";
 import SharedMatches from "../SharedMatches/SharedMatches";
@@ -239,30 +240,32 @@ const mapRows = (first: PlayerView, second: PlayerView, t: Translate, format: Fo
 interface PickerProps {
   label: string;
   value: string;
-  options: readonly string[];
+  players: readonly Player[];
   onChange: (nickname: string) => void;
 }
 
-// A labelled select for one of the two players
-const Picker = ({ label, value, options, onChange }: PickerProps) => {
+// A labelled select for one of the two players, with their avatar and ELO
+const Picker = ({ label, value, players, onChange }: PickerProps) => {
   const id = useId();
+  const { format } = useI18n();
+  const selected = players.find((player) => player.nickname === value);
   return (
     <div className="flex min-w-0 flex-col gap-1">
       <label htmlFor={id} className="text-xs font-semibold text-ink-muted">
         {label}
       </label>
-      <select
+      <Select
         id={id}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="w-full min-w-0 rounded-full border border-line bg-inset py-2 pr-8 pl-3 text-sm font-semibold text-ink"
+        leading={<Avatar src={selected?.avatar ?? null} name={value} size={26} />}
       >
-        {options.map((nickname) => (
-          <option key={nickname} value={nickname}>
-            {nickname}
+        {players.map((player) => (
+          <option key={player.id} value={player.nickname}>
+            {`${player.nickname} · ${format.integer(player.elo)}`}
           </option>
         ))}
-      </select>
+      </Select>
     </div>
   );
 };
@@ -348,7 +351,7 @@ const ComparePage = ({ players, updatedAt, mapImages }: ComparePageProps) => {
             <Picker
               label={t("compare.first")}
               value={first.nickname}
-              options={nicknames}
+              players={ordered}
               onChange={(value) => choose("a", value)}
             />
             <button
@@ -362,7 +365,7 @@ const ComparePage = ({ players, updatedAt, mapImages }: ComparePageProps) => {
             <Picker
               label={t("compare.second")}
               value={second.nickname}
-              options={nicknames}
+              players={ordered}
               onChange={(value) => choose("b", value)}
             />
           </div>

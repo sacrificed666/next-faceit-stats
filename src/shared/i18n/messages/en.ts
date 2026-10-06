@@ -186,6 +186,7 @@ export const en = {
   "trends.last": "Last {count}",
 
   "table.show": "Show data table",
+  "table.hide": "Hide data table",
 
   "maps.title": "Map pool",
   "maps.metric": "Map pool metric",
@@ -243,7 +244,6 @@ export const en = {
   "records.aces": "Ace club",
   "records.acesHint": "Five kills in a single round",
   "records.empty": "No records yet",
-  "records.room": "Match room",
 
   "player.breadcrumb": "Breadcrumb",
   "player.kicker": "FACEIT · CS2",

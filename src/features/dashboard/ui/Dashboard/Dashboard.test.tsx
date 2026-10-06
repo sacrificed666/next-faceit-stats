@@ -113,7 +113,7 @@ describe("Dashboard", () => {
     expect(within(together).getByText("2 matches")).toBeInTheDocument();
     const records = screen.getByRole("region", { name: "Records" });
     expect(within(records).getByText("1 ace")).toBeInTheDocument();
-    expect(within(records).getAllByRole("link", { name: /^Match room, Anubis/ }).length).toBeGreaterThan(0);
+    expect(within(records).getAllByRole("link", { name: /^Match room for Anubis/ }).length).toBeGreaterThan(0);
   });
 
   it("warns about players that could not be loaded", () => {

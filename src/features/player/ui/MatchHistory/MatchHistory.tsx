@@ -17,9 +17,11 @@ import { faceitMatchUrl } from "@/shared/lib/urls";
 import Avatar from "@/shared/ui/Avatar/Avatar";
 import EmptyState from "@/shared/ui/EmptyState/EmptyState";
 import ExternalLink from "@/shared/ui/ExternalLink/ExternalLink";
+import Icon from "@/shared/ui/Icon/Icon";
 import LocalDate from "@/shared/ui/LocalDate/LocalDate";
 import Section from "@/shared/ui/Section/Section";
 import SegmentedControl from "@/shared/ui/SegmentedControl/SegmentedControl";
+import Select from "@/shared/ui/Select/Select";
 import SortHeader from "@/shared/ui/SortHeader/SortHeader";
 
 type ResultFilter = "all" | "wins" | "losses";
@@ -88,12 +90,21 @@ const MatchHistory = ({ view, squad, mates }: MatchHistoryProps) => {
       description={t("history.description")}
       actions={
         <>
-          <label className="flex items-center gap-2 text-sm font-semibold text-ink-secondary">
+          <label className="flex min-w-0 items-center text-sm font-semibold text-ink-secondary">
             <span className="sr-only">{t("history.map")}</span>
-            <select
+            <Select
               value={selectedMap}
               onChange={(event) => setMap(event.target.value)}
-              className="rounded-full border border-line bg-inset py-1.5 pr-8 pl-3 text-sm font-semibold text-ink"
+              className="w-44"
+              leading={
+                selectedMap === "all" ? (
+                  <span className="inline-flex h-5 w-8 items-center justify-center rounded-[5px] bg-surface text-ink-muted ring-1 ring-line">
+                    <Icon name="map" size={13} />
+                  </span>
+                ) : (
+                  <MapThumb map={selectedMap} size="xs" />
+                )
+              }
             >
               <option value="all">{t("history.allMaps")}</option>
               {maps.map((entry) => (
@@ -101,7 +112,7 @@ const MatchHistory = ({ view, squad, mates }: MatchHistoryProps) => {
                   {mapName(entry)}
                 </option>
               ))}
-            </select>
+            </Select>
           </label>
           <SegmentedControl label={t("history.result")} options={options} value={result} onChange={setResult} />
         </>

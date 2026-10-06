@@ -192,6 +192,7 @@ export const fr: Messages = {
   "trends.last": "{count} derniers",
 
   "table.show": "Afficher le tableau de données",
+  "table.hide": "Masquer le tableau de données",
 
   "maps.title": "Cartes",
   "maps.metric": "Indicateur des cartes",
@@ -251,7 +252,6 @@ export const fr: Messages = {
   "records.aces": "Club des aces",
   "records.acesHint": "Cinq éliminations en une seule manche",
   "records.empty": "Aucun record pour l’instant",
-  "records.room": "Salle du match",
 
   "player.breadcrumb": "Fil d’Ariane",
   "player.kicker": "FACEIT · CS2",

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { activityFeed, type FeedPlayer } from "@/features/dashboard/model/activity";
+import { activityFeed, type FeedEntry } from "@/features/dashboard/model/activity";
 import { mapName } from "@/features/squad/model/maps";
 import { METRICS } from "@/features/squad/model/metrics";
 import { members, playerById, type PlayerView } from "@/features/squad/model/squad";
@@ -21,27 +21,85 @@ import Section from "@/shared/ui/Section/Section";
 
 const PAGE = 8;
 
-// One squad member's line in a match: K-D-A, rating, K/D and ADR
-const Line = ({ entry, player }: { entry: FeedPlayer; player: Player }) => {
+const STATS = ["rating", "kd", "adr"] as const;
+
+const HEAD = "px-3 py-2.5 text-xs font-semibold text-ink-muted";
+const CELL = "px-3 py-2";
+
+interface MatchRowsProps {
+  entry: FeedEntry;
+  players: ReadonlyMap<string, Player>;
+}
+
+// A match as a group of rows, one per squad member, the match cells spanning them
+const MatchRows = ({ entry, players }: MatchRowsProps) => {
   const { t } = useI18n();
-  const { match } = entry;
-  const kda = { kills: match.kills, deaths: match.deaths, assists: match.assists };
+  const lines = entry.sides.flatMap((side) =>
+    side.players.map((feedPlayer, index) => ({ side, feedPlayer, opensSide: index === 0 })),
+  );
+  const rivals = entry.sides.length > 1;
   return (
-    <li className="flex flex-wrap items-center gap-x-6 gap-y-1">
-      <PlayerName player={player} size={24} className="sm:w-44" />
-      <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-secondary tabular-nums sm:gap-x-4">
-        <span className="sm:w-16">
-          <span aria-hidden="true">{t("activity.kda", kda)}</span>
-          <span className="sr-only">{t("activity.kdaSpoken", kda)}</span>
-        </span>
-        {(["rating", "kd", "adr"] as const).map((key) => (
-          <span key={key} className="font-semibold text-ink">
-            <span className="font-normal text-ink-muted">{`${t(METRICS[key].label)} `}</span>
-            <MetricValue metric={key} value={match[key]} />
-          </span>
-        ))}
-      </span>
-    </li>
+    <tbody className="group border-b border-line last:border-b-0 hover:bg-hover">
+      {lines.map(({ side, feedPlayer, opensSide }, index) => {
+        const player = players.get(feedPlayer.playerId);
+        const { match } = feedPlayer;
+        const kda = { kills: match.kills, deaths: match.deaths, assists: match.assists };
+        return (
+          <tr key={`${feedPlayer.playerId}:${String(side.won)}`}>
+            {index === 0 ? (
+              <th
+                scope="rowgroup"
+                rowSpan={lines.length}
+                className={`${CELL} sticky left-0 z-10 bg-surface text-left font-normal group-hover:bg-[color-mix(in_oklab,var(--surface),var(--ink)_4%)]`}
+              >
+                <span className="flex items-center gap-3">
+                  <MapThumb map={entry.map} size="md" className="max-sm:hidden" />
+                  <span className="flex min-w-0 flex-col items-start font-semibold text-ink">
+                    {mapName(entry.map)}
+                    <RelativeTime
+                      timestamp={entry.finishedAt}
+                      className="text-xs font-normal whitespace-nowrap text-ink-muted"
+                    />
+                    {rivals || lines.length > 1 ? (
+                      <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-accent-soft px-1.5 py-px text-[0.6875rem] font-bold whitespace-nowrap text-accent-text">
+                        <Icon name={rivals ? "swap" : "users"} size={11} />
+                        {t(rivals ? "activity.squadVsSquad" : "activity.together")}
+                      </span>
+                    ) : null}
+                  </span>
+                </span>
+              </th>
+            ) : null}
+            {opensSide ? (
+              <td rowSpan={side.players.length} className={CELL}>
+                <ResultBadge won={side.won} score={`${side.teamScore}:${side.opponentScore}`} />
+              </td>
+            ) : null}
+            <th scope="row" className={`${CELL} text-left font-normal`}>
+              {player ? <PlayerName player={player} size={24} /> : null}
+            </th>
+            <td className={`${CELL} text-right whitespace-nowrap text-ink-secondary tabular-nums`}>
+              <span aria-hidden="true">{t("activity.kda", kda)}</span>
+              <span className="sr-only">{t("activity.kdaSpoken", kda)}</span>
+            </td>
+            {STATS.map((key) => (
+              <td key={key} className={`${CELL} text-right font-semibold text-ink tabular-nums`}>
+                <MetricValue metric={key} value={match[key]} />
+              </td>
+            ))}
+            {index === 0 ? (
+              <td rowSpan={lines.length} className={`${CELL} text-right`}>
+                <ExternalLink
+                  href={faceitMatchUrl(entry.matchId)}
+                  label={t("activity.roomFor", { map: mapName(entry.map) })}
+                  className="rounded-full p-1.5 text-ink-muted hover:bg-hover hover:text-accent-text"
+                />
+              </td>
+            ) : null}
+          </tr>
+        );
+      })}
+    </tbody>
   );
 };
 
@@ -65,56 +123,42 @@ const Activity = ({ views }: ActivityProps) => {
         </div>
       ) : (
         <div className="flex flex-col gap-3">
-          <ol className="panel flex flex-col divide-y divide-line">
-            {shown.map((entry) => {
-              const rivals = entry.sides.length > 1;
-              const squadSize = entry.sides.reduce((sum, side) => sum + side.players.length, 0);
-              return (
-                <li
-                  key={entry.matchId}
-                  className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2.5 px-4 py-3 sm:grid-cols-[13rem_minmax(0,1fr)_auto] sm:gap-x-5"
-                >
-                  <div className="flex min-w-0 items-center gap-3">
-                    <MapThumb map={entry.map} size="md" />
-                    <div className="flex min-w-0 flex-col">
-                      <span className="truncate font-bold text-ink">{mapName(entry.map)}</span>
-                      <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                        <RelativeTime timestamp={entry.finishedAt} className="text-xs text-ink-muted" />
-                        {rivals || squadSize > 1 ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-accent-soft px-1.5 py-px text-[0.6875rem] font-bold text-accent-text">
-                            <Icon name={rivals ? "swap" : "users"} size={11} />
-                            {t(rivals ? "activity.squadVsSquad" : "activity.together")}
-                          </span>
-                        ) : null}
-                      </span>
-                    </div>
-                  </div>
-                  <ExternalLink
-                    href={faceitMatchUrl(entry.matchId)}
-                    label={t("activity.roomFor", { map: mapName(entry.map) })}
-                    className="justify-self-end rounded-full p-1.5 text-ink-muted hover:bg-hover hover:text-accent-text sm:order-last"
-                  />
-                  <div className="col-span-2 flex min-w-0 flex-col gap-2 sm:col-span-1">
-                    {entry.sides.map((side) => (
-                      <div key={String(side.won)} className="flex min-w-0 items-start gap-3 sm:items-center sm:gap-4">
-                        <span className="shrink-0 sm:w-20">
-                          <ResultBadge won={side.won} score={`${side.teamScore}:${side.opponentScore}`} />
-                        </span>
-                        <ul className="flex min-w-0 flex-1 flex-col gap-1.5">
-                          {side.players.map((feedPlayer) => {
-                            const player = players.get(feedPlayer.playerId);
-                            return player ? (
-                              <Line key={feedPlayer.playerId} entry={feedPlayer} player={player} />
-                            ) : null;
-                          })}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                </li>
-              );
-            })}
-          </ol>
+          <div className="panel scrollbar-thin relative overflow-x-auto">
+            <table className="w-full min-w-[48rem] text-sm">
+              <caption className="sr-only">{t("activity.title")}</caption>
+              <thead className="border-b border-line">
+                <tr>
+                  <th scope="col" className={`${HEAD} sticky left-0 z-10 bg-surface text-left`}>
+                    {t("history.map")}
+                  </th>
+                  <th scope="col" className={`${HEAD} text-left`}>
+                    {t("history.result")}
+                  </th>
+                  <th scope="col" className={`${HEAD} text-left`}>
+                    {t("leaderboard.player")}
+                  </th>
+                  <th scope="col" className={`${HEAD} text-right`}>
+                    <abbr title={t("history.kdaName")} className="no-underline">
+                      {t("history.kda")}
+                    </abbr>
+                  </th>
+                  {STATS.map((key) => (
+                    <th key={key} scope="col" className={`${HEAD} text-right`}>
+                      <abbr title={t(METRICS[key].name)} className="no-underline">
+                        {t(METRICS[key].label)}
+                      </abbr>
+                    </th>
+                  ))}
+                  <th scope="col" className={HEAD}>
+                    <span className="sr-only">{t("history.links")}</span>
+                  </th>
+                </tr>
+              </thead>
+              {shown.map((entry) => (
+                <MatchRows key={entry.matchId} entry={entry} players={players} />
+              ))}
+            </table>
+          </div>
           <div className="flex flex-wrap items-center justify-between gap-3">
             <p aria-live="polite" className="text-sm text-ink-muted">
               {t("activity.shown", { shown: shown.length, total: feed.length })}

@@ -205,6 +205,7 @@ export const cs: Messages = {
   "trends.last": "Posledních {count}",
 
   "table.show": "Zobrazit tabulku s daty",
+  "table.hide": "Skrýt tabulku s daty",
 
   "maps.title": "Mapy",
   "maps.metric": "Metrika map",
@@ -262,7 +263,6 @@ export const cs: Messages = {
   "records.aces": "Klub es",
   "records.acesHint": "Pět zabití v jednom kole",
   "records.empty": "Zatím žádné rekordy",
-  "records.room": "Místnost zápasu",
 
   "player.breadcrumb": "Drobečková navigace",
   "player.kicker": "FACEIT · CS2",
