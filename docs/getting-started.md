@@ -2,12 +2,12 @@
 
 ## 📋 Requirements
 
-| Tool              | Version                                          |
-| ----------------- | ------------------------------------------------ |
-| 🟢 Node.js        | **26.10 or newer** (`.nvmrc` pins the `26` line) |
-| 📦 npm            | 11 or newer (ships with Node 24)                 |
-| 🔑 FACEIT API key | A **server-side** key for the FACEIT Data API    |
-| 🌐 Browser        | Any evergreen browser                            |
+| Tool              | Version                                              |
+| ----------------- | ---------------------------------------------------- |
+| 🟢 Node.js        | **24 or newer**; `.nvmrc` pins `26`, the newest line |
+| 📦 npm            | 11 or newer (ships with Node 24)                     |
+| 🔑 FACEIT API key | A **server-side** key for the FACEIT Data API        |
+| 🌐 Browser        | Any evergreen browser                                |
 
 > [!TIP]
 > With a version manager, run `nvm use` (or `fnm use`) in the project root to switch to the Node.js line from `.nvmrc`.

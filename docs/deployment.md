@@ -56,6 +56,9 @@ The build job proves that the app builds without secrets: with no key, every pag
 
 Without `SITE_URL` the production domain from `VERCEL_PROJECT_PRODUCTION_URL` is used for canonical links and Open Graph cards.
 
+> [!IMPORTANT]
+> Vercel takes the Node.js version from `engines.node` in `package.json`. `>=24` lets it build with the newest major it supports, 24 today, and move to 26 on its own once Vercel offers it. A range that only allows a newer line than Vercel supports, such as `>=26`, fails the build with "invalid or discontinued Node.js Version".
+
 > [!NOTE]
 > Preview deployments are kept out of search engines automatically: robots disallow everything and pages are marked `noindex`.
 
@@ -92,7 +95,7 @@ docker compose -f compose.yaml -f docker/production.yaml up --build -d
 
 ### 🖥️ Any Node.js host
 
-Any server with Node.js 26.10 or newer works:
+Any server with Node.js 24 or newer works, 26 is recommended:
 
 ```bash
 npm ci
