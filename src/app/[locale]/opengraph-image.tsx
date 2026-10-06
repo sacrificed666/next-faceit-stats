@@ -9,14 +9,17 @@ import { getI18n } from "@/shared/i18n/server";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
+// One share card per language
 export const generateStaticParams = () => LOCALES.map((locale) => ({ locale }));
 
+// Alt text of the share card in the page language
 export const generateImageMetadata = async ({ params }: { params: Promise<{ locale: string }> }) => {
   const { locale } = await params;
   const { t } = await getI18n(isLocale(locale) ? locale : DEFAULT_LOCALE);
   return [{ id: "card", alt: t("og.alt", { app: t("app.name") }), size, contentType }];
 };
 
+// Share card with the squad, its average ELO and the top players
 const Image = async ({ params }: { params: Promise<{ locale: string }> }) => {
   const { locale } = await params;
   const [squad, { t, format }] = await Promise.all([getSquad(), getI18n(isLocale(locale) ? locale : DEFAULT_LOCALE)]);

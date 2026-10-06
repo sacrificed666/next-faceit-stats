@@ -11,6 +11,7 @@ interface AvatarProps {
   eager?: boolean;
 }
 
+// A round avatar that falls back to the initial when the image fails
 const Avatar = ({ src, name, size = 40, className = "", eager = false }: AvatarProps) => {
   const [failed, setFailed] = useState<string | null>(null);
   const style = { width: size, height: size };

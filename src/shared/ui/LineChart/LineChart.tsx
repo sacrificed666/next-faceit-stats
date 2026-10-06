@@ -40,8 +40,10 @@ const TONES: Record<SeriesTone, { stroke: string; width: number; dot: string }> 
   context: { stroke: "var(--data-muted)", width: 1.5, dot: "mark-muted bg-data-muted" },
 };
 
+// Horizontal position of a point, from 0 to 1
 const xRatio = (index: number, count: number): number => (count <= 1 ? 0.5 : index / (count - 1));
 
+// An SVG path through the values, with gaps where a value is missing
 const linePath = (values: ReadonlyArray<number | null>, count: number, domain: [number, number]): string => {
   let path = "";
   let drawing = false;
@@ -58,6 +60,7 @@ const linePath = (values: ReadonlyArray<number | null>, count: number, domain: [
   return path;
 };
 
+// The line sample of a legend entry
 const LineKey = ({ tone }: { tone: SeriesTone | "reference" }) => {
   if (tone === "reference") {
     return <span aria-hidden="true" className="inline-block w-3 border-t border-dashed border-ink-muted" />;
@@ -65,6 +68,7 @@ const LineKey = ({ tone }: { tone: SeriesTone | "reference" }) => {
   return <span aria-hidden="true" className={`inline-block h-0.5 w-3 rounded-full ${TONES[tone].dot}`} />;
 };
 
+// A label under the chart, as a date when the point has a time
 const AxisLabel = ({ point, align = "start" }: { point: ChartPoint; align?: "start" | "end" }) => {
   const className = `truncate ${align === "end" ? "text-right" : ""}`;
   return point.timestamp === undefined ? (
@@ -74,6 +78,7 @@ const AxisLabel = ({ point, align = "start" }: { point: ChartPoint; align?: "sta
   );
 };
 
+// Legend of the series and the reference line
 export const ChartLegend = ({
   series,
   reference,
@@ -97,12 +102,14 @@ export const ChartLegend = ({
   </ul>
 );
 
+// SVG line chart with a crosshair, a tooltip and a keyboard slider
 const LineChart = ({ label, series, points, scale, format, reference = null, height = 220 }: LineChartProps) => {
   const [active, setActive] = useState<number | null>(null);
   const count = points.length;
   const last = Math.max(count - 1, 0);
   const { domain, ticks } = scale;
 
+  // Moves the crosshair to the match nearest to the pointer
   const onPointer = (event: PointerEvent<HTMLDivElement>): void => {
     if (count === 0) return;
     const rect = event.currentTarget.getBoundingClientRect();
@@ -110,6 +117,7 @@ const LineChart = ({ label, series, points, scale, format, reference = null, hei
     setActive(Math.min(Math.max(Math.round(ratio * last), 0), last));
   };
 
+  // The spoken value of every series at one match
   const describe = (index: number): string => {
     const target = points[index];
     if (!target) return "";

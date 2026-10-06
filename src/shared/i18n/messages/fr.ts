@@ -107,6 +107,8 @@ export const fr: Messages = {
   "level.progress": "Progression vers le niveau {level}",
   "level.eloLevel": "ELO · Niveau {level}",
 
+  "metric.rating": "Rating",
+  "metric.rating.name": "Rating 1.0",
   "metric.kd": "K/D",
   "metric.kd.name": "Éliminations par mort",
   "metric.kr": "K/R",
@@ -115,6 +117,8 @@ export const fr: Messages = {
   "metric.adr.name": "Dégâts par manche",
   "metric.hsPercent": "HS %",
   "metric.hsPercent.name": "Taux de headshots",
+  "metric.survival": "Survie",
+  "metric.survival.name": "Manches survécues",
   "metric.winRate": "% victoires",
   "metric.winRate.name": "Taux de victoire",
   "metric.elo": "ELO",
@@ -236,6 +240,7 @@ export const fr: Messages = {
 
   "records.title": "Records",
   "records.description": "Les meilleures performances individuelles et séries sur la période choisie.",
+  "records.rating": "Meilleur rating",
   "records.kills": "Le plus d’éliminations",
   "records.adr": "ADR le plus élevé",
   "records.kd": "Meilleur K/D",
@@ -251,7 +256,7 @@ export const fr: Messages = {
   "player.breadcrumb": "Fil d’Ariane",
   "player.kicker": "FACEIT · CS2",
   "player.kickerRegion": "FACEIT · CS2 · {region}",
-  "player.faceit": "Profil FACEIT",
+  "player.faceit": "FACEIT",
   "player.steam": "Steam",
   "player.compare": "Comparer",
   "player.notFound": "Joueur introuvable",
@@ -281,8 +286,9 @@ export const fr: Messages = {
   "playerMaps.title": "Cartes",
   "playerMaps.description":
     "Résultats sur chaque carte pendant la période choisie, avec les chiffres de carrière de FACEIT en dessous.",
-  "playerMaps.allTime": "Carrière : {matches} · {rate} de victoires · {kd} K/D",
-  "playerMaps.noAllTime": "Aucune donnée de carrière chez FACEIT",
+  "playerMaps.range": "Période",
+  "playerMaps.allTime": "Carrière",
+  "playerMaps.caption": "{map} : la période choisie et la carrière",
 
   "history.title": "Historique des matchs",
   "history.description":

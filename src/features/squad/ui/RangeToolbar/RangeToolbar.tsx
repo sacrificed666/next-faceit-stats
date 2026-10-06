@@ -14,11 +14,13 @@ interface RangeToolbarProps {
   sections?: ToolbarSections;
 }
 
+// Floating toolbar with the range and links to the sections
 const RangeToolbar = ({ sections = NO_SECTIONS }: RangeToolbarProps) => {
   const { t } = useI18n();
   const range = useRange();
   const name = useId();
 
+  // One range as a radio with its full name for screen readers
   const option = (value: Range) => {
     const spec = rangeSpec(value);
     const title = t(spec.unit === "days" ? "range.option.days" : "range.option.matches", { count: spec.count });

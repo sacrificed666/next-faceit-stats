@@ -13,6 +13,7 @@ const RADIUS = 9.5;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 const ARC = CIRCUMFERENCE * 0.75;
 
+// FACEIT-style ring with the level number in the level colour
 const LevelBadge = ({ level, size = 32, className = "" }: LevelBadgeProps) => {
   const { t } = useI18n();
   const { color } = levelOf(level);

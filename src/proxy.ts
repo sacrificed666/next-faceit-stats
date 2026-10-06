@@ -6,11 +6,13 @@ import { isLocale, LOCALE_COOKIE, negotiateLocale, type Locale } from "@/shared/
 
 const MISSING = "__missing__";
 
+// The saved language, or the best match for the browser
 const preferredLocale = (request: NextRequest): Locale => {
   const saved = request.cookies.get(LOCALE_COOKIE)?.value;
   return isLocale(saved) ? saved : negotiateLocale(request.headers.get("accept-language"));
 };
 
+// Adds the language to bare addresses and checks player nicknames
 export const proxy = (request: NextRequest) => {
   const { pathname } = request.nextUrl;
   const segments = pathname.split("/").filter(Boolean);

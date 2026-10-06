@@ -5,10 +5,12 @@ import ComparePage from "@/features/compare/ui/ComparePage/ComparePage";
 import { withoutMaps } from "@/features/player/model/profile";
 import { alternates, social } from "@/features/seo/model/seo";
 import { getSquad } from "@/features/squad/api/loader";
+import { mapImages } from "@/features/squad/model/maps";
 import SquadStatus from "@/features/squad/ui/SquadStatus/SquadStatus";
 import { isLocale } from "@/shared/i18n/locales";
 import { getI18n } from "@/shared/i18n/server";
 
+// Title, description and links of the compare page
 export const generateMetadata = async ({ params }: PageProps<"/[locale]/compare">): Promise<Metadata> => {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
@@ -24,6 +26,7 @@ export const generateMetadata = async ({ params }: PageProps<"/[locale]/compare"
   };
 };
 
+// The compare page, or the setup help while the squad is unavailable
 const CompareRoute = async ({ params }: PageProps<"/[locale]/compare">) => {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
@@ -34,7 +37,13 @@ const CompareRoute = async ({ params }: PageProps<"/[locale]/compare">) => {
   if (squad.players.length === 0) {
     return <SquadStatus problem={{ status: "empty", failed: squad.failed }} i18n={i18n} />;
   }
-  return <ComparePage players={squad.players.map(withoutMaps)} updatedAt={squad.updatedAt} />;
+  return (
+    <ComparePage
+      players={squad.players.map(withoutMaps)}
+      updatedAt={squad.updatedAt}
+      mapImages={mapImages(squad.players)}
+    />
+  );
 };
 
 export default CompareRoute;

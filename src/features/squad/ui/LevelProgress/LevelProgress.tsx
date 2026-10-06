@@ -8,6 +8,7 @@ interface LevelProgressProps {
   className?: string;
 }
 
+// A meter towards the next level with the ELO still needed
 const LevelProgress = ({ elo, className = "" }: LevelProgressProps) => {
   const { t, format } = useI18n();
   const { current, next, eloToNext } = levelProgress(elo);

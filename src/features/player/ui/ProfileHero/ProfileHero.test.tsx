@@ -22,7 +22,7 @@ describe("ProfileHero", () => {
     expect(screen.getByText("#65,552 in EU")).toBeInTheDocument();
     expect(screen.getByText("Level 10")).toBeInTheDocument();
     expect(screen.getByRole("meter", { name: "Level 10" })).toHaveAttribute("aria-valuetext", "403 ELO above level 10");
-    expect(screen.getByRole("link", { name: /FACEIT profile/ })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /^FACEIT/ })).toHaveAttribute(
       "href",
       "https://www.faceit.com/en/players/sacrificed",
     );

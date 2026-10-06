@@ -148,6 +148,8 @@ export const pl: Messages = {
   "level.progress": "Postęp do poziomu {level}",
   "level.eloLevel": "ELO · Poziom {level}",
 
+  "metric.rating": "Rating",
+  "metric.rating.name": "Rating 1.0",
   "metric.kd": "K/D",
   "metric.kd.name": "Zabójstwa na śmierć",
   "metric.kr": "K/R",
@@ -156,6 +158,8 @@ export const pl: Messages = {
   "metric.adr.name": "Obrażenia na rundę",
   "metric.hsPercent": "HS %",
   "metric.hsPercent.name": "Odsetek headshotów",
+  "metric.survival": "Przeżywalność",
+  "metric.survival.name": "Przeżyte rundy",
   "metric.winRate": "Wygrane %",
   "metric.winRate.name": "Procent wygranych",
   "metric.elo": "ELO",
@@ -281,6 +285,7 @@ export const pl: Messages = {
 
   "records.title": "Rekordy",
   "records.description": "Najlepsze pojedyncze występy i serie w wybranym zakresie.",
+  "records.rating": "Najlepszy rating",
   "records.kills": "Najwięcej zabójstw",
   "records.adr": "Najwyższy ADR",
   "records.kd": "Najlepsze K/D",
@@ -296,7 +301,7 @@ export const pl: Messages = {
   "player.breadcrumb": "Ścieżka nawigacji",
   "player.kicker": "FACEIT · CS2",
   "player.kickerRegion": "FACEIT · CS2 · {region}",
-  "player.faceit": "Profil FACEIT",
+  "player.faceit": "FACEIT",
   "player.steam": "Steam",
   "player.compare": "Porównaj",
   "player.notFound": "Nie znaleziono gracza",
@@ -337,8 +342,9 @@ export const pl: Messages = {
 
   "playerMaps.title": "Mapy",
   "playerMaps.description": "Wyniki na każdej mapie w wybranym zakresie, a pod nimi dane FACEIT z całej kariery.",
-  "playerMaps.allTime": "Cała kariera: {matches} · {rate} wygranych · {kd} K/D",
-  "playerMaps.noAllTime": "Brak danych FACEIT z całej kariery",
+  "playerMaps.range": "Okres",
+  "playerMaps.allTime": "Cała kariera",
+  "playerMaps.caption": "{map}: wybrany okres i cała kariera",
 
   "history.title": "Historia meczów",
   "history.description":

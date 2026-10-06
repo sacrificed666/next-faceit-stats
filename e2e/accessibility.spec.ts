@@ -13,9 +13,11 @@ const PAGES = [
 
 test.use({ reducedMotion: "reduce" });
 
+// The computed background colour of an element
 const background = (locator: Locator): Promise<string> =>
   locator.evaluate((element) => getComputedStyle(element).backgroundColor);
 
+// Axe violations of a page once it has applied the address
 const violations = async (page: Page) => {
   await page.locator("html:not([data-pending])").waitFor();
   const results = await new AxeBuilder({ page })

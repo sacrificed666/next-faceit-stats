@@ -3,7 +3,7 @@
 [![CI](https://github.com/sacrificed666/faceit-stats/actions/workflows/ci.yml/badge.svg)](https://github.com/sacrificed666/faceit-stats/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/sacrificed666/faceit-stats/actions/workflows/codeql.yml/badge.svg)](https://github.com/sacrificed666/faceit-stats/actions/workflows/codeql.yml)
 
-A dashboard that puts a squad of friends side by side on **FACEIT CS2**: ELO and levels, form, K/D, ADR and headshots, map pools, the duos that queue together, the latest matches and the best single games, over the last days or the last matches of every player. Two players can be compared head to head on their own page. Built with Next.js 16, React 19 and TypeScript 7, prerendered and refreshed every five minutes, in ten languages, accessible, light or dark.
+A dashboard that puts a squad of friends side by side on **FACEIT CS2**: ELO and levels, form, rating, K/D, ADR and headshots, map pools, the duos that queue together, the latest matches and the best single games, over the last days or the last matches of every player. Two players can be compared head to head on their own page. Built with Next.js 16, React 19 and TypeScript 7, prerendered and refreshed every five minutes, in ten languages, accessible, light or dark.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./docs/images/desktop-dark.png" />
@@ -13,15 +13,17 @@ A dashboard that puts a squad of friends side by side on **FACEIT CS2**: ELO and
 ## ✨ Highlights
 
 - 🧑‍🤝‍🧑 **Squad overview**: average ELO, squad K/D and win rate, matches played together and the hottest streak at a glance
-- 🃏 **Player cards**: level badge, ELO with the progress to the next level, region ranking, last five results and when they last played
-- 🕹️ **Recent matches**: one feed for the whole squad, where a match played together appears once with everyone who played
+- 🃏 **Player cards**: level badge, ELO with the progress to the next level, region ranking, rating, K/D, ADR, win rate, last five results and when they last played
+- ⭐ **Rating 1.0 and survival**: an HLTV 1.0 rating and the share of rounds survived for every match, calculated from the FACEIT statistics
+- 🚦 **Highlighted numbers**: good values in green and weak ones in red, with the same thresholds in every card, table and chart
+- 🕹️ **Recent matches**: one compact feed for the whole squad with map pictures, where a match played together appears once with everyone who played
 - 🏆 **Leaderboard**: every player and metric in one sortable table, with medals for the top three of each column
-- 📊 **Rankings**: ranked bars for K/D, K/R, ADR, headshots or win rate against the squad average
+- 📊 **Rankings**: ranked bars for rating, K/D, K/R, ADR, headshots or win rate against the squad average
 - 📈 **Trends**: one small chart per player on a shared scale, with a five-match rolling average
-- 🗺️ **Map pool**: a heatmap of win rate, K/D or picks for every player and map, plus the whole squad
+- 🗺️ **Map pool**: a heatmap of win rate, K/D or picks for every player and map with the map pictures, plus the whole squad
 - 🤝 **Playing together**: duos and lineups detected from shared match ids, with their win rates
-- 🏅 **Records**: most kills, highest ADR, best K/D, headshot machine, MVPs, the longest win streak and the ace club
-- 👤 **Player pages**: current form against the squad, a trend chart, maps with all-time numbers, a filterable match history with FACEIT match rooms, teammates, lifetime and playstyle statistics
+- 🏅 **Records**: best rating, most kills, highest ADR, best K/D, headshot machine, MVPs, the longest win streak and the ace club
+- 👤 **Player pages**: current form against the squad, a trend chart, maps next to their all-time numbers, a filterable match history with ratings and FACEIT match rooms, teammates, lifetime and playstyle statistics
 - ⚔️ **Compare**: two players side by side with form, lifetime numbers, maps and every match they played together or against each other
 - 🎚️ **One range for everything**: the last 7, 30 or 90 days, or the last 20, 50 or 100 matches, kept in the address so it can be shared
 - 🌍 **Ten languages**: English, Ukrainian, Czech, German, Spanish, French, Italian, Dutch, Polish and Portuguese, each under its own address, with correct plurals, numbers and dates
@@ -62,7 +64,7 @@ TypeScript 7 · Oxlint · Oxfmt · Vitest 5 · Testing Library · Playwright · 
 
 ## 🚀 Quick start
 
-Requires **Node.js 24.15** or newer and a server-side key for the FACEIT Data API.
+Requires **Node.js 26.10** or newer and a server-side key for the FACEIT Data API.
 
 ```bash
 npm ci

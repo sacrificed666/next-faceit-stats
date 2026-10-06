@@ -19,10 +19,13 @@ const LOADERS: Readonly<Record<Locale, () => Promise<Messages>>> = {
   pt: async () => (await import("./messages/pt")).pt,
 };
 
+// Loads the catalog of a language
 export const getMessages = (locale: Locale): Promise<Messages> => LOADERS[locale]();
 
+// Translator and formatter for Server Components
 export const getI18n = async (locale: Locale): Promise<I18n> => createI18n(locale, await getMessages(locale));
 
+// The language of the current request
 export const currentLocale = async (): Promise<Locale> => {
   const value = await rootLocale();
   return isLocale(value) ? value : DEFAULT_LOCALE;

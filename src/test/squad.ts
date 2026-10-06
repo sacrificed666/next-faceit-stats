@@ -5,9 +5,11 @@ import { makeMatch, makePlayer, newestFirst } from "./factories";
 const DAY = 86_400_000;
 const START = Date.UTC(2026, 8, 10, 18, 0);
 
+// A match on a given day of the sample range
 const on = (day: number, overrides: Partial<Match>): Match =>
   makeMatch({ finishedAt: START + day * DAY, ...overrides });
 
+// Three players with solo matches and two matches played together
 export const sampleSquad = (): Player[] => {
   const sharedWin = { id: "shared-win", map: "de_nuke", won: true };
   const sharedLoss = { id: "shared-loss", map: "de_mirage", won: false };

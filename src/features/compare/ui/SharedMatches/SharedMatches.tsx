@@ -2,7 +2,10 @@
 
 import type { SharedMatch } from "@/features/compare/model/compare";
 import { mapName } from "@/features/squad/model/maps";
+import { METRICS } from "@/features/squad/model/metrics";
 import type { Match } from "@/features/squad/model/types";
+import MapThumb from "@/features/squad/ui/MapThumb/MapThumb";
+import MetricValue from "@/features/squad/ui/MetricValue/MetricValue";
 import ResultBadge from "@/features/squad/ui/ResultBadge/ResultBadge";
 import { useI18n } from "@/shared/i18n/useI18n";
 import { faceitMatchUrl } from "@/shared/lib/urls";
@@ -17,16 +20,25 @@ interface SharedMatchesProps {
   secondName: string;
 }
 
+// One player's K-D-A with the rating, K/D and ADR of that match
 const Line = ({ match }: { match: Match }) => {
-  const { t, format } = useI18n();
+  const { t } = useI18n();
   return (
     <span className="flex flex-col items-end gap-0.5 tabular-nums">
       <span className="font-semibold text-ink">{`${match.kills}-${match.deaths}-${match.assists}`}</span>
-      <span className="text-xs text-ink-muted">{`${t("metric.kd")} ${format.decimal(match.kd, 2)} · ${t("metric.adr")} ${format.decimal(match.adr, 1)}`}</span>
+      <span className="flex gap-2 text-xs font-semibold text-ink-secondary">
+        {(["rating", "kd", "adr"] as const).map((key) => (
+          <span key={key}>
+            <span className="font-normal text-ink-muted">{`${t(METRICS[key].label)} `}</span>
+            <MetricValue metric={key} value={match[key]} />
+          </span>
+        ))}
+      </span>
     </span>
   );
 };
 
+// Every match both players played, together or against each other
 const SharedMatches = ({ shared, firstName, secondName }: SharedMatchesProps) => {
   const { t } = useI18n();
   return (
@@ -60,9 +72,16 @@ const SharedMatches = ({ shared, firstName, secondName }: SharedMatchesProps) =>
               {shared.map((match) => (
                 <tr key={match.id} className="border-b border-line last:border-b-0 hover:bg-hover">
                   <th scope="row" className="px-3 py-2.5 text-left font-normal">
-                    <span className="flex flex-col">
-                      <span className="font-semibold text-ink">{mapName(match.map)}</span>
-                      <LocalDate timestamp={match.finishedAt} format="datetime" className="text-xs text-ink-muted" />
+                    <span className="flex items-center gap-3">
+                      <MapThumb map={match.map} />
+                      <span className="flex flex-col">
+                        <span className="font-semibold text-ink">{mapName(match.map)}</span>
+                        <LocalDate
+                          timestamp={match.finishedAt}
+                          format="datetime"
+                          className="text-xs whitespace-nowrap text-ink-muted"
+                        />
+                      </span>
                     </span>
                   </th>
                   <td className="px-3 py-2.5">

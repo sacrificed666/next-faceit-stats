@@ -1,6 +1,7 @@
 import { currentLocale, getI18n } from "@/shared/i18n/server";
 import Skeleton from "@/shared/ui/Skeleton/Skeleton";
 
+// Placeholder for the squad overview while it renders
 const Loading = async () => {
   const { t } = await getI18n(await currentLocale());
   return (

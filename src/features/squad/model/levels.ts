@@ -28,12 +28,15 @@ export const LEVELS: readonly Level[] = [
   TOP_LEVEL,
 ];
 
+// A FACEIT level by its number
 export const levelOf = (level: number): Level =>
   LEVELS.find((entry) => entry.level === level) ?? (level > TOP_LEVEL.level ? TOP_LEVEL : FIRST_LEVEL);
 
+// The FACEIT level an ELO falls into
 export const levelForElo = (elo: number): Level =>
   LEVELS.find((entry) => entry.max === null || elo <= entry.max) ?? TOP_LEVEL;
 
+// Progress to the next level, or the ELO above level 10
 export const levelProgress = (elo: number): LevelProgress => {
   const current = levelForElo(elo);
   const next = LEVELS.find((entry) => entry.level === current.level + 1) ?? null;

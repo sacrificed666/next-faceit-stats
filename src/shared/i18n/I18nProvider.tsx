@@ -13,6 +13,7 @@ interface I18nProviderProps {
   children: ReactNode;
 }
 
+// Gives Client Components the catalog of the page language
 const I18nProvider = ({ locale, messages, children }: I18nProviderProps) => (
   <I18nContext value={createI18n(locale, messages)}>{children}</I18nContext>
 );

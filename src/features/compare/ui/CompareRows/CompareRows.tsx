@@ -1,11 +1,13 @@
 "use client";
 
+import type { ReactNode } from "react";
+
 import { leader } from "@/features/compare/model/compare";
 import { useI18n } from "@/shared/i18n/useI18n";
 
 export interface CompareRow {
   key: string;
-  label: string;
+  label: ReactNode;
   first: number | null;
   second: number | null;
   display: (value: number, side: "first" | "second") => string;
@@ -19,6 +21,7 @@ interface CompareRowsProps {
   rows: readonly CompareRow[];
 }
 
+// A bar that grows away from the metric names in the middle
 const Bar = ({
   value,
   max,
@@ -44,6 +47,7 @@ const Bar = ({
   );
 };
 
+// Two players mirrored around the metric names, the better value in bold
 const CompareRows = ({ caption, firstName, secondName, rows }: CompareRowsProps) => {
   const { t } = useI18n();
   return (
@@ -52,13 +56,13 @@ const CompareRows = ({ caption, firstName, secondName, rows }: CompareRowsProps)
         <caption className="sr-only">{caption}</caption>
         <thead>
           <tr className="text-xs text-ink-muted">
-            <th scope="col" className="w-[42%] px-2 pb-2 text-right font-semibold">
+            <th scope="col" className="w-[38%] px-2 pb-2 text-right font-semibold">
               {firstName}
             </th>
             <th scope="col" className="px-2 pb-2 text-center font-semibold">
               <span className="sr-only">{t("compare.metric")}</span>
             </th>
-            <th scope="col" className="w-[42%] px-2 pb-2 text-left font-semibold">
+            <th scope="col" className="w-[38%] px-2 pb-2 text-left font-semibold">
               {secondName}
             </th>
           </tr>

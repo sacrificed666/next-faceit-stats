@@ -9,6 +9,7 @@ interface StatTileProps {
   className?: string;
 }
 
+// A label and a value with an optional difference and detail
 const StatTile = ({ label, value, detail, delta, icon, className = "" }: StatTileProps) => (
   <div className={`panel flex min-w-0 flex-col gap-1 p-4 ${className}`}>
     <dt className="flex items-center gap-1.5 text-xs font-semibold text-ink-muted">

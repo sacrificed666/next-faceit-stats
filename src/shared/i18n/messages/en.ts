@@ -105,6 +105,8 @@ export const en = {
   "level.progress": "Progress to level {level}",
   "level.eloLevel": "ELO · Level {level}",
 
+  "metric.rating": "Rating",
+  "metric.rating.name": "Rating 1.0",
   "metric.kd": "K/D",
   "metric.kd.name": "Kills per death",
   "metric.kr": "K/R",
@@ -113,6 +115,8 @@ export const en = {
   "metric.adr.name": "Damage per round",
   "metric.hsPercent": "HS %",
   "metric.hsPercent.name": "Headshot rate",
+  "metric.survival": "Survival",
+  "metric.survival.name": "Rounds survived",
   "metric.winRate": "Win %",
   "metric.winRate.name": "Win rate",
   "metric.elo": "ELO",
@@ -228,6 +232,7 @@ export const en = {
 
   "records.title": "Records",
   "records.description": "The best single performances and streaks in the selected range.",
+  "records.rating": "Best rating",
   "records.kills": "Most kills",
   "records.adr": "Highest ADR",
   "records.kd": "Best K/D",
@@ -243,7 +248,7 @@ export const en = {
   "player.breadcrumb": "Breadcrumb",
   "player.kicker": "FACEIT · CS2",
   "player.kickerRegion": "FACEIT · CS2 · {region}",
-  "player.faceit": "FACEIT profile",
+  "player.faceit": "FACEIT",
   "player.steam": "Steam",
   "player.compare": "Compare",
   "player.notFound": "Player not found",
@@ -272,8 +277,9 @@ export const en = {
 
   "playerMaps.title": "Maps",
   "playerMaps.description": "Results on each map in the selected range, with all-time numbers from FACEIT underneath.",
-  "playerMaps.allTime": "All time: {matches} · {rate} win rate · {kd} K/D",
-  "playerMaps.noAllTime": "No all-time data from FACEIT",
+  "playerMaps.range": "Range",
+  "playerMaps.allTime": "All time",
+  "playerMaps.caption": "{map}: the selected range and all time",
 
   "history.title": "Match history",
   "history.description":

@@ -31,17 +31,20 @@ const EFFECT_OPTIONS: ReadonlyArray<{ value: Effects; label: MessageKey }> = [
   { value: "reduced", label: "settings.effects.reduced" },
 ];
 
+// The same address in another language
 const switchLocale = (pathname: string, locale: Locale) => {
   const [, first = "", ...rest] = pathname.split("/");
   const tail = isLocale(first) ? rest : [first, ...rest].filter(Boolean);
   return ["", locale, ...tail].join("/");
 };
 
+// Remembers the language for the next visit to the bare address
 const rememberLocale = (locale: Locale) => {
   const secure = location.protocol === "https:" ? "; secure" : "";
   document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; max-age=${ONE_YEAR}; samesite=lax${secure}`;
 };
 
+// Settings popover: appearance, effects and language
 const SettingsMenu = () => {
   const { locale, t } = useI18n();
   const pathname = usePathname();

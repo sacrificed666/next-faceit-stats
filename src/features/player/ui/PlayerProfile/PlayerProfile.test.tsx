@@ -68,11 +68,23 @@ describe("PlayerProfile", () => {
     expect(within(lifetime).getByRole("meter", { name: "Sniper kills" })).toHaveAttribute("aria-valuetext", "No data");
   });
 
-  it("adds all-time map numbers to the map cards", () => {
+  it("puts the all-time map numbers under the numbers for the range", () => {
     renderProfile();
     const maps = screen.getByRole("region", { name: "Maps" });
-    expect(within(maps).getByText("All time: 109 matches · 51% win rate · 1.14 K/D")).toBeInTheDocument();
-    expect(within(maps).getAllByText("No all-time data from FACEIT").length).toBeGreaterThan(0);
+    const nuke = within(maps).getByRole("table", { name: "Nuke: the selected range and all time" });
+    const allTime = within(nuke).getByRole("row", { name: /^All time/ });
+    expect(
+      within(allTime)
+        .getAllByRole("cell")
+        .map((cell) => cell.textContent),
+    ).toEqual(["109", "51%", "1.14", "84.2"]);
+    const mirage = within(maps).getByRole("table", { name: "Mirage: the selected range and all time" });
+    const empty = within(mirage).getByRole("row", { name: /^All time/ });
+    expect(
+      within(empty)
+        .getAllByRole("cell")
+        .map((cell) => cell.textContent),
+    ).toEqual(["-", "-", "-", "-"]);
   });
 
   it("switches the trend to another metric", async () => {

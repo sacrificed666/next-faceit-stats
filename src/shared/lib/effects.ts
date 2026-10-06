@@ -8,6 +8,7 @@ export const EFFECTS_STORAGE_KEY = "effects";
 
 export const RICH_EFFECTS_DEVICES = /Mac|iPhone|iPad|iPod/u;
 
+// Whether a value is a valid effects choice
 export const isEffects = (value: unknown): value is Effects =>
   typeof value === "string" && (EFFECTS as readonly string[]).includes(value);
 
@@ -15,6 +16,7 @@ export const isEffects = (value: unknown): value is Effects =>
 export const prefersRichEffects = (userAgent: string, cores: number): boolean =>
   RICH_EFFECTS_DEVICES.test(userAgent) && cores >= 8;
 
+// Auto becomes full or reduced, depending on the device
 export const resolveEffects = (effects: Effects, rich: boolean): EffectsLevel => {
   if (effects !== "auto") return effects;
   return rich ? "full" : "reduced";

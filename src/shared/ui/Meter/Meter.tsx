@@ -12,6 +12,7 @@ interface MeterProps {
   hint?: string;
 }
 
+// A labelled native meter with the value and an optional hint
 const Meter = ({ label, value, display, max = 100, hint }: MeterProps) => {
   const id = useId();
   const { t } = useI18n();

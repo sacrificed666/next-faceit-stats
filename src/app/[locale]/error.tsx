@@ -11,6 +11,7 @@ interface ErrorPageProps {
   retry: () => void;
 }
 
+// Shown when a page fails to render, with a way to try again
 const ErrorPage = ({ error, retry }: ErrorPageProps) => {
   const { locale, t } = useI18n();
   return (

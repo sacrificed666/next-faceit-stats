@@ -34,6 +34,7 @@ export const OG_FONTS = await Promise.all(
   ),
 );
 
+// An image as a data URL for a share card, or null when it fails
 export const imageDataUrl = async (url: string | null): Promise<string | null> => {
   "use cache";
   cacheLife("days");

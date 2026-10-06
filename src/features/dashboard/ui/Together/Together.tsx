@@ -2,6 +2,7 @@
 
 import { playerById, type PlayerView } from "@/features/squad/model/squad";
 import { duos, partySizes, type Lineup } from "@/features/squad/model/together";
+import MetricValue from "@/features/squad/ui/MetricValue/MetricValue";
 import PlayerName from "@/features/squad/ui/PlayerName/PlayerName";
 import type { MessageKey } from "@/shared/i18n/translate";
 import { useI18n } from "@/shared/i18n/useI18n";
@@ -26,11 +27,13 @@ interface TogetherProps {
   lineups: readonly Lineup[];
 }
 
+// Win rate by party size and the duos that queue together most
 const Together = ({ views, lineups }: TogetherProps) => {
   const { t, format } = useI18n();
   const players = playerById(views);
   const sizes = partySizes(lineups);
   const pairs = duos(lineups).slice(0, DUO_LIMIT);
+  // Duo, trio and so on, or the number of squad members
   const lineupLabel = (size: number) => {
     const key = LINEUPS[size];
     return key ? t(key) : t("together.lineup.other", { count: size });
@@ -38,7 +41,7 @@ const Together = ({ views, lineups }: TogetherProps) => {
 
   return (
     <Section id="together" title={t("together.title")} description={t("together.description")}>
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:items-start">
         <div className="panel flex flex-col gap-4 p-4 sm:p-6">
           <h3 className="text-base font-bold text-ink">{t("together.lineups")}</h3>
           {sizes.length > 0 ? (
@@ -48,7 +51,7 @@ const Together = ({ views, lineups }: TogetherProps) => {
               items={sizes.map((size) => ({
                 id: String(size.size),
                 value: size.winRate,
-                display: format.percent(size.winRate, 0),
+                display: <MetricValue metric="winRate" value={size.winRate} digits={0} />,
                 label: <span className="truncate text-sm font-semibold text-ink">{lineupLabel(size.size)}</span>,
                 detail: `${t("count.matches", { count: size.matches })}, ${size.wins}-${size.matches - size.wins}`,
               }))}
@@ -82,7 +85,9 @@ const Together = ({ views, lineups }: TogetherProps) => {
                     </span>
                     <span className="flex items-center gap-4 text-sm">
                       <span className="text-ink-secondary">{t("count.matches", { count: pair.matches })}</span>
-                      <span className="w-14 text-right font-bold text-ink">{format.percent(pair.winRate, 0)}</span>
+                      <span className="w-14 text-right font-bold text-ink">
+                        <MetricValue metric="winRate" value={pair.winRate} digits={0} />
+                      </span>
                       <span className="hidden w-32 text-right text-xs text-ink-muted sm:inline">
                         <RelativeTime timestamp={pair.lastPlayedAt} />
                       </span>

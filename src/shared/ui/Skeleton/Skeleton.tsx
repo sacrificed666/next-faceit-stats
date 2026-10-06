@@ -5,6 +5,7 @@ interface SkeletonProps {
   children: ReactNode;
 }
 
+// Pulsing placeholders with a spoken loading message
 const Skeleton = ({ label, children }: SkeletonProps) => (
   <>
     <output className="sr-only">{`${label}…`}</output>

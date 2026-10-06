@@ -7,6 +7,7 @@ export const PROFILE = {
   games: { cs2: { region: "EU", skill_level: 10, faceit_elo: 2404 } },
 };
 
+// One FACEIT match statistics item, with fields to override
 export const matchItem = (overrides: Record<string, string | number> = {}) => ({
   stats: {
     "Match Id": "1-194343b4-6a43-443b-87dd-5ae99b90ed13",

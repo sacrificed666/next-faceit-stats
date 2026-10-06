@@ -7,6 +7,7 @@ import { members, viewPlayers } from "@/features/squad/model/squad";
 import { lineups } from "@/features/squad/model/together";
 import type { FailedPlayer, Player } from "@/features/squad/model/types";
 import { useRange, withRange } from "@/features/squad/model/useRange";
+import { MapImagesProvider } from "@/features/squad/ui/MapThumb/MapThumb";
 import RangeToolbar from "@/features/squad/ui/RangeToolbar/RangeToolbar";
 import { rich } from "@/shared/i18n/rich";
 import { useI18n } from "@/shared/i18n/useI18n";
@@ -30,9 +31,11 @@ interface DashboardProps {
   players: Player[];
   failed: FailedPlayer[];
   updatedAt: number;
+  mapImages: Readonly<Record<string, string>>;
 }
 
-const Dashboard = ({ players, failed, updatedAt }: DashboardProps) => {
+// The squad overview: header, range toolbar and every section
+const Dashboard = ({ players, failed, updatedAt, mapImages }: DashboardProps) => {
   const { locale, t, format } = useI18n();
   const range = useRange();
   const spec = rangeSpec(range);
@@ -55,62 +58,64 @@ const Dashboard = ({ players, failed, updatedAt }: DashboardProps) => {
   });
 
   return (
-    <div className="flex flex-col gap-12 sm:gap-16" data-query-scope="">
-      <header className="grid gap-8 pt-6 sm:pt-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-        <div className="flex flex-col gap-3">
-          <p className="text-xs font-bold tracking-[0.18em] text-accent-text uppercase">{t("app.kicker")}</p>
-          <h1 className="text-4xl font-extrabold tracking-tight text-balance text-ink sm:text-6xl">
-            {t("dashboard.title")}
-          </h1>
-          <p className="max-w-2xl text-base text-pretty text-ink-secondary sm:text-lg">{subtitle}</p>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <p className="text-sm text-ink-muted">
-              {rich(t("dashboard.updated"), { time: <RelativeTime timestamp={updatedAt} /> })}
-            </p>
-            <Link
-              href={withRange(comparePath(locale), range)}
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-text hover:underline"
-            >
-              <Icon name="users" size={16} />
-              {t("dashboard.compareCta")}
-            </Link>
+    <MapImagesProvider images={mapImages}>
+      <div className="flex flex-col gap-12 sm:gap-16" data-query-scope="">
+        <header className="grid gap-8 pt-6 sm:pt-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+          <div className="flex flex-col gap-3">
+            <p className="text-xs font-bold tracking-[0.18em] text-accent-text uppercase">{t("app.kicker")}</p>
+            <h1 className="text-4xl font-extrabold tracking-tight text-balance text-ink sm:text-6xl">
+              {t("dashboard.title")}
+            </h1>
+            <p className="max-w-2xl text-base text-pretty text-ink-secondary sm:text-lg">{subtitle}</p>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              <p className="text-sm text-ink-muted">
+                {rich(t("dashboard.updated"), { time: <RelativeTime timestamp={updatedAt} /> })}
+              </p>
+              <Link
+                href={withRange(comparePath(locale), range)}
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-text hover:underline"
+              >
+                <Icon name="users" size={16} />
+                {t("dashboard.compareCta")}
+              </Link>
+            </div>
           </div>
-        </div>
-        <ul aria-hidden="true" className="hidden -space-x-3 pb-2 lg:flex">
-          {players
-            .toSorted((a, b) => b.elo - a.elo)
-            .map((player) => (
-              <li key={player.id} className="rounded-full shadow-card">
-                <Avatar src={player.avatar} name={player.nickname} size={52} className="ring-4 ring-plane" />
-              </li>
-            ))}
-        </ul>
-      </header>
+          <ul aria-hidden="true" className="hidden -space-x-3 pb-2 lg:flex">
+            {players
+              .toSorted((a, b) => b.elo - a.elo)
+              .map((player) => (
+                <li key={player.id} className="rounded-full shadow-card">
+                  <Avatar src={player.avatar} name={player.nickname} size={52} className="ring-4 ring-plane" />
+                </li>
+              ))}
+          </ul>
+        </header>
 
-      <RangeToolbar sections={sections} />
+        <RangeToolbar sections={sections} />
 
-      {failed.length > 0 ? (
-        <Notice tone="warning" title={t("dashboard.failed", { count: failed.length })}>
-          {format.list(
-            failed.map((entry) =>
-              t(entry.reason === "not-found" ? "dashboard.failed.notFound" : "dashboard.failed.error", {
-                nickname: entry.nickname,
-              }),
-            ),
-          )}
-        </Notice>
-      ) : null}
+        {failed.length > 0 ? (
+          <Notice tone="warning" title={t("dashboard.failed", { count: failed.length })}>
+            {format.list(
+              failed.map((entry) =>
+                t(entry.reason === "not-found" ? "dashboard.failed.notFound" : "dashboard.failed.error", {
+                  nickname: entry.nickname,
+                }),
+              ),
+            )}
+          </Notice>
+        ) : null}
 
-      <Overview views={views} lineups={lineupList} />
-      <Roster views={views} />
-      <Activity views={views} />
-      <Leaderboard views={views} />
-      <Rankings views={views} />
-      <Trends views={views} />
-      <MapPool views={views} />
-      <Together views={views} lineups={lineupList} />
-      <Highlights views={views} />
-    </div>
+        <Overview views={views} lineups={lineupList} />
+        <Roster views={views} />
+        <Activity views={views} />
+        <Leaderboard views={views} />
+        <Rankings views={views} />
+        <Trends views={views} />
+        <MapPool views={views} />
+        <Together views={views} lineups={lineupList} />
+        <Highlights views={views} />
+      </div>
+    </MapImagesProvider>
   );
 };
 

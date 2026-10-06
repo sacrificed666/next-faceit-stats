@@ -20,9 +20,11 @@ export interface FeedEntry {
   sides: FeedSide[];
 }
 
+// Larger sides first, then the winning side
 const bySize = (a: FeedSide, b: FeedSide): number =>
   b.players.length - a.players.length || Number(b.won) - Number(a.won);
 
+// One entry per match with every squad member on their side
 export const activityFeed = (members: readonly SquadMember[]): FeedEntry[] => {
   const entries = new Map<string, FeedEntry>();
   for (const member of members) {

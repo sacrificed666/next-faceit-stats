@@ -20,6 +20,7 @@ interface SegmentedControlProps<T extends string | number> {
   className?: string;
 }
 
+// A native radio group styled as pills
 const SegmentedControl = <T extends string | number>({
   label,
   options,

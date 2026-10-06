@@ -26,9 +26,11 @@ export const LOCALE_INFO: Readonly<Record<Locale, LocaleInfo>> = {
   pt: { name: "Português", flag: "PT", intl: "pt-PT", openGraph: "pt_PT" },
 };
 
+// Whether a value is a supported language
 export const isLocale = (value: unknown): value is Locale =>
   typeof value === "string" && (LOCALES as readonly string[]).includes(value);
 
+// The best supported language for an Accept-Language header
 export const negotiateLocale = (acceptLanguage: string | null | undefined): Locale => {
   const ranked = (acceptLanguage ?? "")
     .split(",")
@@ -43,4 +45,5 @@ export const negotiateLocale = (acceptLanguage: string | null | undefined): Loca
   return ranked.map((entry) => entry.language).find(isLocale) ?? DEFAULT_LOCALE;
 };
 
+// A path inside a language
 export const localePath = (locale: Locale, path = "/"): string => (path === "/" ? `/${locale}` : `/${locale}${path}`);

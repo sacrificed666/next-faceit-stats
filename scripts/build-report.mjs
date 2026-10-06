@@ -5,6 +5,7 @@ import { gzipSync } from "node:zlib";
 const root = new URL("../", import.meta.url).pathname;
 const build = join(root, ".next");
 
+// Every file below a directory
 const walk = (directory) =>
   readdirSync(directory).flatMap((name) => {
     const path = join(directory, name);
@@ -12,10 +13,12 @@ const walk = (directory) =>
   });
 
 const failures = [];
+// Collects a failed check instead of stopping at the first one
 const expect = (condition, message) => {
   if (!condition) failures.push(message);
 };
 
+// Reads a JSON manifest from the build output
 const readJson = (file) => JSON.parse(readFileSync(join(build, file), "utf8"));
 
 const localesSource = readFileSync(join(root, "src/shared/i18n/locales.ts"), "utf8");
@@ -53,6 +56,7 @@ for (const header of [
   expect(headers.has(header), `the ${header} header is missing`);
 }
 
+// Bytes as kilobytes for the report
 const formatSize = (bytes) => `${(bytes / 1024).toFixed(1)} kB`;
 
 const assets = walk(join(build, "static"))
@@ -63,6 +67,7 @@ const assets = walk(join(build, "static"))
   })
   .toSorted((a, b) => b.gzip - a.gzip);
 
+// Gzipped size of all assets of one kind
 const sum = (kind) =>
   assets.filter((asset) => asset.name.endsWith(kind)).reduce((total, asset) => total + asset.gzip, 0);
 

@@ -9,6 +9,7 @@ export const SITE = {
   themeColor: { light: "#f3f3f0", dark: "#0f1011" },
 } as const;
 
+// The public address: SITE_URL, the Vercel domain or localhost
 export const siteUrl = (env: Partial<Record<string, string>> = process.env): URL => {
   const explicit = env.SITE_URL?.trim();
   if (explicit) return new URL(explicit);

@@ -148,6 +148,8 @@ export const uk: Messages = {
   "level.progress": "Прогрес до рівня {level}",
   "level.eloLevel": "ELO · Рівень {level}",
 
+  "metric.rating": "Рейтинг",
+  "metric.rating.name": "Рейтинг 1.0",
   "metric.kd": "K/D",
   "metric.kd.name": "Вбивства на смерть",
   "metric.kr": "K/R",
@@ -156,6 +158,8 @@ export const uk: Messages = {
   "metric.adr.name": "Шкода за раунд",
   "metric.hsPercent": "HS %",
   "metric.hsPercent.name": "Частка хедшотів",
+  "metric.survival": "Виживання",
+  "metric.survival.name": "Пережиті раунди",
   "metric.winRate": "% перемог",
   "metric.winRate.name": "Відсоток перемог",
   "metric.elo": "ELO",
@@ -281,6 +285,7 @@ export const uk: Messages = {
 
   "records.title": "Рекорди",
   "records.description": "Найкращі окремі виступи й серії у вибраному діапазоні.",
+  "records.rating": "Найкращий рейтинг",
   "records.kills": "Найбільше вбивств",
   "records.adr": "Найвищий ADR",
   "records.kd": "Найкращий K/D",
@@ -296,7 +301,7 @@ export const uk: Messages = {
   "player.breadcrumb": "Навігаційний ланцюжок",
   "player.kicker": "FACEIT · CS2",
   "player.kickerRegion": "FACEIT · CS2 · {region}",
-  "player.faceit": "Профіль FACEIT",
+  "player.faceit": "FACEIT",
   "player.steam": "Steam",
   "player.compare": "Порівняти",
   "player.notFound": "Гравця не знайдено",
@@ -338,8 +343,9 @@ export const uk: Messages = {
   "playerMaps.title": "Мапи",
   "playerMaps.description":
     "Результати на кожній мапі у вибраному діапазоні, а під ними показники за весь час із FACEIT.",
-  "playerMaps.allTime": "За весь час: {matches} · {rate} перемог · {kd} K/D",
-  "playerMaps.noAllTime": "FACEIT не має даних за весь час",
+  "playerMaps.range": "Період",
+  "playerMaps.allTime": "За весь час",
+  "playerMaps.caption": "{map}: обраний період і весь час",
 
   "history.title": "Історія матчів",
   "history.description":

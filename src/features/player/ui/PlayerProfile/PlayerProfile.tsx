@@ -1,8 +1,10 @@
 "use client";
 
 import { contextFor, type ProfileData } from "@/features/player/model/profile";
+import { mapImages } from "@/features/squad/model/maps";
 import { viewPlayer } from "@/features/squad/model/squad";
 import { useRange } from "@/features/squad/model/useRange";
+import { MapImagesProvider } from "@/features/squad/ui/MapThumb/MapThumb";
 import RangeToolbar from "@/features/squad/ui/RangeToolbar/RangeToolbar";
 import { useI18n } from "@/shared/i18n/useI18n";
 
@@ -18,6 +20,7 @@ interface PlayerProfileProps {
   data: ProfileData;
 }
 
+// The sections of a player page for the range in the address
 const PlayerProfile = ({ data }: PlayerProfileProps) => {
   const { t } = useI18n();
   const range = useRange();
@@ -35,16 +38,18 @@ const PlayerProfile = ({ data }: PlayerProfileProps) => {
   ];
 
   return (
-    <div className="flex flex-col gap-12 sm:gap-16" data-query-scope="">
-      <RangeToolbar sections={sections} />
-      <FormSummary view={view} averages={context.averages} />
-      <PlayerTrend view={view} averages={context.averages} />
-      <PlayerMaps view={view} />
-      <MatchHistory view={view} squad={squad} mates={new Map(context.mates)} />
-      <Teammates view={view} squad={squad} mates={context.teammates} />
-      <Playstyle player={data.player} />
-      <SquadLinks squad={data.squad} current={data.player.id} />
-    </div>
+    <MapImagesProvider images={mapImages([data.player])}>
+      <div className="flex flex-col gap-12 sm:gap-16" data-query-scope="">
+        <RangeToolbar sections={sections} />
+        <FormSummary view={view} averages={context.averages} />
+        <PlayerTrend view={view} averages={context.averages} />
+        <PlayerMaps view={view} />
+        <MatchHistory view={view} squad={squad} mates={new Map(context.mates)} />
+        <Teammates view={view} squad={squad} mates={context.teammates} />
+        <Playstyle player={data.player} />
+        <SquadLinks squad={data.squad} current={data.player.id} />
+      </div>
+    </MapImagesProvider>
   );
 };
 

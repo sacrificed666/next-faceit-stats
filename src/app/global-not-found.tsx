@@ -27,6 +27,7 @@ const montserrat = Montserrat({
 
 const CATALOG: Readonly<Record<(typeof LOCALES)[number], Messages>> = { en, uk, cs, de, es, fr, it, nl, pl, pt };
 
+// A message of the not found page as plain text
 const text = (
   messages: Messages,
   key: "notFound.meta" | "notFound.title" | "notFound.body" | "notFound.home",
@@ -56,6 +57,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
+// Not found page for addresses outside any language
 const GlobalNotFound = () => (
   <html lang={DEFAULT_LOCALE} className={montserrat.variable} suppressHydrationWarning>
     <head>

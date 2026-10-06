@@ -26,6 +26,7 @@ interface ProfileHeroProps {
 const BUTTON =
   "inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface/80 px-3.5 py-2 text-sm font-semibold text-ink backdrop-blur reduced:bg-surface reduced:backdrop-blur-none transition-colors hover:border-accent hover:text-accent-text";
 
+// Avatar, name, links and the ELO progress of a player
 const ProfileHero = ({ player }: ProfileHeroProps) => {
   const { locale, t, format } = useI18n();
   const range = useRange();

@@ -7,6 +7,7 @@ import { siteUrl } from "@/shared/lib/site";
 
 type Entry = MetadataRoute.Sitemap[number];
 
+// One sitemap entry per language, each linking the others
 const localized = (path: string, base: URL, entry: Omit<Entry, "url" | "alternates">): Entry[] => {
   const { languages } = alternates("en", path);
   const absolute = Object.fromEntries(
@@ -17,6 +18,7 @@ const localized = (path: string, base: URL, entry: Omit<Entry, "url" | "alternat
   );
 };
 
+// Sitemap of the overview, compare and every player page
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   const base = siteUrl();
   const squad = await getSquad();

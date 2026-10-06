@@ -4,6 +4,7 @@ import { useState, type CSSProperties } from "react";
 
 import { mapCells, mapColumns, type PlayerView } from "@/features/squad/model/squad";
 import { summarize, type Summary } from "@/features/squad/model/stats";
+import MapThumb from "@/features/squad/ui/MapThumb/MapThumb";
 import PlayerName from "@/features/squad/ui/PlayerName/PlayerName";
 import type { MessageKey, Translate } from "@/shared/i18n/translate";
 import { useI18n } from "@/shared/i18n/useI18n";
@@ -24,6 +25,7 @@ interface HeatDefinition {
   legend: (format: Formatter, t: Translate) => [string, string];
 }
 
+// Cells with fewer than five matches are paler, as their numbers say less
 const confidence = (summary: Summary): number => Math.min(summary.matches / FULL_CONFIDENCE, 1);
 
 const HEAT: Record<HeatMetric, HeatDefinition> = {
@@ -74,11 +76,13 @@ interface MapPoolProps {
   views: readonly PlayerView[];
 }
 
+// The colour of a heatmap cell, from its pole and strength
 const heatStyle = (definition: HeatDefinition, summary: Summary, busiest: number): CSSProperties => {
   const { pole, strength } = definition.tone(summary, busiest);
   return { "--heat": strength.toFixed(3), "--heat-pole": POLES[pole] };
 };
 
+// A heatmap of every player and map, with the whole squad in the last row
 const MapPool = ({ views }: MapPoolProps) => {
   const { t, format } = useI18n();
   const [metric, setMetric] = useState<HeatMetric>("winRate");
@@ -129,7 +133,10 @@ const MapPool = ({ views }: MapPoolProps) => {
                       scope="col"
                       className="min-w-[4.5rem] px-1 py-2 text-center text-xs font-semibold text-ink-secondary"
                     >
-                      {column.name}
+                      <span className="flex flex-col items-center gap-1.5">
+                        <MapThumb map={column.map} size="md" />
+                        {column.name}
+                      </span>
                     </th>
                   ))}
                 </tr>

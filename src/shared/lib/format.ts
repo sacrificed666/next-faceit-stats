@@ -31,6 +31,7 @@ export interface Formatter {
   country: (code: string) => string;
 }
 
+// Caches one Intl formatter per option
 const memo = <K, V>(create: (key: K) => V): ((key: K) => V) => {
   const cache = new Map<K, V>();
   return (key) => {
@@ -43,8 +44,10 @@ const memo = <K, V>(create: (key: K) => V): ((key: K) => V) => {
   };
 };
 
+// A real minus sign instead of a hyphen
 const minus = (text: string): string => text.replaceAll("-", MINUS);
 
+// Numbers, dates, relative times and lists in one language
 export const createFormatter = (locale: Locale): Formatter => {
   const tag = LOCALE_INFO[locale].intl;
   const decimals = memo(

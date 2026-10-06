@@ -16,7 +16,7 @@ const renderDashboard = (
   locale: Locale = "en",
 ) => {
   const players = sampleSquad();
-  renderWithI18n(<Dashboard players={players} failed={failed} updatedAt={UPDATED_AT} />, locale);
+  renderWithI18n(<Dashboard players={players} failed={failed} updatedAt={UPDATED_AT} mapImages={{}} />, locale);
   return players;
 };
 
@@ -67,7 +67,7 @@ describe("Dashboard", () => {
   it("keeps players without matches in the range at the bottom and still ranks their ELO", async () => {
     const user = userEvent.setup();
     const players = [...sampleSquad(), makePlayer({ nickname: "dana", elo: 2600, matches: [] })];
-    renderWithI18n(<Dashboard players={players} failed={[]} updatedAt={UPDATED_AT} />);
+    renderWithI18n(<Dashboard players={players} failed={[]} updatedAt={UPDATED_AT} mapImages={{}} />);
     const table = screen.getByRole("table", { name: /Squad leaderboard/ });
     expect(leaderboardRows()).toEqual(["dana", "anna", "bohdan", "chris"]);
     expect(within(within(table).getByRole("row", { name: /dana/ })).getByText("1st place")).toBeInTheDocument();

@@ -5,12 +5,14 @@ export interface Scale {
 
 const STEPS = [1, 2, 2.5, 5, 10];
 
+// Decimal places of a step, so ticks print without float noise
 const decimals = (step: number): number => {
   const text = String(step);
   const dot = text.indexOf(".");
   return dot === -1 ? 0 : text.length - dot - 1;
 };
 
+// A chart scale with round ticks that covers every value
 export const niceScale = (values: readonly number[], count = 4, includeZero = true): Scale => {
   const finite = values.filter((value) => Number.isFinite(value));
   let min = includeZero ? 0 : Math.min(...finite);
@@ -31,5 +33,6 @@ export const niceScale = (values: readonly number[], count = 4, includeZero = tr
   return { domain: [Number(start.toFixed(precision)), Number(end.toFixed(precision))], ticks };
 };
 
+// Where a value sits between the ends of a domain, from 0 to 1
 export const position = (value: number, [min, max]: [number, number]): number =>
   max === min ? 0.5 : (value - min) / (max - min);

@@ -107,6 +107,8 @@ export const es: Messages = {
   "level.progress": "Progreso hacia el nivel {level}",
   "level.eloLevel": "ELO · Nivel {level}",
 
+  "metric.rating": "Rating",
+  "metric.rating.name": "Rating 1.0",
   "metric.kd": "K/D",
   "metric.kd.name": "Bajas por muerte",
   "metric.kr": "K/R",
@@ -115,6 +117,8 @@ export const es: Messages = {
   "metric.adr.name": "Daño por ronda",
   "metric.hsPercent": "HS %",
   "metric.hsPercent.name": "Porcentaje de headshots",
+  "metric.survival": "Supervivencia",
+  "metric.survival.name": "Rondas sobrevividas",
   "metric.winRate": "% victorias",
   "metric.winRate.name": "Porcentaje de victorias",
   "metric.elo": "ELO",
@@ -233,6 +237,7 @@ export const es: Messages = {
 
   "records.title": "Récords",
   "records.description": "Las mejores actuaciones individuales y rachas del periodo elegido.",
+  "records.rating": "Mejor rating",
   "records.kills": "Más bajas",
   "records.adr": "ADR más alto",
   "records.kd": "Mejor K/D",
@@ -248,7 +253,7 @@ export const es: Messages = {
   "player.breadcrumb": "Ruta de navegación",
   "player.kicker": "FACEIT · CS2",
   "player.kickerRegion": "FACEIT · CS2 · {region}",
-  "player.faceit": "Perfil de FACEIT",
+  "player.faceit": "FACEIT",
   "player.steam": "Steam",
   "player.compare": "Comparar",
   "player.notFound": "Jugador no encontrado",
@@ -277,8 +282,9 @@ export const es: Messages = {
 
   "playerMaps.title": "Mapas",
   "playerMaps.description": "Resultados en cada mapa del periodo elegido, con las cifras históricas de FACEIT debajo.",
-  "playerMaps.allTime": "Histórico: {matches} · {rate} de victorias · {kd} K/D",
-  "playerMaps.noAllTime": "FACEIT no tiene datos históricos",
+  "playerMaps.range": "Periodo",
+  "playerMaps.allTime": "Histórico",
+  "playerMaps.caption": "{map}: el periodo elegido y el histórico",
 
   "history.title": "Historial de partidas",
   "history.description":

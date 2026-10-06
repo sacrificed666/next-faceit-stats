@@ -17,7 +17,7 @@ test("filters the match history", async ({ page }) => {
 
 test("compares the player with the squad", async ({ page }) => {
   await page.goto("/en/players/chris");
-  await expect(page.getByRole("link", { name: "FACEIT profile (opens in a new tab)" })).toHaveAttribute(
+  await expect(page.getByRole("link", { name: "FACEIT (opens in a new tab)" })).toHaveAttribute(
     "href",
     "https://www.faceit.com/en/players/chris",
   );

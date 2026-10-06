@@ -30,6 +30,33 @@ Every number on a page is calculated from one range, chosen in the toolbar:
 > [!NOTE]
 > Only **5v5** matches count. Wingman, 1v1 and other modes are left out of every statistic, and FACEIT returns at most the last 100 matches of each player.
 
+## 📐 Metrics
+
+FACEIT reports kills, deaths, assists, ADR, headshots, MVPs and multi-kill rounds for every match. Two more numbers are calculated from them:
+
+- ⭐ **Rating 1.0**: the HLTV 1.0 rating of a match, from kills per round, rounds survived and multi-kill rounds, each measured against the average of professional play. **1.00** is an average game, **1.20** a strong one.
+- 🛡️ **Rounds survived**: the share of rounds in which the player did not die.
+
+## 🚦 Highlighted numbers
+
+Wherever a metric appears, in cards, tables, bars, charts and the data tables under them, a good value is **green** and a weak one **red**; everything in between keeps the normal colour:
+
+| Metric             | Green from | Red below |
+| ------------------ | ---------- | --------- |
+| ⭐ Rating          | 1.10       | 0.90      |
+| 🎯 K/D             | 1.10       | 0.90      |
+| 🔫 K/R             | 0.75       | 0.60      |
+| 💥 ADR             | 85         | 70        |
+| 💀 HS %            | 55 %       | 35 %      |
+| 🛡️ Rounds survived | 40 %       | 28 %      |
+| 🏆 Win %           | 55 %       | 45 %      |
+
+Colour is never the only signal: the value itself is always printed, and the differences to the squad average carry an arrow.
+
+## 🖼️ Map pictures
+
+Every map name comes with the picture FACEIT shows for that map, taken from the players' lifetime map statistics: in the recent matches, the map pool, the match history and the compare page. A map without a picture shows its initials instead.
+
 ## 🧑‍🤝‍🧑 Squad overview
 
 ### 📊 Overview tiles
@@ -37,29 +64,29 @@ Every number on a page is calculated from one range, chosen in the toolbar:
 | Tile               | Meaning                                                                           |
 | ------------------ | --------------------------------------------------------------------------------- |
 | 📈 Average ELO     | Mean ELO of the squad with the level it falls into, and the highest-rated player  |
-| 🎯 Squad K/D       | Mean of the players' average K/D, and the best player                             |
-| 🏆 Squad win rate  | Mean of the players' win rates, and the best player                               |
+| 🎯 Squad K/D       | Mean of the players' average K/D, highlighted, and the best player                |
+| 🏆 Squad win rate  | Mean of the players' win rates, highlighted, and the best player                  |
 | 🤝 Played together | Matches in which at least two squad members were on the same team, and their wins |
 | 🔥 Hottest streak  | The longest win streak that is still running                                      |
 
 ### 🃏 Players
 
-One card per player, sorted by ELO: avatar, nickname and flag, region ranking, level badge, ELO with a bar towards the next level (or the ELO above level 10), K/D, ADR and win rate, the last five results and how long ago the last match was. The whole card opens the player page.
+One compact card per player, sorted by ELO, four in a row on wide screens: avatar, nickname and flag, region ranking, level badge, ELO with a bar towards the next level (or the ELO above level 10), rating, K/D, ADR and win rate, the last five results and how long ago the last match was. The whole card opens the player page.
 
 ### 🕹️ Recent matches
 
-The latest matches of the whole squad in one feed, newest first:
+The latest matches of the whole squad in one compact list, a row per match, newest first:
 
-- 🫂 A match that several squad members played is shown **once** and marked **Together**, with everyone who played, their K-D-A, K/D and ADR.
+- 🫂 A match that several squad members played is shown **once** and marked **Together**, with everyone who played, their K-D-A, rating, K/D and ADR.
 - ⚔️ When squad members met on opposite teams, both sides are listed with their own result and the match is marked **Squad vs squad**.
-- 🔗 Every entry has the map, how long ago it was, the result and score of each side and a link to the FACEIT match room.
+- 🔗 Every entry has the map with its picture, how long ago it was, the result and score of each side and a link to the FACEIT match room.
 - ➕ Eight matches are shown at first, **Show more matches** adds eight more.
 
 ![Recent matches, with matches played together shown once with both players](./images/activity-light.png)
 
 ### 🏆 Leaderboard
 
-A table of every player with ELO, level, form, matches with the win-loss record, K/D, K/R, ADR, headshot rate and win rate.
+A table of every player with ELO, level, form, matches with the win-loss record, rating, K/D, K/R, ADR, headshot rate and win rate.
 
 - ↕️ Every numeric column header is a button: the first click sorts from high to low, the next one reverses it.
 - 🥇 Medals mark the top three of every column; ties share a place. ELO medals count every player, because ELO does not depend on the range.
@@ -69,17 +96,17 @@ A table of every player with ELO, level, form, matches with the win-loss record,
 
 ### 📊 Rankings
 
-Horizontal bars for one metric at a time (K/D, K/R, ADR, HS % or Win %), sorted from best to worst, with a vertical line for the squad average.
+Horizontal bars for one metric at a time (Rating, K/D, K/R, ADR, HS % or Win %), sorted from best to worst, with a vertical line for the squad average.
 
 ### 📈 Trends
 
-Small multiples: one chart per player, all on the same scale, so the shapes can be compared directly. Each chart shows the value of every match and a **five-match rolling average**, with the squad average as a dashed reference. Hover, tap or use the arrow keys to read a single match, and open **Show data table** for the numbers.
+Small multiples: one chart per player, four in a row on wide screens, all on the same scale and ordered from the best average down, so the shapes can be compared directly. Each chart shows the value of every match (Rating, K/D, K/R, ADR or HS %) and a **five-match rolling average**, with the squad average as a dashed reference. Hover, tap or use the arrow keys to read a single match, and open **Show data table** for the highlighted numbers.
 
 ![Trend charts for every player on a shared scale](./images/trends-dark.png)
 
 ### 🗺️ Map pool
 
-A heatmap with a row per player and a column per map, ordered by how often the squad plays it:
+A heatmap with a row per player and a column per map, each column headed by the map picture and ordered by how often the squad plays it:
 
 | Metric     | Colours                                          |
 | ---------- | ------------------------------------------------ |
@@ -96,7 +123,7 @@ Every cell also prints the value and the number of matches, and the **Whole squa
 Two squad members who appear in the same match **with the same result** were on the same team. From that:
 
 - 👥 **Win rate by lineup**: results without squad mates, as a duo, trio, four-stack or five-stack.
-- 🫂 **Most played duos**: the pairs with the most shared matches, their win rate and when they last played together.
+- 🫂 **Most played duos**: the pairs with the most shared matches, their highlighted win rate and when they last played together.
 
 Only matches inside both players' ranges count, so a larger range finds more shared games.
 
@@ -106,6 +133,7 @@ The best performances in the range, each with the player, the map, the score, th
 
 | Record                | Rule                                         |
 | --------------------- | -------------------------------------------- |
+| ⭐ Best rating        | Matches of at least 13 rounds                |
 | 🔫 Most kills         | Kills in one match                           |
 | ⚡ Highest ADR        | Matches of at least 13 rounds                |
 | 🎯 Best K/D           | Matches of at least 13 rounds                |
@@ -119,12 +147,12 @@ The best performances in the range, each with the player, the map, the score, th
 | Section                   | Content                                                                                                                                                                             |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 🪪 Profile                | Avatar, nickname, country, region ranking, links to the FACEIT and Steam profiles, level and ELO progress, and a **Compare** button                                                 |
-| 📊 Current form           | K/D, K/R, ADR, HS % and Win % with the difference to the squad average and the lifetime value, the record and the current streak, the last ten results                              |
+| 📊 Current form           | Rating, K/D, K/R, ADR, HS %, rounds survived and Win % with the difference to the squad average and the lifetime value, the record and the current streak, the last ten results     |
 | 📈 Trend                  | One metric per match with a five-match rolling average and the squad average                                                                                                        |
-| 🗺️ Maps                   | A card per map with the official map art, the range numbers and the all-time FACEIT numbers                                                                                         |
-| 📜 Match history          | Date, map, result and score, K-D-A, K/D, K/R, ADR, HS %, MVPs, 3K, 4K and aces, the squad mates in the team and a link to the match room; sortable and filterable by map and result |
+| 🗺️ Maps                   | A card per map with the map picture and a small table: matches, win rate, K/D and ADR in the range, and the same all-time numbers from FACEIT underneath                            |
+| 📜 Match history          | Date, map, result and score, K-D-A, rating, kills, K/D, K/R, ADR, HS %, MVPs, 3K, 4K and aces, the squad mates in the team and a link to the match room; sortable and filterable    |
 | 🫂 Teammates              | Win rate with every squad mate, compared with the player's overall win rate                                                                                                         |
-| 🧬 Lifetime and playstyle | All-time matches, win rate, K/D, headshots, ADR and longest streak; entry rate and success, 1v1 and 1v2 clutches, flash success, sniper kills and utility damage                    |
+| 🧬 Lifetime and playstyle | A row of all-time tiles (matches, win rate, K/D, headshots, ADR and longest streak) and meters for entry rate and success, clutches, flash success, sniper kills and utility damage |
 | 🔗 More from the squad    | Links to every other player                                                                                                                                                         |
 
 Scores always show the player's team first. Nicknames in the address are matched without regard to case and redirect to the exact spelling; nicknames outside the squad answer with a 404.
@@ -133,16 +161,16 @@ Scores always show the player's team first. Nicknames in the address are matched
 
 Two squad members side by side, picked from two lists or opened from a player's **Compare** button. The pair is kept in the address (`?a=anna&b=Bohdan`), together with the range.
 
-| Part              | Content                                                                                                         |
-| ----------------- | --------------------------------------------------------------------------------------------------------------- |
-| 🥊 Contenders     | Avatar, level, ELO with the progress to the next level and the last five results of both players                |
-| 🤝 Shared history | Matches on the same team with their record, and the head to head score of matches against each other            |
-| 📊 Form           | Matches, win rate, K/D, K/R, ADR, headshots, kills and MVPs per match, multi-kills and aces in the range        |
-| 🧬 Lifetime       | All-time matches, win rate, K/D, headshots, ADR, entry success, 1v1 clutches, flash success, utility and streak |
-| 🗺️ Maps           | Win rate and matches on every map either player played in the range                                             |
-| 📜 Shared matches | Every match both played, on the same team or as opponents, with both lines and the match room                   |
+| Part              | Content                                                                                                              |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------- |
+| 🥊 Contenders     | Avatar, level, ELO with the progress to the next level and the last five results of both players                     |
+| 🤝 Shared history | Matches on the same team with their record, and the head to head score of matches against each other                 |
+| 📊 Form           | Matches, win rate, rating, K/D, K/R, ADR, headshots, rounds survived, kills and MVPs per match, multi-kills and aces |
+| 🧬 Lifetime       | All-time matches, win rate, K/D, headshots, ADR, entry success, 1v1 clutches, flash success, utility and streak      |
+| 🗺️ Maps           | Win rate and matches on every map either player played in the range, with the map pictures                           |
+| 📜 Shared matches | Every match both played, on the same team or as opponents, with both highlighted lines and the match room            |
 
-Each row draws two bars from the centre and highlights the better value; screen readers hear who is ahead. Picking the player who is already on the other side swaps the two, and **Swap players** flips them in one click.
+Form and lifetime sit side by side on wide screens. Each row draws two bars from the centre and highlights the better value; screen readers hear who is ahead. Picking the player who is already on the other side swaps the two, and **Swap players** flips them in one click.
 
 ![Two players compared side by side](./images/compare-dark.png)
 

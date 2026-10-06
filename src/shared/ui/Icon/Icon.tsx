@@ -48,6 +48,7 @@ interface IconProps extends Omit<SVGProps<SVGSVGElement>, "children"> {
   label?: string;
 }
 
+// An outline icon, hidden from screen readers unless it has a label
 const Icon = ({ name, size = 18, label, ...props }: IconProps) => {
   return (
     <svg

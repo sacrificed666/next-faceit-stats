@@ -15,6 +15,7 @@ interface SquadLinksProps {
   current: string;
 }
 
+// Links to the other players of the squad
 const SquadLinks = ({ squad, current }: SquadLinksProps) => {
   const { locale, t, format } = useI18n();
   const range = useRange();

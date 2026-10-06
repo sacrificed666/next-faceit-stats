@@ -92,7 +92,7 @@ docker compose -f compose.yaml -f docker/production.yaml up --build -d
 
 ### 🖥️ Any Node.js host
 
-Any server with Node.js 24.15 or newer works:
+Any server with Node.js 26.10 or newer works:
 
 ```bash
 npm ci

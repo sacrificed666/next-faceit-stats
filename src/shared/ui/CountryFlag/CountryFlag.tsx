@@ -11,6 +11,7 @@ interface CountryFlagProps {
   className?: string;
 }
 
+// A country flag with the country name for screen readers
 const CountryFlag = ({ code, size = 18, className = "" }: CountryFlagProps) => {
   const { format } = useI18n();
   const name = format.country(code);

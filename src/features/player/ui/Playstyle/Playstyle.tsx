@@ -1,15 +1,18 @@
 "use client";
 
 import type { Player } from "@/features/squad/model/types";
+import MetricValue from "@/features/squad/ui/MetricValue/MetricValue";
 import { useI18n } from "@/shared/i18n/useI18n";
 import EmptyState from "@/shared/ui/EmptyState/EmptyState";
 import Meter from "@/shared/ui/Meter/Meter";
 import Section from "@/shared/ui/Section/Section";
+import StatTile from "@/shared/ui/StatTile/StatTile";
 
 interface PlaystyleProps {
   player: Player;
 }
 
+// All-time numbers and the playstyle meters FACEIT reports for a player
 const Playstyle = ({ player }: PlaystyleProps) => {
   const { t, format } = useI18n();
   const lifetime = player.lifetime;
@@ -17,25 +20,25 @@ const Playstyle = ({ player }: PlaystyleProps) => {
   return (
     <Section id="lifetime" title={t("lifetime.title")} description={t("lifetime.description")}>
       {lifetime ? (
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
-          <div className="panel flex flex-col gap-5 p-4 sm:p-6">
-            <dl className="grid grid-cols-2 gap-x-4 gap-y-5">
-              {[
-                { label: t("lifetime.matches"), value: format.integer(lifetime.matches) },
-                { label: t("lifetime.winRate"), value: format.percent(lifetime.winRate, 0) },
-                { label: t("lifetime.kd"), value: format.decimal(lifetime.kd, 2) },
-                { label: t("lifetime.hs"), value: format.percent(lifetime.hsPercent, 0) },
-                { label: t("lifetime.adr"), value: lifetime.adr === null ? "-" : format.decimal(lifetime.adr, 1) },
-                { label: t("lifetime.streak"), value: format.integer(lifetime.longestWinStreak) },
-              ].map((entry) => (
-                <div key={entry.label} className="flex flex-col gap-0.5">
-                  <dt className="text-xs font-semibold text-ink-muted">{entry.label}</dt>
-                  <dd className="text-xl font-bold text-ink">{entry.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-          <div className="panel grid gap-5 p-4 sm:grid-cols-2 sm:p-6">
+        <div className="flex flex-col gap-3 sm:gap-4">
+          <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
+            <StatTile label={t("lifetime.matches")} value={format.integer(lifetime.matches)} />
+            <StatTile
+              label={t("lifetime.winRate")}
+              value={<MetricValue metric="winRate" value={lifetime.winRate} digits={0} />}
+            />
+            <StatTile label={t("lifetime.kd")} value={<MetricValue metric="kd" value={lifetime.kd} />} />
+            <StatTile
+              label={t("lifetime.hs")}
+              value={<MetricValue metric="hsPercent" value={lifetime.hsPercent} digits={0} />}
+            />
+            <StatTile
+              label={t("lifetime.adr")}
+              value={lifetime.adr === null ? "-" : <MetricValue metric="adr" value={lifetime.adr} />}
+            />
+            <StatTile label={t("lifetime.streak")} value={format.integer(lifetime.longestWinStreak)} />
+          </dl>
+          <div className="panel grid gap-5 p-4 sm:grid-cols-2 sm:p-6 lg:grid-cols-4">
             <Meter
               label={t("lifetime.entryRate")}
               value={lifetime.entryRate}

@@ -4,6 +4,7 @@ import { levelOf } from "@/features/squad/model/levels";
 
 import { OG_COLORS } from "./assets";
 
+// The logo drawn for share cards and icons
 export const OgLogo = ({ size = 44 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 32 32">
     <defs>
@@ -26,6 +27,7 @@ export const OgLogo = ({ size = 44 }: { size?: number }) => (
   </svg>
 );
 
+// The FACEIT level ring for share cards
 export const OgLevel = ({ level, size }: { level: number; size: number }) => {
   const { color } = levelOf(level);
   const radius = 9.5;
@@ -73,6 +75,7 @@ export const OgLevel = ({ level, size }: { level: number; size: number }) => {
   );
 };
 
+// An avatar for share cards, with the initial when it is missing
 export const OgAvatar = ({ src, name, size }: { src: string | null; name: string; size: number }) => {
   if (src) {
     return (
@@ -105,6 +108,7 @@ export const OgAvatar = ({ src, name, size }: { src: string | null; name: string
   );
 };
 
+// The shared frame of every share card: logo, kicker and content
 export const OgFrame = ({ children, kicker, name }: { children: ReactNode; kicker: string; name: string }) => (
   <div
     style={{

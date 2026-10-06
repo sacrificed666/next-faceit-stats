@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { formatMetric, METRICS, METRIC_KEYS, type MetricKey } from "@/features/squad/model/metrics";
 import { active, metricRanks, squadAverage, type PlayerView } from "@/features/squad/model/squad";
+import MetricValue from "@/features/squad/ui/MetricValue/MetricValue";
 import PlayerName from "@/features/squad/ui/PlayerName/PlayerName";
 import { useI18n } from "@/shared/i18n/useI18n";
 import BarList from "@/shared/ui/BarList/BarList";
@@ -16,6 +17,7 @@ interface RankingsProps {
   views: readonly PlayerView[];
 }
 
+// Ranked bars for one metric against the squad average
 const Rankings = ({ views }: RankingsProps) => {
   const { t, format } = useI18n();
   const [metric, setMetric] = useState<MetricKey>("kd");
@@ -28,7 +30,7 @@ const Rankings = ({ views }: RankingsProps) => {
     .map((view) => ({
       id: view.player.id,
       value: view.summary[metric],
-      display: formatMetric(format, metric, view.summary[metric]),
+      display: <MetricValue metric={metric} value={view.summary[metric]} />,
       label: (
         <>
           <span className="w-5 shrink-0 text-right text-xs font-semibold text-ink-muted tabular-nums">

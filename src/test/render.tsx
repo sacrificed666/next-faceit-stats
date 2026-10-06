@@ -18,8 +18,10 @@ import type { Messages } from "@/shared/i18n/translate";
 
 export const CATALOG: Readonly<Record<Locale, Messages>> = { en, uk, cs, de, es, fr, it, nl, pl, pt };
 
+// Translator and formatter for a language in tests
 export const i18nFor = (locale: Locale = "en") => createI18n(locale, CATALOG[locale]);
 
+// Renders a component inside the translations of a language
 export const renderWithI18n = (ui: ReactElement, locale: Locale = "en"): RenderResult =>
   render(ui, {
     wrapper: ({ children }: { children: ReactNode }) => (

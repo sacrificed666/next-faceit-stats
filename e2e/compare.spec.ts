@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
+// The two players in the address of the compare page
 const pair = (page: Page) => {
   const query = new URL(page.url()).searchParams;
   return [query.get("a"), query.get("b")];

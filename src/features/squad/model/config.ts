@@ -7,6 +7,7 @@ export interface SquadConfig {
   nicknames: string[];
 }
 
+// Nicknames from the variable, without duplicates and up to the squad limit
 export const parseNicknames = (value: string | undefined): string[] => {
   const seen = new Set<string>();
   const nicknames: string[] = [];
@@ -19,11 +20,13 @@ export const parseNicknames = (value: string | undefined): string[] => {
   return nicknames.slice(0, MAX_PLAYERS);
 };
 
+// The API key and the nicknames from the environment
 export const readSquadConfig = (env: Partial<Record<string, string>> = process.env): SquadConfig => {
   const apiKey = env.FACEIT_API_KEY?.trim() ?? "";
   return { apiKey: apiKey === "" ? null : apiKey, nicknames: parseNicknames(env.FACEIT_PLAYERS) };
 };
 
+// Environment variables that still need a value
 export const missingVariables = (config: SquadConfig): ConfigVariable[] => {
   const missing: ConfigVariable[] = [];
   if (!config.apiKey) missing.push("FACEIT_API_KEY");

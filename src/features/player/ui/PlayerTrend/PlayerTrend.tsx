@@ -11,6 +11,7 @@ import {
   type MetricKey,
 } from "@/features/squad/model/metrics";
 import { ROLLING_WINDOW, trendSeries, type PlayerView } from "@/features/squad/model/squad";
+import MetricValue from "@/features/squad/ui/MetricValue/MetricValue";
 import { useTimeZone } from "@/shared/hooks/useClient";
 import { useI18n } from "@/shared/i18n/useI18n";
 import { niceScale } from "@/shared/lib/scale";
@@ -26,6 +27,7 @@ interface PlayerTrendProps {
   averages: Readonly<Record<MetricKey, number>>;
 }
 
+// One metric per match with the rolling and squad averages
 const PlayerTrend = ({ view, averages }: PlayerTrendProps) => {
   const { t, format } = useI18n();
   const [metric, setMetric] = useState<MatchMetricKey>("kd");
@@ -63,7 +65,7 @@ const PlayerTrend = ({ view, averages }: PlayerTrendProps) => {
             <ChartLegend series={series} reference={t("trends.squadAverageValue", { value: show(average) })} />
             <LineChart
               label={t("trends.chart", { metric: t(definition.name), player: view.player.nickname })}
-              height={260}
+              height={200}
               scale={scale}
               format={show}
               reference={{ value: average, label: t("trends.squadAverage") }}
@@ -83,9 +85,11 @@ const PlayerTrend = ({ view, averages }: PlayerTrendProps) => {
                 header: <LocalDate timestamp={match.finishedAt} />,
                 cells: [
                   mapName(match.map),
-                  result(match.won, `${match.teamScore}:${match.opponentScore}`),
-                  show(trend.perMatch[index] ?? 0),
-                  show(trend.rolling[index] ?? 0),
+                  <span key="result" className={match.won ? "text-good" : "text-bad"}>
+                    {result(match.won, `${match.teamScore}:${match.opponentScore}`)}
+                  </span>,
+                  <MetricValue key="match" metric={metric} value={trend.perMatch[index] ?? 0} />,
+                  <MetricValue key="rolling" metric={metric} value={trend.rolling[index] ?? 0} />,
                 ],
               }))}
             />

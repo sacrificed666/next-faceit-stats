@@ -1,6 +1,7 @@
 import { currentLocale, getI18n } from "@/shared/i18n/server";
 import Skeleton from "@/shared/ui/Skeleton/Skeleton";
 
+// Placeholder for the compare page while it renders
 const CompareLoading = async () => {
   const { t } = await getI18n(await currentLocale());
   return (

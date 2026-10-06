@@ -9,6 +9,7 @@ interface NoticeProps {
   icon?: IconName;
 }
 
+// A highlighted message with an icon, for warnings and information
 const Notice = ({ tone = "info", title, children, icon }: NoticeProps) => {
   const palette = tone === "warning" ? "border-bad/30 bg-bad-soft" : "border-line bg-surface";
   return (

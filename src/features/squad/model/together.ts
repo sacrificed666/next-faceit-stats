@@ -32,11 +32,13 @@ export interface PartySize extends WinRecord {
   size: number;
 }
 
+// Adds the win rate in percent
 const withWinRate = <T extends { matches: number; wins: number }>(entry: T): T & { winRate: number } => ({
   ...entry,
   winRate: entry.matches === 0 ? 0 : (entry.wins / entry.matches) * 100,
 });
 
+// Squad members who shared a match and its result were one team
 export const lineups = (members: readonly SquadMember[]): Lineup[] => {
   const byTeam = new Map<string, Lineup>();
   for (const member of members) {
@@ -59,6 +61,7 @@ export const lineups = (members: readonly SquadMember[]): Lineup[] => {
   return [...byTeam.values()].toSorted((a, b) => b.finishedAt - a.finishedAt);
 };
 
+// Every pair of squad members inside a lineup, most matches first
 export const duos = (lineupList: readonly Lineup[]): Duo[] => {
   const pairs = new Map<string, Omit<Duo, "winRate">>();
   for (const lineup of lineupList) {
@@ -79,6 +82,7 @@ export const duos = (lineupList: readonly Lineup[]): Duo[] => {
     .toSorted((a, b) => b.matches - a.matches || b.winRate - a.winRate || b.lastPlayedAt - a.lastPlayedAt);
 };
 
+// The duos of one player as teammates
 export const teammates = (playerId: string, duoList: readonly Duo[]): Teammate[] =>
   duoList
     .filter((duo) => duo.ids.includes(playerId))
@@ -89,6 +93,7 @@ export const teammates = (playerId: string, duoList: readonly Duo[]): Teammate[]
       winRate: duo.winRate,
     }));
 
+// Matches and wins by the number of squad members in the team
 export const partySizes = (lineupList: readonly Lineup[]): PartySize[] => {
   const sizes = new Map<number, { size: number; matches: number; wins: number }>();
   for (const lineup of lineupList) {

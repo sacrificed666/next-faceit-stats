@@ -11,9 +11,12 @@ The first release.
 ### Added
 
 - 🧑‍🤝‍🧑 A squad overview with the average ELO, squad K/D and win rate, matches played together and the hottest streak.
-- 🃏 Player cards with the level, ELO progress to the next level, region ranking, recent results and the last match.
+- 🃏 Compact player cards with the level, ELO progress to the next level, region ranking, rating, K/D, ADR, win rate, recent results and the last match.
+- ⭐ A Rating 1.0 and the share of rounds survived for every match, calculated from the FACEIT match statistics.
+- 🚦 Good values in green and weak ones in red, with the same thresholds on cards, tables, bars, charts and data tables.
+- 🖼️ The FACEIT picture of every map next to its name, in the feed, the map pool, the match history and the comparison.
 - 🕹️ One feed of recent matches for the whole squad, a sortable leaderboard, rankings against the squad average and per-player trend charts.
-- 🗺️ A map pool heatmap of win rate, K/D or picks, duos and lineups detected from shared matches, and records such as the most kills or the longest win streak.
+- 🗺️ A map pool heatmap of win rate, K/D or picks, duos and lineups detected from shared matches, and records such as the best rating, the most kills or the longest win streak.
 - 👤 Player pages with current form, a trend chart, maps, a filterable match history, teammates, lifetime and playstyle statistics.
 - ⚔️ A head-to-head comparison of two players, including every match they played together or against each other.
 - 🎚️ One range for every page: the last 7, 30 or 90 days, or the last 20, 50 or 100 matches, kept in the address.

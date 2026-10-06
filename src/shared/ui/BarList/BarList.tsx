@@ -4,7 +4,7 @@ export interface BarListItem {
   id: string;
   label: ReactNode;
   value: number;
-  display: string;
+  display: ReactNode;
   detail?: ReactNode;
   emphasis?: boolean;
 }
@@ -17,6 +17,7 @@ interface BarListProps {
   className?: string;
 }
 
+// Bars on one scale, with an optional reference line such as an average
 const BarList = ({ items, max, reference, ordered = true, className = "" }: BarListProps) => {
   const limit = Math.max(max ?? 0, ...items.map((item) => item.value), reference?.value ?? 0) || 1;
   const List = ordered ? "ol" : "ul";

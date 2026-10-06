@@ -22,6 +22,7 @@ const HINTS: Record<ConfigVariable, MessageKey> = {
   FACEIT_PLAYERS: "status.players",
 };
 
+// Inline code in the setup help
 const Code = ({ children }: { children: ReactNode }) => (
   <code className="rounded-md bg-inset px-1.5 py-0.5 font-mono text-[0.8125rem] text-ink">{children}</code>
 );
@@ -31,6 +32,7 @@ interface SquadStatusProps {
   i18n: I18n;
 }
 
+// Explains a missing configuration, an unavailable API or an empty squad
 const SquadStatus = ({ problem, i18n: { t, format } }: SquadStatusProps) => {
   let icon: IconName = "info";
   let title: string;

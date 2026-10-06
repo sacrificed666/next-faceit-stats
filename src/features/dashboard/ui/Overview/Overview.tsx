@@ -4,6 +4,7 @@ import { levelForElo } from "@/features/squad/model/levels";
 import { active, averageElo, squadAverage, type PlayerView } from "@/features/squad/model/squad";
 import type { Lineup } from "@/features/squad/model/together";
 import LevelBadge from "@/features/squad/ui/LevelBadge/LevelBadge";
+import MetricValue from "@/features/squad/ui/MetricValue/MetricValue";
 import { useI18n } from "@/shared/i18n/useI18n";
 import Icon from "@/shared/ui/Icon/Icon";
 import StatTile from "@/shared/ui/StatTile/StatTile";
@@ -13,9 +14,11 @@ interface OverviewProps {
   lineups: readonly Lineup[];
 }
 
+// The view with the highest value, or null for an empty list
 const best = (views: readonly PlayerView[], value: (view: PlayerView) => number): PlayerView | null =>
   views.reduce<PlayerView | null>((top, view) => (!top || value(view) > value(top) ? view : top), null);
 
+// Five headline numbers for the whole squad
 const Overview = ({ views, lineups }: OverviewProps) => {
   const { t, format } = useI18n();
   const playing = active(views);
@@ -54,7 +57,7 @@ const Overview = ({ views, lineups }: OverviewProps) => {
         <StatTile
           label={t("overview.squadKd")}
           icon={<Icon name="crosshair" size={14} />}
-          value={format.decimal(squadAverage(views, "kd"), 2)}
+          value={<MetricValue metric="kd" value={squadAverage(views, "kd")} />}
           detail={
             topKd
               ? t("overview.best", { name: topKd.player.nickname, value: format.decimal(topKd.summary.kd, 2) })
@@ -64,7 +67,7 @@ const Overview = ({ views, lineups }: OverviewProps) => {
         <StatTile
           label={t("overview.squadWinRate")}
           icon={<Icon name="trophy" size={14} />}
-          value={format.percent(squadAverage(views, "winRate"))}
+          value={<MetricValue metric="winRate" value={squadAverage(views, "winRate")} />}
           detail={
             topWin
               ? t("overview.best", { name: topWin.player.nickname, value: format.percent(topWin.summary.winRate) })

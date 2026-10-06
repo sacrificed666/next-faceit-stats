@@ -24,6 +24,7 @@ const MATCH_RECORDS: ReadonlyArray<{
   icon: IconName;
   format: (format: Formatter, value: number) => string;
 }> = [
+  { kind: "rating", title: "records.rating", icon: "chart", format: (format, value) => format.decimal(value, 2) },
   { kind: "kills", title: "records.kills", icon: "crosshair", format: (format, value) => format.integer(value) },
   { kind: "adr", title: "records.adr", icon: "bolt", format: (format, value) => format.decimal(value, 1) },
   { kind: "kd", title: "records.kd", icon: "target", format: (format, value) => format.decimal(value, 2) },
@@ -39,6 +40,7 @@ interface RecordCardProps {
   children?: ReactNode;
 }
 
+// One record: what it is, the value and who set it
 const RecordCard = ({ title, icon, value, player, children }: RecordCardProps) => (
   <li className="panel flex flex-col gap-3 p-4">
     <p className="flex items-center gap-2 text-xs font-bold tracking-wide text-ink-muted uppercase">
@@ -55,6 +57,7 @@ const RecordCard = ({ title, icon, value, player, children }: RecordCardProps) =
   </li>
 );
 
+// The result, map and date of the match that set a record, with its room
 const MatchContext = ({ match }: { match: Match }) => {
   const { t } = useI18n();
   return (
@@ -78,6 +81,7 @@ interface HighlightsProps {
   views: readonly PlayerView[];
 }
 
+// The best single matches and streaks of the squad in the range
 const Highlights = ({ views }: HighlightsProps) => {
   const { t, format } = useI18n();
   const players = playerById(views);

@@ -118,6 +118,8 @@ export const cs: Messages = {
   "level.progress": "Postup na úroveň {level}",
   "level.eloLevel": "ELO · Úroveň {level}",
 
+  "metric.rating": "Rating",
+  "metric.rating.name": "Rating 1.0",
   "metric.kd": "K/D",
   "metric.kd.name": "Zabití na smrt",
   "metric.kr": "K/R",
@@ -126,6 +128,8 @@ export const cs: Messages = {
   "metric.adr.name": "Poškození na kolo",
   "metric.hsPercent": "HS %",
   "metric.hsPercent.name": "Podíl headshotů",
+  "metric.survival": "Přežití",
+  "metric.survival.name": "Přežitá kola",
   "metric.winRate": "Výhry %",
   "metric.winRate.name": "Podíl výher",
   "metric.elo": "ELO",
@@ -247,6 +251,7 @@ export const cs: Messages = {
 
   "records.title": "Rekordy",
   "records.description": "Nejlepší jednotlivé výkony a série ve zvoleném rozsahu.",
+  "records.rating": "Nejlepší rating",
   "records.kills": "Nejvíc zabití",
   "records.adr": "Nejvyšší ADR",
   "records.kd": "Nejlepší K/D",
@@ -262,7 +267,7 @@ export const cs: Messages = {
   "player.breadcrumb": "Drobečková navigace",
   "player.kicker": "FACEIT · CS2",
   "player.kickerRegion": "FACEIT · CS2 · {region}",
-  "player.faceit": "Profil na FACEITu",
+  "player.faceit": "FACEIT",
   "player.steam": "Steam",
   "player.compare": "Porovnat",
   "player.notFound": "Hráč nenalezen",
@@ -300,8 +305,9 @@ export const cs: Messages = {
 
   "playerMaps.title": "Mapy",
   "playerMaps.description": "Výsledky na každé mapě ve zvoleném rozsahu, pod nimi celkové údaje z FACEITu.",
-  "playerMaps.allTime": "Celkově: {matches} · podíl výher {rate} · K/D {kd}",
-  "playerMaps.noAllTime": "Z FACEITu nejsou celkové údaje",
+  "playerMaps.range": "Období",
+  "playerMaps.allTime": "Celkově",
+  "playerMaps.caption": "{map}: zvolené období a celkově",
 
   "history.title": "Historie zápasů",
   "history.description":

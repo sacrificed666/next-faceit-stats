@@ -10,6 +10,7 @@ interface DeltaProps {
   points?: boolean;
 }
 
+// A signed difference with an arrow, green above and red below
 const Delta = ({ value, digits, points = false }: DeltaProps) => {
   const { t, format } = useI18n();
   const rounded = Number(value.toFixed(digits));

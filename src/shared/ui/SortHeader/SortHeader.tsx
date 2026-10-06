@@ -14,6 +14,7 @@ interface SortHeaderProps {
   className?: string;
 }
 
+// A column header that sorts the table and reports the order
 const SortHeader = ({ label, title, active, direction, onSort, align = "right", className = "" }: SortHeaderProps) => {
   const sort = active ? (direction === "asc" ? "ascending" : "descending") : undefined;
   return (

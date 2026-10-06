@@ -9,7 +9,7 @@ import ComparePage from "./ComparePage";
 
 const renderCompare = (path = "/en/compare") => {
   window.history.replaceState(null, "", path);
-  renderWithI18n(<ComparePage players={sampleSquad()} updatedAt={Date.UTC(2026, 8, 20, 12)} />);
+  renderWithI18n(<ComparePage players={sampleSquad()} updatedAt={Date.UTC(2026, 8, 20, 12)} mapImages={{}} />);
 };
 
 const pickers = () => [

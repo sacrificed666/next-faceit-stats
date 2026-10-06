@@ -6,11 +6,13 @@ import { currentLocale, getI18n } from "@/shared/i18n/server";
 import { homePath } from "@/shared/lib/urls";
 import Icon from "@/shared/ui/Icon/Icon";
 
+// Keeps the not found page out of search results
 export const generateMetadata = async (): Promise<Metadata> => {
   const { t } = await getI18n(await currentLocale());
   return { title: t("notFound.meta"), robots: { index: false, follow: true } };
 };
 
+// Not found page for an unknown player or address
 const NotFound = async () => {
   const locale = await currentLocale();
   const { t } = await getI18n(locale);

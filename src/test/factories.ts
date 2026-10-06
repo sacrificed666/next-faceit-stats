@@ -5,6 +5,7 @@ const HOUR = 3_600_000;
 
 let sequence = 0;
 
+// A match with sensible numbers, with fields to override
 export const makeMatch = (overrides: Partial<Match> = {}): Match => {
   sequence += 1;
   return {
@@ -23,15 +24,20 @@ export const makeMatch = (overrides: Partial<Match> = {}): Match => {
     adr: 85,
     hsPercent: 50,
     mvps: 3,
+    doubleKills: 2,
     tripleKills: 0,
     quadroKills: 0,
     pentaKills: 0,
+    rating: 1.15,
+    survival: 31.8,
     ...overrides,
   };
 };
 
+// Matches sorted the way FACEIT returns them
 export const newestFirst = (matches: Match[]): Match[] => matches.toSorted((a, b) => b.finishedAt - a.finishedAt);
 
+// A player with sensible defaults, with fields to override
 export const makePlayer = (overrides: Partial<Player> = {}): Player => {
   sequence += 1;
   return {

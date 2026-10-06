@@ -11,6 +11,7 @@ const MATCH_LIMIT = 100;
 
 export type FaceitErrorKind = "unauthorized" | "rate-limited" | "unreachable";
 
+// A failed FACEIT request with the reason and the status
 export class FaceitError extends Error {
   readonly kind: FaceitErrorKind;
   readonly status: number | null;
@@ -25,11 +26,13 @@ export class FaceitError extends Error {
 
 const startedAt: number[] = [];
 
+// Waits for the given time
 const sleep = (ms: number): Promise<void> =>
   new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 
+// Waits until a request fits into the rate limit of FACEIT
 const acquireSlot = async (): Promise<void> => {
   const now = Date.now();
   while (startedAt.length > 0 && now - (startedAt[0] ?? now) >= WINDOW_MS) startedAt.shift();
@@ -41,6 +44,7 @@ const acquireSlot = async (): Promise<void> => {
   return acquireSlot();
 };
 
+// Time to wait before a retry: the header of FACEIT or a backoff
 const retryDelay = (response: Response | null, attempt: number): number => {
   const header = response?.headers.get("retry-after") ?? response?.headers.get("ratelimit-reset");
   const seconds = header ? Number.parseFloat(header) : Number.NaN;
@@ -48,12 +52,14 @@ const retryDelay = (response: Response | null, attempt: number): number => {
   return Number.isFinite(seconds) && seconds > 0 ? Math.max(seconds * 1000, backoff) : backoff;
 };
 
+// The FACEIT API address, which tests point to the mock API
 export const baseUrl = (env: Partial<Record<string, string>> = process.env): string => {
   const configured = env.FACEIT_API_URL?.trim();
   if (!configured) return DEFAULT_BASE_URL;
   return configured.endsWith("/") ? configured : `${configured}/`;
 };
 
+// One cached request, or null when the network fails
 const send = async (path: string, apiKey: string): Promise<Response | null> => {
   await acquireSlot();
   try {
@@ -68,6 +74,7 @@ const send = async (path: string, apiKey: string): Promise<Response | null> => {
   }
 };
 
+// A request with retries; 404 is null and a rejected key throws
 export const request = async (path: string, apiKey: string, attempt = 0): Promise<unknown> => {
   const response = await send(path, apiKey);
   if (response?.ok) {
@@ -86,8 +93,10 @@ export const request = async (path: string, apiKey: string, attempt = 0): Promis
   return request(path, apiKey, attempt + 1);
 };
 
+// The API path of a player
 const playerPath = (playerId: string): string => `players/${encodeURIComponent(playerId)}`;
 
+// The four FACEIT requests the app needs, bound to an API key
 export const createFaceitClient = (apiKey: string) => ({
   player: (nickname: string) => request(`players?nickname=${encodeURIComponent(nickname)}`, apiKey),
   matches: (playerId: string) =>

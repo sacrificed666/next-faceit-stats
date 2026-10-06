@@ -8,6 +8,7 @@ interface ResultBadgeProps {
   size?: "sm" | "md";
 }
 
+// W or L with the score, coloured and spoken in full
 const ResultBadge = ({ won, score, size = "md" }: ResultBadgeProps) => {
   const { t } = useI18n();
   const tone = won ? "bg-good-soft text-good" : "bg-bad-soft text-bad";
@@ -28,6 +29,7 @@ interface FormGuideProps {
   label?: string;
 }
 
+// The latest results as a row of W and L badges
 export const FormGuide = ({ matches, label }: FormGuideProps) => {
   const { t, format } = useI18n();
   const name = label ?? t("form.recent");

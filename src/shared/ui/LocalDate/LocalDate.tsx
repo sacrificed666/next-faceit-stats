@@ -10,6 +10,7 @@ interface LocalDateProps {
   className?: string;
 }
 
+// A date in the visitor's time zone
 const LocalDate = ({ timestamp, format: style = "date", className }: LocalDateProps) => {
   const { format } = useI18n();
   const timeZone = useTimeZone();

@@ -15,6 +15,7 @@ interface ExternalLinkProps {
   context?: string;
 }
 
+// A link to another site that opens in a new tab and says so
 const ExternalLink = ({ href, children, className = "", icon = true, label, context }: ExternalLinkProps) => {
   const { t } = useI18n();
   return (

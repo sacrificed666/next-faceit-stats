@@ -12,6 +12,7 @@ import { getI18n } from "@/shared/i18n/server";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
+// One share card per language and player
 export const generateStaticParams = async () => {
   const nicknames = await squadNicknames();
   return nicknames.length > 0 ? nicknames.map((nickname) => ({ nickname })) : [{ nickname: "__squad__" }];
@@ -21,12 +22,14 @@ interface ImageProps {
   params: Promise<{ locale: string; nickname: string }>;
 }
 
+// Alt text of the share card in the page language
 export const generateImageMetadata = async ({ params }: ImageProps) => {
   const { locale } = await params;
   const { t } = await getI18n(isLocale(locale) ? locale : DEFAULT_LOCALE);
   return [{ id: "card", alt: t("og.playerAlt"), size, contentType }];
 };
 
+// Share card with the player's avatar, level, ELO and recent numbers
 const Image = async ({ params }: ImageProps) => {
   const { locale, nickname } = await params;
   const [squad, { t, format }] = await Promise.all([getSquad(), getI18n(isLocale(locale) ? locale : DEFAULT_LOCALE)]);

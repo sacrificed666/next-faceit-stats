@@ -13,14 +13,17 @@ interface ImageProps {
   params: Promise<{ locale: string }>;
 }
 
+// One share card per language
 export const generateStaticParams = () => LOCALES.map((locale) => ({ locale }));
 
+// Alt text of the share card in the page language
 export const generateImageMetadata = async ({ params }: ImageProps) => {
   const { locale } = await params;
   const { t } = await getI18n(isLocale(locale) ? locale : DEFAULT_LOCALE);
   return [{ id: "card", alt: t("og.compareAlt"), size, contentType }];
 };
 
+// Share card with the two highest rated players face to face
 const Image = async ({ params }: ImageProps) => {
   const { locale } = await params;
   const [squad, { t, format }] = await Promise.all([getSquad(), getI18n(isLocale(locale) ? locale : DEFAULT_LOCALE)]);

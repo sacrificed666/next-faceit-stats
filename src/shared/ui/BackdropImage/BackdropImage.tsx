@@ -10,6 +10,7 @@ interface BackdropImageProps {
   className?: string;
 }
 
+// A cover image behind a card that hides itself when it fails
 const BackdropImage = ({ src, sizes, eager = false, className = "" }: BackdropImageProps) => {
   const [failed, setFailed] = useState<string | null>(null);
   if (!src || failed === src) return null;

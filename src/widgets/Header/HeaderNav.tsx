@@ -11,6 +11,7 @@ interface HeaderNavProps {
   className?: string;
 }
 
+// Squad and Compare links that keep the range
 const HeaderNav = ({ className = "" }: HeaderNavProps) => {
   const { locale, t } = useI18n();
   const pathname = usePathname();

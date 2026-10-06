@@ -37,7 +37,7 @@ All colours are CSS custom properties defined in `src/app/globals.scss` and expo
 | `accent-text`   | `#b33a0a`             | `#ff7a3d`             | Links and accent text                              |
 | `data`          | `#eb6834`             | `#d95926`             | Bars, lines and meters                             |
 | `data-muted`    | `#c3c2b7`             | `#4a4a46`             | Context series                                     |
-| `good` / `bad`  | `#006300` / `#b42323` | `#3fbf3f` / `#f06a6a` | Wins and losses, positive and negative differences |
+| `good` / `bad`  | `#006300` / `#b42323` | `#3fbf3f` / `#f06a6a` | Wins and losses, differences, good and weak values |
 | `div-positive`  | `#75cca7`             | `#007e57`             | Heatmap cells above the baseline                   |
 | `div-middle`    | `#f0efec`             | `#383835`             | Heatmap cells at the baseline                      |
 | `div-negative`  | `#ea6e52`             | `#c0453b`             | Heatmap cells below the baseline                   |
@@ -66,6 +66,7 @@ The light tokens live on `:root`. The dark tokens are applied twice: inside `@me
 | 🗺️ Above or below a baseline | Heatmap                           | Diverging green ↔ red around a grey midpoint (50 % wins, 1.00 K/D), paler for small samples          |
 | 🔁 How often                 | Heatmap                           | One hue, lighter to darker                                                                           |
 | ✅ Win or loss               | Badges                            | `good` / `bad` **with** the letter W or L                                                            |
+| 🚦 Good or weak value        | Coloured numbers                  | `good` from the metric's good threshold, `bad` below its weak one, the normal ink in between         |
 | 🎚️ Progress                  | Meters                            | The level colour or `data` on an `inset` track                                                       |
 | 🥊 Two players               | Mirrored bars from the centre     | `data` for the leader of the row, `data-muted` for the other                                         |
 
@@ -77,6 +78,7 @@ Rules that keep the charts honest and readable:
 - 🏷️ Values are written as text next to every bar and inside every heatmap cell; the tooltip only adds detail.
 - 📋 Every chart has a data table or an equivalent text alternative.
 - 🧮 Small samples are pale: a heatmap cell reaches its full colour only from five matches on, so one lucky game does not look like a strength.
+- 🚦 Values are coloured by fixed thresholds per metric, the same in every view, so a green K/D on a card is green in the leaderboard, the match history and the data tables too. The thresholds live next to the metric definitions; see [Features](./features.md#-highlighted-numbers).
 
 ### 🟢 Green and red for everyone
 
@@ -103,6 +105,8 @@ The numbers are OKLab distances between the two poles after simulating each kind
 | `Section`                  | Titled region with description and actions                  |
 | `SegmentedControl`         | Native radio group styled as pills; used for every switch   |
 | `StatTile`                 | Label, value, difference and detail                         |
+| `MetricValue`              | A metric formatted and coloured by its good and weak values |
+| `MapThumb`                 | The map picture next to a map name, or its initials         |
 | `LevelBadge`               | FACEIT-style ring with the level number in the level colour |
 | `LevelProgress`, `Meter`   | Native `<meter>` styled with tokens                         |
 | `BarList`                  | Ranked bars with an optional reference line                 |
@@ -115,11 +119,13 @@ The numbers are OKLab distances between the two poles after simulating each kind
 | `Skeleton`                 | Pulsing placeholders and a spoken loading message           |
 | `SettingsMenu`             | Sliders button with a popover: appearance and languages     |
 | `Avatar`, `BackdropImage`  | Images that fall back gracefully when the CDN fails         |
+| `EmptyState`               | A low icon and message for a section without data           |
 
 ## 📐 Layout
 
 - 📏 Content is centred with a maximum width of 80 rem and 16-32 px side padding.
-- 🧱 Grids step up from one column on phones to two, three and five columns.
+- 🧱 Grids step up from one column on phones to two, three and four columns, and five for the player cards on very wide screens.
+- 🗜️ Blocks stay as tall as their content: lists share one panel with dividers instead of a card per row, side-by-side panels align to the top instead of stretching, and empty sections show one low line instead of a tall placeholder.
 - 📊 Wide tables scroll sideways inside their card with the first column pinned; the page itself never scrolls horizontally.
 - 📌 The range toolbar is a floating pill that sticks to the top while scrolling; days and matches are two clusters of one radio group, and on screens narrower than about 360 px the matches move to a second row.
 - 🧭 On phones the navigation moves to its own row under the logo. The settings panel opens under its button with CSS anchor positioning where supported, and as a bottom sheet below 640 px.

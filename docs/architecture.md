@@ -113,6 +113,7 @@ The client returns `unknown`. `src/features/squad/api/parse.ts` reads every fiel
 - 🗺️ Lifetime map segments (`"Dust2"`) are matched to match maps (`de_dust2`) through `mapKey()`.
 - 🖼️ Image URLs are accepted only from `distribution.faceit-cdn.net` and `assets.faceit-cdn.net`, the same hosts `next/image` allows.
 - 📈 Rates such as `"0.53"` become percentages.
+- ⭐ Every match gets two derived numbers from `src/features/squad/model/rating.ts`: the HLTV 1.0 rating, from kills, deaths and the 2K to 5K rounds per round, and the share of rounds survived.
 
 ## 🗄️ Snapshots
 
@@ -173,20 +174,23 @@ Catalogs live in `src/shared/i18n/messages`, one typed file per language. Server
 
 Everything below is a pure function with tests next to it.
 
-| Module                                 | Responsibility                                                                                                                          |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `features/squad/model/range.ts`        | The six ranges, parsing `?range=` and picking the matches of a day or match range                                                       |
-| `features/squad/model/stats.ts`        | `summarize()` averages per-match K/D, K/R, ADR and HS % like FACEIT does; `rank()` gives tied values the same place; `rollingAverage()` |
-| `features/squad/model/squad.ts`        | The view model: `viewPlayers()` cuts each player to the range, squad averages, ranks, map columns and cells, trend series               |
-| `features/squad/model/form.ts`         | Current and longest streaks                                                                                                             |
-| `features/squad/model/together.ts`     | Lineups, duos, teammates and lineup sizes                                                                                               |
-| `features/squad/model/levels.ts`       | FACEIT CS2 level thresholds, colours and the progress to the next level                                                                 |
-| `features/dashboard/model/activity.ts` | The recent matches feed: one entry per match with every squad member on their side                                                      |
-| `features/dashboard/model/records.ts`  | Single-match records with eligibility rules, the longest streak and aces                                                                |
-| `features/compare/model/compare.ts`    | Shared matches of two players, their record together and against each other, the leader of a row and the pair from the address          |
-| `features/player/model/profile.ts`     | The per-range context of a player page and slimmer players for the browser                                                              |
-| `shared/lib/scale.ts`                  | Nice chart scales with round ticks                                                                                                      |
-| `shared/lib/format.ts`                 | Numbers, signed differences, percentages, dates in any time zone, relative times, lists and country names                               |
+| Module                                 | Responsibility                                                                                                                 |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `features/squad/model/range.ts`        | The six ranges, parsing `?range=` and picking the matches of a day or match range                                              |
+| `features/squad/model/stats.ts`        | `summarize()` averages every per-match number like FACEIT does; `rank()` gives tied values the same place; `rollingAverage()`  |
+| `features/squad/model/rating.ts`       | The HLTV 1.0 rating of a match and the share of rounds survived                                                                |
+| `features/squad/model/metrics.ts`      | Labels, digits and the good and weak thresholds of every metric, and `metricTone()` that colours a value                       |
+| `features/squad/model/maps.ts`         | Map names and keys, and `mapImages()`: the picture of every map from the squad's lifetime statistics                           |
+| `features/squad/model/squad.ts`        | The view model: `viewPlayers()` cuts each player to the range, squad averages, ranks, map columns and cells, trend series      |
+| `features/squad/model/form.ts`         | Current and longest streaks                                                                                                    |
+| `features/squad/model/together.ts`     | Lineups, duos, teammates and lineup sizes                                                                                      |
+| `features/squad/model/levels.ts`       | FACEIT CS2 level thresholds, colours and the progress to the next level                                                        |
+| `features/dashboard/model/activity.ts` | The recent matches feed: one entry per match with every squad member on their side                                             |
+| `features/dashboard/model/records.ts`  | Single-match records with eligibility rules, the longest streak and aces                                                       |
+| `features/compare/model/compare.ts`    | Shared matches of two players, their record together and against each other, the leader of a row and the pair from the address |
+| `features/player/model/profile.ts`     | The per-range context of a player page and slimmer players for the browser                                                     |
+| `shared/lib/scale.ts`                  | Nice chart scales with round ticks                                                                                             |
+| `shared/lib/format.ts`                 | Numbers, signed differences, percentages, dates in any time zone, relative times, lists and country names                      |
 
 ### 🤝 How shared matches are found
 
@@ -201,6 +205,7 @@ FACEIT's match statistics contain a match id per player. Squad members who share
 | ⚡ Effects                   | `localStorage` and `data-effects` on `<html>`, resolved by the same script from the saved choice or the device, switched by `setEffects()`        |
 | 🕒 Time zone, clock          | `useSyncExternalStore` with a UTC server snapshot; the inline script already rewrites `<time>` elements in the visitor's zone before hydration    |
 | 🔀 Sorting, metrics, filters | Plain `useState` inside each section                                                                                                              |
+| 🖼️ Map pictures              | Collected once per page with `mapImages()` and shared with every `MapThumb` through `MapImagesProvider`, a React context                          |
 
 When the address asks for something other than the prerendered default (`?range=`, `?a=`, `?b=`), the inline script marks the page as pending and the data sections stay hidden until React has applied the address, so visitors never see the default range flash before their own.
 

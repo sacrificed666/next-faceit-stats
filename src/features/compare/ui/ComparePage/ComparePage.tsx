@@ -9,6 +9,7 @@ import type { Player } from "@/features/squad/model/types";
 import { useRange } from "@/features/squad/model/useRange";
 import LevelBadge from "@/features/squad/ui/LevelBadge/LevelBadge";
 import LevelProgress from "@/features/squad/ui/LevelProgress/LevelProgress";
+import MapThumb, { MapImagesProvider } from "@/features/squad/ui/MapThumb/MapThumb";
 import PlayerName from "@/features/squad/ui/PlayerName/PlayerName";
 import RangeToolbar from "@/features/squad/ui/RangeToolbar/RangeToolbar";
 import { FormGuide } from "@/features/squad/ui/ResultBadge/ResultBadge";
@@ -26,16 +27,21 @@ import SharedMatches from "../SharedMatches/SharedMatches";
 interface ComparePageProps {
   players: Player[];
   updatedAt: number;
+  mapImages: Readonly<Record<string, string>>;
 }
 
+// A total divided by the matches played, or nothing without matches
 const perMatch = (view: PlayerView, value: (view: PlayerView) => number): number | null =>
   view.summary.matches > 0 ? value(view) / view.summary.matches : null;
 
+// The value only when the player has matches in the range
 const played = (view: PlayerView, value: number): number | null => (view.summary.matches > 0 ? value : null);
 
+// 3K, 4K and 5K rounds in the range
 const multiKills = (view: PlayerView): number =>
   view.summary.tripleKills + view.summary.quadroKills + view.summary.pentaKills;
 
+// Form rows: averages over the range plus per-match counts
 const formRows = (first: PlayerView, second: PlayerView, t: Translate, format: Formatter): CompareRow[] => {
   const decimal = (digits: number) => (value: number) => format.decimal(value, digits);
   const percent = (value: number) => format.percent(value, 1);
@@ -54,6 +60,13 @@ const formRows = (first: PlayerView, second: PlayerView, t: Translate, format: F
       first: played(first, first.summary.winRate),
       second: played(second, second.summary.winRate),
       display: percent,
+    },
+    {
+      key: "rating",
+      label: t("metric.rating.name"),
+      first: played(first, first.summary.rating),
+      second: played(second, second.summary.rating),
+      display: decimal(2),
     },
     {
       key: "kd",
@@ -81,6 +94,13 @@ const formRows = (first: PlayerView, second: PlayerView, t: Translate, format: F
       label: t("metric.hsPercent.name"),
       first: played(first, first.summary.hsPercent),
       second: played(second, second.summary.hsPercent),
+      display: percent,
+    },
+    {
+      key: "survival",
+      label: t("metric.survival.name"),
+      first: played(first, first.summary.survival),
+      second: played(second, second.summary.survival),
       display: percent,
     },
     {
@@ -114,6 +134,7 @@ const formRows = (first: PlayerView, second: PlayerView, t: Translate, format: F
   ];
 };
 
+// Lifetime rows from the all-time FACEIT statistics
 const lifetimeRows = (first: Player, second: Player, t: Translate, format: Formatter): CompareRow[] => {
   const a = first.lifetime;
   const b = second.lifetime;
@@ -187,6 +208,7 @@ const lifetimeRows = (first: Player, second: Player, t: Translate, format: Forma
   ];
 };
 
+// Win rate on every map either player played, the busiest maps first
 const mapRows = (first: PlayerView, second: PlayerView, t: Translate, format: Formatter): CompareRow[] => {
   const a = mapCells(first);
   const b = mapCells(second);
@@ -200,7 +222,12 @@ const mapRows = (first: PlayerView, second: PlayerView, t: Translate, format: Fo
     const right = b.get(map);
     return {
       key: map,
-      label: mapName(map),
+      label: (
+        <span className="inline-flex items-center gap-2">
+          <MapThumb map={map} />
+          {mapName(map)}
+        </span>
+      ),
       first: left ? left.winRate : null,
       second: right ? right.winRate : null,
       display: (value, side) =>
@@ -216,6 +243,7 @@ interface PickerProps {
   onChange: (nickname: string) => void;
 }
 
+// A labelled select for one of the two players
 const Picker = ({ label, value, options, onChange }: PickerProps) => {
   const id = useId();
   return (
@@ -239,6 +267,7 @@ const Picker = ({ label, value, options, onChange }: PickerProps) => {
   );
 };
 
+// One player's card: avatar, level, ELO and the last five results
 const Contender = ({ view, align }: { view: PlayerView; align: "start" | "end" }) => {
   const { t, format } = useI18n();
   const { player } = view;
@@ -259,7 +288,8 @@ const Contender = ({ view, align }: { view: PlayerView; align: "start" | "end" }
   );
 };
 
-const ComparePage = ({ players, updatedAt }: ComparePageProps) => {
+// Two players side by side, picked in the address so the page can be shared
+const ComparePage = ({ players, updatedAt, mapImages }: ComparePageProps) => {
   const { t, format } = useI18n();
   const range = useRange();
   const ordered = players.toSorted((a, b) => b.elo - a.elo);
@@ -297,6 +327,7 @@ const ComparePage = ({ players, updatedAt }: ComparePageProps) => {
   const shared = sharedMatches(a.matches, b.matches);
   const rival = rivalry(shared);
 
+  // Picks a player; picking the other side's player swaps the two
   const choose = (slot: "a" | "b", nickname: string): void => {
     const taken = slot === "a" ? second.nickname : first.nickname;
     if (nickname !== taken) {
@@ -307,100 +338,104 @@ const ComparePage = ({ players, updatedAt }: ComparePageProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-12 sm:gap-16" data-query-scope="">
-      {header}
-      <RangeToolbar sections={sections} />
+    <MapImagesProvider images={mapImages}>
+      <div className="flex flex-col gap-12 sm:gap-16" data-query-scope="">
+        {header}
+        <RangeToolbar sections={sections} />
 
-      <section aria-label={t("compare.pick")} className="panel flex flex-col gap-6 p-5 sm:p-8">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-end gap-3 sm:gap-6">
-          <Picker
-            label={t("compare.first")}
-            value={first.nickname}
-            options={nicknames}
-            onChange={(value) => choose("a", value)}
-          />
-          <button
-            type="button"
-            onClick={() => setSearchParams({ a: second.nickname, b: first.nickname })}
-            className="inline-flex size-10 items-center justify-center rounded-full border border-line-strong text-ink-secondary transition-colors hover:border-accent hover:text-accent-text"
-          >
-            <Icon name="swap" size={18} />
-            <span className="sr-only">{t("compare.swap")}</span>
-          </button>
-          <Picker
-            label={t("compare.second")}
-            value={second.nickname}
-            options={nicknames}
-            onChange={(value) => choose("b", value)}
-          />
-        </div>
-        <div className="grid gap-6 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:items-center">
-          <Contender view={a} align="start" />
-          <span
-            aria-hidden="true"
-            className="hidden size-14 items-center justify-center self-center justify-self-center rounded-full bg-accent text-lg font-extrabold text-accent-ink uppercase sm:inline-flex"
-          >
-            {t("compare.vs")}
-          </span>
-          <Contender view={b} align="end" />
-        </div>
-        <dl className="grid gap-3 border-t border-line pt-5 text-sm sm:grid-cols-2">
-          <div className="flex flex-col gap-0.5">
-            <dt className="text-xs font-semibold text-ink-muted">{t("compare.together")}</dt>
-            <dd className="font-semibold text-ink">
-              {rival.together.matches > 0
-                ? t("compare.togetherSummary", {
-                    count: rival.together.matches,
-                    record: `${rival.together.wins}-${rival.together.matches - rival.together.wins}`,
-                  })
-                : t("compare.never")}
-            </dd>
+        <section aria-label={t("compare.pick")} className="panel flex flex-col gap-6 p-5 sm:p-8">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-end gap-3 sm:gap-6">
+            <Picker
+              label={t("compare.first")}
+              value={first.nickname}
+              options={nicknames}
+              onChange={(value) => choose("a", value)}
+            />
+            <button
+              type="button"
+              onClick={() => setSearchParams({ a: second.nickname, b: first.nickname })}
+              className="inline-flex size-10 items-center justify-center rounded-full border border-line-strong text-ink-secondary transition-colors hover:border-accent hover:text-accent-text"
+            >
+              <Icon name="swap" size={18} />
+              <span className="sr-only">{t("compare.swap")}</span>
+            </button>
+            <Picker
+              label={t("compare.second")}
+              value={second.nickname}
+              options={nicknames}
+              onChange={(value) => choose("b", value)}
+            />
           </div>
-          <div className="flex flex-col gap-0.5 sm:items-end sm:text-right">
-            <dt className="text-xs font-semibold text-ink-muted">{t("compare.against")}</dt>
-            <dd className="font-semibold text-ink">
-              {rival.against.matches > 0
-                ? t("compare.againstSummary", {
-                    first: first.nickname,
-                    firstWins: rival.against.firstWins,
-                    second: second.nickname,
-                    secondWins: rival.against.secondWins,
-                  })
-                : t("compare.never")}
-            </dd>
+          <div className="grid gap-6 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:items-center">
+            <Contender view={a} align="start" />
+            <span
+              aria-hidden="true"
+              className="hidden size-14 items-center justify-center self-center justify-self-center rounded-full bg-accent text-lg font-extrabold text-accent-ink uppercase sm:inline-flex"
+            >
+              {t("compare.vs")}
+            </span>
+            <Contender view={b} align="end" />
           </div>
-        </dl>
-      </section>
+          <dl className="grid gap-3 border-t border-line pt-5 text-sm sm:grid-cols-2">
+            <div className="flex flex-col gap-0.5">
+              <dt className="text-xs font-semibold text-ink-muted">{t("compare.together")}</dt>
+              <dd className="font-semibold text-ink">
+                {rival.together.matches > 0
+                  ? t("compare.togetherSummary", {
+                      count: rival.together.matches,
+                      record: `${rival.together.wins}-${rival.together.matches - rival.together.wins}`,
+                    })
+                  : t("compare.never")}
+              </dd>
+            </div>
+            <div className="flex flex-col gap-0.5 sm:items-end sm:text-right">
+              <dt className="text-xs font-semibold text-ink-muted">{t("compare.against")}</dt>
+              <dd className="font-semibold text-ink">
+                {rival.against.matches > 0
+                  ? t("compare.againstSummary", {
+                      first: first.nickname,
+                      firstWins: rival.against.firstWins,
+                      second: second.nickname,
+                      secondWins: rival.against.secondWins,
+                    })
+                  : t("compare.never")}
+              </dd>
+            </div>
+          </dl>
+        </section>
 
-      <Section id="stats" title={t("compare.stats")} description={t("compare.statsDescription")}>
-        <CompareRows
-          caption={t("compare.stats")}
-          firstName={first.nickname}
-          secondName={second.nickname}
-          rows={formRows(a, b, t, format)}
-        />
-      </Section>
+        <div className="grid grid-cols-1 gap-12 sm:gap-16 xl:grid-cols-2 xl:gap-6">
+          <Section id="stats" title={t("compare.stats")} description={t("compare.statsDescription")}>
+            <CompareRows
+              caption={t("compare.stats")}
+              firstName={first.nickname}
+              secondName={second.nickname}
+              rows={formRows(a, b, t, format)}
+            />
+          </Section>
 
-      <Section id="lifetime" title={t("compare.lifetime")} description={t("compare.lifetimeDescription")}>
-        <CompareRows
-          caption={t("compare.lifetime")}
-          firstName={first.nickname}
-          secondName={second.nickname}
-          rows={lifetimeRows(first, second, t, format)}
-        />
-      </Section>
+          <Section id="lifetime" title={t("compare.lifetime")} description={t("compare.lifetimeDescription")}>
+            <CompareRows
+              caption={t("compare.lifetime")}
+              firstName={first.nickname}
+              secondName={second.nickname}
+              rows={lifetimeRows(first, second, t, format)}
+            />
+          </Section>
+        </div>
 
-      <Section id="maps" title={t("compare.mapsTitle")} description={t("compare.mapsDescription")}>
-        <CompareRows
-          caption={t("compare.mapsCaption", { first: first.nickname, second: second.nickname })}
-          firstName={first.nickname}
-          secondName={second.nickname}
-          rows={mapRows(a, b, t, format)}
-        />
-      </Section>
+        <Section id="maps" title={t("compare.mapsTitle")} description={t("compare.mapsDescription")}>
+          <CompareRows
+            caption={t("compare.mapsCaption", { first: first.nickname, second: second.nickname })}
+            firstName={first.nickname}
+            secondName={second.nickname}
+            rows={mapRows(a, b, t, format)}
+          />
+        </Section>
 
-      <SharedMatches shared={shared} firstName={first.nickname} secondName={second.nickname} />
-    </div>
+        <SharedMatches shared={shared} firstName={first.nickname} secondName={second.nickname} />
+      </div>
+    </MapImagesProvider>
   );
 };
 

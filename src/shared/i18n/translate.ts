@@ -11,6 +11,7 @@ export type Translate = (key: MessageKey, params?: TranslationParams) => string;
 const pluralRules = new Map<Locale, Intl.PluralRules>();
 const numberFormats = new Map<Locale, Intl.NumberFormat>();
 
+// The plural form of a count in a language
 export const pluralCategory = (locale: Locale, count: number): Intl.LDMLPluralRule => {
   let rules = pluralRules.get(locale);
   if (!rules) {
@@ -20,6 +21,7 @@ export const pluralCategory = (locale: Locale, count: number): Intl.LDMLPluralRu
   return rules.select(count);
 };
 
+// Numbers inside messages are formatted for the language
 const formatParameter = (locale: Locale, value: string | number): string => {
   if (typeof value === "string") return value;
   let format = numberFormats.get(locale);
@@ -30,6 +32,7 @@ const formatParameter = (locale: Locale, value: string | number): string => {
   return format.format(value);
 };
 
+// A message with its plural form picked and placeholders filled
 export const translate = (
   locale: Locale,
   messages: Messages,
@@ -47,6 +50,7 @@ export const translate = (
   });
 };
 
+// A translate function bound to one language
 export const createTranslator =
   (locale: Locale, messages: Messages): Translate =>
   (key, params) =>

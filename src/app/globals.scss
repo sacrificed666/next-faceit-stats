@@ -2,6 +2,7 @@
 
 @custom-variant reduced (&:where([data-effects="reduced"], [data-effects="reduced"] *));
 
+// Colour tokens of the light theme
 @mixin light-tokens {
   color-scheme: light;
   --plane: #f3f3f0;
@@ -37,6 +38,7 @@
   --image-fade: linear-gradient(180deg, rgb(252 252 251 / 10%) 0%, rgb(252 252 251 / 92%) 78%, #fcfcfb 100%);
 }
 
+// Colour tokens of the dark theme
 @mixin dark-tokens {
   color-scheme: dark;
   --plane: #0f1011;
@@ -72,16 +74,19 @@
   --image-fade: linear-gradient(180deg, rgb(24 25 27 / 20%) 0%, rgb(24 25 27 / 92%) 78%, #18191b 100%);
 }
 
+// Light by default
 :root {
   @include light-tokens;
 }
 
+// Dark when the system is dark, unless light was picked
 @media (prefers-color-scheme: dark) {
   :root:where(:not([data-theme="light"])) {
     @include dark-tokens;
   }
 }
 
+// Dark when picked in the settings
 :root[data-theme="dark"] {
   @include dark-tokens;
 }
@@ -91,6 +96,7 @@
   --shadow: var(--shadow-flat);
 }
 
+// Stronger text and lines for more contrast, light theme
 @mixin light-contrast {
   --ink-secondary: #2b2a27;
   --ink-muted: #45443f;
@@ -98,6 +104,7 @@
   --line-strong: rgb(17 17 16 / 48%);
 }
 
+// Stronger text and lines for more contrast, dark theme
 @mixin dark-contrast {
   --ink-secondary: #e6e5df;
   --ink-muted: #cfcec6;
@@ -105,6 +112,7 @@
   --line-strong: rgb(255 255 255 / 45%);
 }
 
+// More contrast when the system asks for it
 @media (prefers-contrast: more) {
   :root {
     @include light-contrast;
@@ -115,6 +123,7 @@
   }
 }
 
+// The dark contrast tokens for a dark system theme
 @media (prefers-contrast: more) and (prefers-color-scheme: dark) {
   :root:where(:not([data-theme="light"])) {
     @include dark-contrast;
@@ -153,6 +162,7 @@
   --breakpoint-xs: 30rem;
 }
 
+// Document defaults
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -160,6 +170,7 @@
     text-size-adjust: 100%;
   }
 
+  // The page background with a soft glow at the top
   body {
     min-height: 100dvh;
     background-color: var(--plane);
@@ -182,16 +193,20 @@
     background-color: var(--accent-soft);
   }
 
+  // Section links stop below the floating toolbar
   [id] {
     scroll-margin-top: 5rem;
   }
 
+  // Numbers line up in every table
   table {
     font-variant-numeric: tabular-nums;
   }
 }
 
+// Panels, heatmap cells, meters and the settings popover
 @layer components {
+  // The card surface used by every block
   .panel {
     border: 1px solid var(--line);
     border-radius: 1.25rem;
@@ -199,10 +214,12 @@
     box-shadow: var(--shadow);
   }
 
+  // Mixes the cell colour from its pole and strength
   .heat-cell {
     background-color: color-mix(in oklab, var(--div-middle), var(--heat-pole) calc(var(--heat) * 100%));
   }
 
+  // Native meters drawn with the tokens in every browser
   .meter {
     display: block;
     inline-size: 100%;
@@ -237,15 +254,18 @@
     }
   }
 
+  // Thin scrollbars for tables that scroll sideways
   .scrollbar-thin {
     scrollbar-width: thin;
     scrollbar-color: var(--line-strong) transparent;
   }
 
+  // The settings button is the anchor of its popover
   .settings-anchor {
     anchor-name: --settings;
   }
 
+  // The settings popover
   .settings-panel {
     position: fixed;
     inset: 4.5rem 1rem auto auto;
@@ -280,6 +300,7 @@
       }
     }
 
+    // Opens under the settings button where anchor positioning works
     @supports (anchor-name: --settings) {
       position-anchor: --settings;
       inset: auto;
@@ -289,6 +310,7 @@
       position-try-fallbacks: flip-block;
     }
 
+    // A bottom sheet on phones
     @media (width < 40rem) {
       inset: auto 0 0;
       inline-size: 100%;
@@ -310,10 +332,12 @@
     }
   }
 
+  // Sections fade in once the address has been applied
   [data-query-scope] {
     transition: opacity 0.2s ease;
   }
 
+  // Hidden while pending, revealed after three seconds anyway
   html[data-pending] [data-query-scope] {
     opacity: 0;
     transition: none;
@@ -321,12 +345,14 @@
   }
 }
 
+// Shows hidden sections when JavaScript never arrives
 @keyframes reveal {
   to {
     opacity: 1;
   }
 }
 
+// No smooth scrolling, transitions or animations
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -341,28 +367,33 @@
   }
 }
 
+// System colours for borders and marks in forced colours mode
 @media (forced-colors: active) {
   .panel {
     border-color: CanvasText;
   }
 
+  // Heatmap colours carry the data, so they stay
   .heat-cell,
   .heat-legend {
     forced-color-adjust: none;
   }
 
+  // The selected option of a radio group
   :checked + .choice {
     forced-color-adjust: none;
     background-color: Highlight;
     color: HighlightText;
   }
 
+  // The current page and section are underlined
   [aria-current="page"],
   [aria-current="true"] {
     text-decoration: underline;
     text-underline-offset: 0.3em;
   }
 
+  // Bars and lines in system colours
   .mark {
     forced-color-adjust: none;
     background-color: Highlight;
@@ -379,6 +410,7 @@
   }
 }
 
+// Plain panels without backgrounds on paper
 @media print {
   body {
     background-image: none;

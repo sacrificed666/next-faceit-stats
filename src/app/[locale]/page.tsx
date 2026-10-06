@@ -6,11 +6,13 @@ import { withoutDetails } from "@/features/player/model/profile";
 import { alternates, social, squadSchema } from "@/features/seo/model/seo";
 import JsonLd from "@/features/seo/ui/JsonLd/JsonLd";
 import { getSquad } from "@/features/squad/api/loader";
+import { mapImages } from "@/features/squad/model/maps";
 import SquadStatus from "@/features/squad/ui/SquadStatus/SquadStatus";
 import { isLocale } from "@/shared/i18n/locales";
 import { getI18n } from "@/shared/i18n/server";
 import { siteUrl } from "@/shared/lib/site";
 
+// Title, description and links of the squad overview
 export const generateMetadata = async ({ params }: PageProps<"/[locale]">): Promise<Metadata> => {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
@@ -22,6 +24,7 @@ export const generateMetadata = async ({ params }: PageProps<"/[locale]">): Prom
   };
 };
 
+// The squad overview, or the setup help while the squad is unavailable
 const HomePage = async ({ params }: PageProps<"/[locale]">) => {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
@@ -36,7 +39,12 @@ const HomePage = async ({ params }: PageProps<"/[locale]">) => {
   return (
     <>
       <JsonLd data={squadSchema(squad.players, siteUrl(), i18n)} />
-      <Dashboard players={squad.players.map(withoutDetails)} failed={squad.failed} updatedAt={squad.updatedAt} />
+      <Dashboard
+        players={squad.players.map(withoutDetails)}
+        failed={squad.failed}
+        updatedAt={squad.updatedAt}
+        mapImages={mapImages(squad.players)}
+      />
     </>
   );
 };

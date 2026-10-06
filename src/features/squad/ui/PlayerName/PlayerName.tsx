@@ -18,6 +18,7 @@ interface PlayerNameProps {
   className?: string;
 }
 
+// Avatar and nickname linking to the player page in the current range
 const PlayerName = ({
   player,
   size = 28,

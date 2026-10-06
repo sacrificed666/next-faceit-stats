@@ -12,6 +12,7 @@ interface SquadLinkProps {
   className?: string;
 }
 
+// Link back to the squad overview in the current range
 const SquadLink = ({ children, className }: SquadLinkProps) => {
   const { locale } = useI18n();
   const range = useRange();

@@ -16,6 +16,7 @@ export interface Rivalry {
 
 export type Leader = "first" | "second" | null;
 
+// Matches both players played, newest first, and whether on one team
 export const sharedMatches = (first: readonly Match[], second: readonly Match[]): SharedMatch[] => {
   const byId = new Map(second.map((match) => [match.id, match]));
   return first
@@ -36,6 +37,7 @@ export const sharedMatches = (first: readonly Match[], second: readonly Match[])
     .toSorted((a, b) => b.finishedAt - a.finishedAt);
 };
 
+// Record on the same team and the score against each other
 export const rivalry = (shared: readonly SharedMatch[]): Rivalry => {
   const together = shared.filter((match) => match.together);
   const against = shared.filter((match) => !match.together);
@@ -49,11 +51,13 @@ export const rivalry = (shared: readonly SharedMatch[]): Rivalry => {
   };
 };
 
+// Which side of a row is ahead, or null on a tie or missing value
 export const leader = (first: number | null, second: number | null, higherIsBetter = true): Leader => {
   if (first === null || second === null || first === second) return null;
   return first > second === higherIsBetter ? "first" : "second";
 };
 
+// The two players from the address, falling back to the top two
 export const pickPair = (
   nicknames: readonly string[],
   first: string | null,

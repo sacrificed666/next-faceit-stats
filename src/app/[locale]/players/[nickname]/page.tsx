@@ -20,11 +20,13 @@ import Icon from "@/shared/ui/Icon/Icon";
 
 const PLACEHOLDER = "__squad__";
 
+// Prerenders every player of the squad in every language
 export const generateStaticParams = async () => {
   const nicknames = await squadNicknames();
   return nicknames.length > 0 ? nicknames.map((nickname) => ({ nickname })) : [{ nickname: PLACEHOLDER }];
 };
 
+// Title, description, links and structured data of a player page
 export const generateMetadata = async ({ params }: PageProps<"/[locale]/players/[nickname]">): Promise<Metadata> => {
   const { locale, nickname } = await params;
   if (!isLocale(locale)) return {};
@@ -59,6 +61,7 @@ export const generateMetadata = async ({ params }: PageProps<"/[locale]/players/
   };
 };
 
+// A player page, redirecting to the exact spelling of the nickname
 const PlayerPage = async ({ params }: PageProps<"/[locale]/players/[nickname]">) => {
   const { locale, nickname } = await params;
   if (!isLocale(locale)) notFound();

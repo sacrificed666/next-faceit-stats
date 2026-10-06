@@ -107,6 +107,8 @@ export const nl: Messages = {
   "level.progress": "Voortgang naar level {level}",
   "level.eloLevel": "ELO · Level {level}",
 
+  "metric.rating": "Rating",
+  "metric.rating.name": "Rating 1.0",
   "metric.kd": "K/D",
   "metric.kd.name": "Kills per dood",
   "metric.kr": "K/R",
@@ -115,6 +117,8 @@ export const nl: Messages = {
   "metric.adr.name": "Schade per ronde",
   "metric.hsPercent": "HS %",
   "metric.hsPercent.name": "Headshotpercentage",
+  "metric.survival": "Overleving",
+  "metric.survival.name": "Overleefde rondes",
   "metric.winRate": "Winst %",
   "metric.winRate.name": "Winstpercentage",
   "metric.elo": "ELO",
@@ -232,6 +236,7 @@ export const nl: Messages = {
 
   "records.title": "Records",
   "records.description": "De beste individuele prestaties en reeksen in de gekozen periode.",
+  "records.rating": "Beste rating",
   "records.kills": "Meeste kills",
   "records.adr": "Hoogste ADR",
   "records.kd": "Beste K/D",
@@ -247,7 +252,7 @@ export const nl: Messages = {
   "player.breadcrumb": "Kruimelpad",
   "player.kicker": "FACEIT · CS2",
   "player.kickerRegion": "FACEIT · CS2 · {region}",
-  "player.faceit": "FACEIT-profiel",
+  "player.faceit": "FACEIT",
   "player.steam": "Steam",
   "player.compare": "Vergelijken",
   "player.notFound": "Speler niet gevonden",
@@ -276,8 +281,9 @@ export const nl: Messages = {
 
   "playerMaps.title": "Maps",
   "playerMaps.description": "Resultaten op elke map in de gekozen periode, met de totaalcijfers van FACEIT eronder.",
-  "playerMaps.allTime": "Totaal: {matches} · {rate} gewonnen · {kd} K/D",
-  "playerMaps.noAllTime": "Geen totaalcijfers van FACEIT",
+  "playerMaps.range": "Periode",
+  "playerMaps.allTime": "Totaal",
+  "playerMaps.caption": "{map}: de gekozen periode en totaal",
 
   "history.title": "Wedstrijdgeschiedenis",
   "history.description":

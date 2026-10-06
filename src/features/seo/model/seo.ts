@@ -13,6 +13,7 @@ export interface Alternates {
   languages: Record<string, string>;
 }
 
+// JSON-LD that cannot close the script tag it sits in
 export const serializeJsonLd = (data: Schema): string => JSON.stringify(data).replaceAll("<", "\\u003c");
 
 export interface SocialPage {
@@ -22,12 +23,14 @@ export interface SocialPage {
   profile?: string;
 }
 
+// Canonical and hreflang links of a page in every language
 export const alternates = (locale: Locale, path = ""): Alternates => {
   const languages: Record<string, string> = Object.fromEntries(LOCALES.map((entry) => [entry, `/${entry}${path}`]));
   languages["x-default"] = path === "" ? "/" : path;
   return { canonical: `/${locale}${path}`, languages };
 };
 
+// Open Graph and Twitter metadata of a page
 export const social = (
   { locale, t }: Pick<I18n, "locale" | "t">,
   page: SocialPage,
@@ -46,6 +49,7 @@ export const social = (
   };
 };
 
+// A player as a schema.org Person with the FACEIT and Steam profiles
 const person = (player: Player, base: URL, { locale, format }: I18n): Schema => {
   const url = new URL(playerPath(locale, player.nickname), base).href;
   const sameAs = [faceitProfileUrl(player.nickname)];
@@ -61,6 +65,7 @@ const person = (player: Player, base: URL, { locale, format }: I18n): Schema => 
   };
 };
 
+// The site as a schema.org WebSite
 const website = (base: URL, { locale, t }: I18n): Schema => ({
   "@type": "WebSite",
   "@id": new URL(`${homePath(locale)}#website`, base).href,
@@ -71,6 +76,7 @@ const website = (base: URL, { locale, t }: I18n): Schema => ({
   author: { "@type": "Person", name: SITE.author.name, url: SITE.author.url },
 });
 
+// Structured data of the overview: the site and the list of players
 export const squadSchema = (players: readonly Player[], base: URL, i18n: I18n): Schema => {
   return {
     "@context": "https://schema.org",
@@ -92,6 +98,7 @@ export const squadSchema = (players: readonly Player[], base: URL, i18n: I18n): 
   };
 };
 
+// Structured data of a player page: the profile and its breadcrumbs
 export const playerSchema = (player: Player, base: URL, updatedAt: number, i18n: I18n): Schema => {
   const url = new URL(playerPath(i18n.locale, player.nickname), base).href;
   return {

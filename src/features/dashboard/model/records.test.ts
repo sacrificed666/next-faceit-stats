@@ -21,6 +21,12 @@ describe("match records", () => {
     expect(matchRecord("mvps", [{ id: "anna", matches: [older, newer] }])?.match).toBe(newer);
   });
 
+  it("finds the best rating over a full match", () => {
+    const short = makeMatch({ rating: 2.4, rounds: 10 });
+    const full = makeMatch({ rating: 1.8, rounds: 24 });
+    expect(matchRecord("rating", [{ id: "anna", matches: [short, full] }])?.match).toBe(full);
+  });
+
   it("ignores headshot rates from low-kill matches", () => {
     const lucky = makeMatch({ hsPercent: 100, kills: 3 });
     const solid = makeMatch({ hsPercent: 70, kills: 22 });

@@ -4,8 +4,11 @@ import { useState } from "react";
 
 import { activityFeed, type FeedPlayer } from "@/features/dashboard/model/activity";
 import { mapName } from "@/features/squad/model/maps";
+import { METRICS } from "@/features/squad/model/metrics";
 import { members, playerById, type PlayerView } from "@/features/squad/model/squad";
 import type { Player } from "@/features/squad/model/types";
+import MapThumb from "@/features/squad/ui/MapThumb/MapThumb";
+import MetricValue from "@/features/squad/ui/MetricValue/MetricValue";
 import PlayerName from "@/features/squad/ui/PlayerName/PlayerName";
 import ResultBadge from "@/features/squad/ui/ResultBadge/ResultBadge";
 import { useI18n } from "@/shared/i18n/useI18n";
@@ -18,26 +21,25 @@ import Section from "@/shared/ui/Section/Section";
 
 const PAGE = 8;
 
+// One squad member's line in a match: K-D-A, rating, K/D and ADR
 const Line = ({ entry, player }: { entry: FeedPlayer; player: Player }) => {
-  const { t, format } = useI18n();
+  const { t } = useI18n();
   const { match } = entry;
   const kda = { kills: match.kills, deaths: match.deaths, assists: match.assists };
   return (
     <li className="flex flex-wrap items-center gap-x-6 gap-y-1">
-      <PlayerName player={player} size={24} className="sm:w-48" />
-      <span className="flex items-center gap-3 text-xs text-ink-secondary tabular-nums">
-        <span>
+      <PlayerName player={player} size={24} className="sm:w-44" />
+      <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-secondary tabular-nums sm:gap-x-4">
+        <span className="sm:w-16">
           <span aria-hidden="true">{t("activity.kda", kda)}</span>
           <span className="sr-only">{t("activity.kdaSpoken", kda)}</span>
         </span>
-        <span>
-          <span className="text-ink-muted">{`${t("metric.kd")} `}</span>
-          <span className="font-semibold text-ink">{format.decimal(match.kd, 2)}</span>
-        </span>
-        <span>
-          <span className="text-ink-muted">{`${t("metric.adr")} `}</span>
-          <span className="font-semibold text-ink">{format.decimal(match.adr, 1)}</span>
-        </span>
+        {(["rating", "kd", "adr"] as const).map((key) => (
+          <span key={key} className="font-semibold text-ink">
+            <span className="font-normal text-ink-muted">{`${t(METRICS[key].label)} `}</span>
+            <MetricValue metric={key} value={match[key]} />
+          </span>
+        ))}
       </span>
     </li>
   );
@@ -47,6 +49,7 @@ interface ActivityProps {
   views: readonly PlayerView[];
 }
 
+// The latest matches of the whole squad, where a shared match appears once
 const Activity = ({ views }: ActivityProps) => {
   const { t } = useI18n();
   const [limit, setLimit] = useState(PAGE);
@@ -62,33 +65,38 @@ const Activity = ({ views }: ActivityProps) => {
         </div>
       ) : (
         <div className="flex flex-col gap-3">
-          <ol className="flex flex-col gap-3">
+          <ol className="panel flex flex-col divide-y divide-line">
             {shown.map((entry) => {
               const rivals = entry.sides.length > 1;
               const squadSize = entry.sides.reduce((sum, side) => sum + side.players.length, 0);
               return (
                 <li
                   key={entry.matchId}
-                  className="panel grid gap-3 p-4 sm:grid-cols-[10rem_minmax(0,1fr)_auto] sm:items-start sm:gap-5"
+                  className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2.5 px-4 py-3 sm:grid-cols-[13rem_minmax(0,1fr)_auto] sm:gap-x-5"
                 >
-                  <div className="flex items-start justify-between gap-3 sm:flex-col sm:justify-start sm:gap-1">
-                    <div className="flex flex-col">
-                      <span className="font-bold text-ink">{mapName(entry.map)}</span>
-                      <RelativeTime timestamp={entry.finishedAt} className="text-xs text-ink-muted" />
-                    </div>
-                    {rivals || squadSize > 1 ? (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-accent-soft px-2 py-0.5 text-[0.6875rem] font-bold text-accent-text">
-                        <Icon name={rivals ? "swap" : "users"} size={12} />
-                        {t(rivals ? "activity.squadVsSquad" : "activity.together")}
+                  <div className="flex min-w-0 items-center gap-3">
+                    <MapThumb map={entry.map} size="md" />
+                    <div className="flex min-w-0 flex-col">
+                      <span className="truncate font-bold text-ink">{mapName(entry.map)}</span>
+                      <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                        <RelativeTime timestamp={entry.finishedAt} className="text-xs text-ink-muted" />
+                        {rivals || squadSize > 1 ? (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-accent-soft px-1.5 py-px text-[0.6875rem] font-bold text-accent-text">
+                            <Icon name={rivals ? "swap" : "users"} size={11} />
+                            {t(rivals ? "activity.squadVsSquad" : "activity.together")}
+                          </span>
+                        ) : null}
                       </span>
-                    ) : null}
+                    </div>
                   </div>
-                  <div className="flex min-w-0 flex-col gap-3">
+                  <ExternalLink
+                    href={faceitMatchUrl(entry.matchId)}
+                    label={t("activity.roomFor", { map: mapName(entry.map) })}
+                    className="justify-self-end rounded-full p-1.5 text-ink-muted hover:bg-hover hover:text-accent-text sm:order-last"
+                  />
+                  <div className="col-span-2 flex min-w-0 flex-col gap-2 sm:col-span-1">
                     {entry.sides.map((side) => (
-                      <div
-                        key={String(side.won)}
-                        className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-start sm:gap-4"
-                      >
+                      <div key={String(side.won)} className="flex min-w-0 items-start gap-3 sm:items-center sm:gap-4">
                         <span className="shrink-0 sm:w-20">
                           <ResultBadge won={side.won} score={`${side.teamScore}:${side.opponentScore}`} />
                         </span>
@@ -103,11 +111,6 @@ const Activity = ({ views }: ActivityProps) => {
                       </div>
                     ))}
                   </div>
-                  <ExternalLink
-                    href={faceitMatchUrl(entry.matchId)}
-                    label={t("activity.roomFor", { map: mapName(entry.map) })}
-                    className="justify-self-start rounded-full p-1.5 text-ink-muted hover:bg-hover hover:text-accent-text sm:justify-self-end"
-                  />
                 </li>
               );
             })}

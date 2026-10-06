@@ -1,5 +1,6 @@
 import { Fragment, type ReactNode } from "react";
 
+// A message with React elements in place of its placeholders
 export const rich = (text: string, nodes: Readonly<Record<string, ReactNode>>): ReactNode[] => {
   let offset = 0;
   return text.split(/(\{\w+\})/g).flatMap<ReactNode>((part) => {

@@ -1,6 +1,7 @@
 import { currentLocale, getI18n } from "@/shared/i18n/server";
 import Skeleton from "@/shared/ui/Skeleton/Skeleton";
 
+// Placeholder for a player page while it renders
 const PlayerLoading = async () => {
   const { t } = await getI18n(await currentLocale());
   return (

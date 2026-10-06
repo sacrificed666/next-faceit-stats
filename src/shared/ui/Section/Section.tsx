@@ -9,6 +9,7 @@ interface SectionProps {
   className?: string;
 }
 
+// A titled region with a description and optional actions
 const Section = ({ id, title, description, actions, children, className = "" }: SectionProps) => {
   const headingId = `${id}-title`;
   return (

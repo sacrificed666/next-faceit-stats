@@ -14,9 +14,12 @@ export interface Match {
   adr: number;
   hsPercent: number;
   mvps: number;
+  doubleKills: number;
   tripleKills: number;
   quadroKills: number;
   pentaKills: number;
+  rating: number;
+  survival: number;
 }
 
 export interface LifetimeStats {

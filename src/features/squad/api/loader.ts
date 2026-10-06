@@ -10,8 +10,10 @@ import { buildPlayer, parseProfile } from "./parse";
 
 type LoadResult = { ok: true; player: Player } | { ok: false; failure: FailedPlayer; kind: ApiFailure | null };
 
+// Whether FACEIT rejected the API key
 const isUnauthorized = (error: unknown): boolean => error instanceof FaceitError && error.kind === "unauthorized";
 
+// A request that may fail without failing the player, unless the key is bad
 const optional = async (promise: Promise<unknown>): Promise<unknown> => {
   try {
     return await promise;
@@ -21,9 +23,11 @@ const optional = async (promise: Promise<unknown>): Promise<unknown> => {
   }
 };
 
+// In production a failed refresh keeps the last published pages
 const keepsLastVersion = (): boolean =>
   process.env.NODE_ENV === "production" && process.env.NEXT_PHASE !== "phase-production-build";
 
+// The avatar address when it still answers, as FACEIT keeps dead images
 const reachable = async (url: string | null): Promise<string | null> => {
   if (!url) return null;
   try {
@@ -34,6 +38,7 @@ const reachable = async (url: string | null): Promise<string | null> => {
   }
 };
 
+// Profile, matches, lifetime and ranking of one nickname
 const loadPlayer = async (client: FaceitClient, nickname: string): Promise<LoadResult> => {
   try {
     const profile = parseProfile(await client.player(nickname));
@@ -61,6 +66,7 @@ interface LoadedSquad {
   lifetime: "faceit" | "minutes";
 }
 
+// Every player of FACEIT_PLAYERS, or why the squad is unavailable
 const loadSquad = async (): Promise<LoadedSquad> => {
   const config = readSquadConfig();
   const missing = missingVariables(config);
@@ -93,6 +99,7 @@ const loadSquad = async (): Promise<LoadedSquad> => {
 
 let inFlight: Promise<LoadedSquad> | null = null;
 
+// Shares one load between the requests that arrive while it runs
 const loadSquadOnce = (): Promise<LoadedSquad> => {
   inFlight ??= loadSquad().finally(() => {
     inFlight = null;
@@ -100,6 +107,7 @@ const loadSquadOnce = (): Promise<LoadedSquad> => {
   return inFlight;
 };
 
+// The cached squad snapshot, kept longer when every request succeeded
 export const getSquad = async (): Promise<SquadSnapshot> => {
   "use cache";
   cacheTag("squad");
@@ -109,6 +117,7 @@ export const getSquad = async (): Promise<SquadSnapshot> => {
   return snapshot;
 };
 
+// Nicknames for prerendering, from the squad or the configuration
 export const squadNicknames = async (): Promise<string[]> => {
   const squad = await getSquad();
   if (squad.status === "ready" && squad.players.length > 0) return squad.players.map((player) => player.nickname);

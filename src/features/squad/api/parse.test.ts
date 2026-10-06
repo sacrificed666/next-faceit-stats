@@ -60,6 +60,13 @@ describe("parseMatch", () => {
     });
   });
 
+  it("adds the rating and the share of rounds survived", () => {
+    const match = parseMatch(matchItem({ "Double Kills": "2", "Triple Kills": "1" }).stats);
+    expect(match).toMatchObject({ doubleKills: 2, tripleKills: 1 });
+    expect(match?.survival).toBeCloseTo(8.7, 1);
+    expect(match?.rating).toBeCloseTo(0.524, 3);
+  });
+
   it("derives the team score from the result when the final score is missing", () => {
     const stats = matchItem({ Result: "1", Score: "13 / 7" }).stats;
     const { ["Final Score"]: _omitted, ...withoutFinal } = stats;

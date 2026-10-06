@@ -80,6 +80,7 @@ const PLAYERS: MockPlayer[] = [
   },
 ];
 
+// A seeded random generator, so every run gets the same squad
 const random = (seed: number): (() => number) => {
   let state = seed;
   return () => {
@@ -90,12 +91,14 @@ const random = (seed: number): (() => number) => {
   };
 };
 
+// One random item of a list
 const pick = <T>(items: readonly T[], next: () => number): T => {
   const item = items[Math.floor(next() * items.length)];
   if (item === undefined) throw new Error("Cannot pick from an empty list");
   return item;
 };
 
+// A shuffled copy of a list
 const shuffle = <T>(items: readonly T[], next: () => number): T[] => {
   const pool = [...items];
   const result: T[] = [];
@@ -106,6 +109,7 @@ const shuffle = <T>(items: readonly T[], next: () => number): T[] => {
   return result;
 };
 
+// Who played which match: solo, in a party or against a squad mate
 const schedule = (): Map<string, Appearance[]> => {
   const next = random(2026);
   const appearances = new Map<string, Appearance[]>(PLAYERS.map((player) => [player.id, []]));
@@ -135,6 +139,7 @@ const schedule = (): Map<string, Appearance[]> => {
 
 const APPEARANCES = schedule();
 
+// FACEIT match statistics for one appearance, shaped by the player's skill
 const matchStats = (player: MockPlayer, appearance: Appearance, index: number) => {
   const next = random(appearance.slot * 31 + player.id.length * 7 + index);
   const rounds = appearance.teamScore + appearance.opponentScore;
@@ -159,12 +164,14 @@ const matchStats = (player: MockPlayer, appearance: Appearance, index: number) =
     ADR: (55 + 40 * form + next() * 10).toFixed(1),
     "Headshots %": String(Math.round(35 + next() * 30)),
     MVPs: String(Math.round(next() * (appearance.won ? 6 : 3))),
+    "Double Kills": String(Math.round(kills / 6)),
     "Triple Kills": String(next() < 0.35 ? 1 : 0),
     "Quadro Kills": String(next() < 0.08 ? 1 : 0),
     "Penta Kills": String(ace),
   };
 };
 
+// Lifetime statistics with map segments for a mock player
 const lifetime = (player: MockPlayer) => {
   const segments = MAPS.slice(0, 5).map((map, index) => ({
     type: "Map",
@@ -198,6 +205,7 @@ const lifetime = (player: MockPlayer) => {
   };
 };
 
+// Sends a JSON response that is never cached
 const send = (response: ServerResponse, status: number, body: unknown): void => {
   response.writeHead(status, { "Content-Type": "application/json", "Cache-Control": "no-store" });
   response.end(JSON.stringify(body));

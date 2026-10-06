@@ -21,8 +21,10 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
 });
 
+// Prerenders every language
 export const generateStaticParams = () => LOCALES.map((locale) => ({ locale }));
 
+// Site-wide metadata in the page language
 export const generateMetadata = async ({ params }: LayoutProps<"/[locale]">): Promise<Metadata> => {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
@@ -55,6 +57,7 @@ export const viewport: Viewport = {
   colorScheme: "light dark",
 };
 
+// The document shell: boot script, header, content and footer
 const LocaleLayout = async ({ children, params }: LayoutProps<"/[locale]">) => {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();

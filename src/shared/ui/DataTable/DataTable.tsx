@@ -18,6 +18,7 @@ interface DataTableProps {
   rows: readonly DataTableRow[];
 }
 
+// The numbers behind a chart in a table that opens on demand
 const DataTable = ({ caption, columns, rows }: DataTableProps) => {
   const { t } = useI18n();
   return (

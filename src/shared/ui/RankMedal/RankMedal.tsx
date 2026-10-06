@@ -14,6 +14,7 @@ interface RankMedalProps {
   className?: string;
 }
 
+// Gold, silver or bronze for the top three places
 const RankMedal = ({ rank, className = "" }: RankMedalProps) => {
   const { t } = useI18n();
   const medal = MEDALS[rank];

@@ -11,6 +11,7 @@ interface HeaderProps {
   i18n: I18n;
 }
 
+// Logo, navigation and the settings button
 const Header = ({ i18n: { locale, t } }: HeaderProps) => {
   const name = t("app.name");
   return (

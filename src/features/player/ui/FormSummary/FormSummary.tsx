@@ -1,8 +1,9 @@
 "use client";
 
-import { formatMetric, METRICS, METRIC_KEYS, type MetricKey } from "@/features/squad/model/metrics";
+import { FORM_METRIC_KEYS, formatMetric, METRICS, type MetricKey } from "@/features/squad/model/metrics";
 import type { PlayerView } from "@/features/squad/model/squad";
 import type { LifetimeStats } from "@/features/squad/model/types";
+import MetricValue from "@/features/squad/ui/MetricValue/MetricValue";
 import { FormGuide } from "@/features/squad/ui/ResultBadge/ResultBadge";
 import { useI18n } from "@/shared/i18n/useI18n";
 import Delta from "@/shared/ui/Delta/Delta";
@@ -15,6 +16,7 @@ interface FormSummaryProps {
   averages: Readonly<Record<MetricKey, number>>;
 }
 
+// The lifetime value of a metric, when FACEIT reports one
 const lifetimeValue = (lifetime: LifetimeStats | null, key: MetricKey): number | null => {
   if (!lifetime) return null;
   switch (key) {
@@ -26,11 +28,14 @@ const lifetimeValue = (lifetime: LifetimeStats | null, key: MetricKey): number |
       return lifetime.winRate;
     case "adr":
       return lifetime.adr;
+    case "rating":
     case "kr":
+    case "survival":
       return null;
   }
 };
 
+// Averages of the range against the squad and lifetime, and the record
 const FormSummary = ({ view, averages }: FormSummaryProps) => {
   const { t, format } = useI18n();
   const { summary, matches, streak, player } = view;
@@ -46,8 +51,8 @@ const FormSummary = ({ view, averages }: FormSummaryProps) => {
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          <dl className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-6">
-            {METRIC_KEYS.map((key) => {
+          <dl className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
+            {FORM_METRIC_KEYS.map((key) => {
               const definition = METRICS[key];
               const average = averages[key];
               const lifetime = lifetimeValue(player.lifetime, key);
@@ -56,7 +61,7 @@ const FormSummary = ({ view, averages }: FormSummaryProps) => {
                 <StatTile
                   key={key}
                   label={t(definition.name)}
-                  value={formatMetric(format, key, summary[key])}
+                  value={<MetricValue metric={key} value={summary[key]} />}
                   delta={
                     <Delta value={summary[key] - average} digits={definition.digits} points={definition.percent} />
                   }

@@ -2,7 +2,7 @@ import { longestStreak } from "@/features/squad/model/form";
 import type { SquadMember } from "@/features/squad/model/together";
 import type { Match } from "@/features/squad/model/types";
 
-export type MatchRecordKind = "kills" | "adr" | "kd" | "headshots" | "mvps";
+export type MatchRecordKind = "rating" | "kills" | "adr" | "kd" | "headshots" | "mvps";
 
 export interface MatchRecord {
   kind: MatchRecordKind;
@@ -24,7 +24,9 @@ interface RecordRule {
 const MIN_HEADSHOT_KILLS = 15;
 const MIN_ROUNDS = 13;
 
+// Rates need a full match, so short matches cannot set them
 const RULES: Record<MatchRecordKind, RecordRule> = {
+  rating: { value: (match) => match.rating, eligible: (match) => match.rounds >= MIN_ROUNDS },
   kills: { value: (match) => match.kills, eligible: () => true },
   adr: { value: (match) => match.adr, eligible: (match) => match.rounds >= MIN_ROUNDS },
   kd: { value: (match) => match.kd, eligible: (match) => match.rounds >= MIN_ROUNDS },
@@ -32,6 +34,7 @@ const RULES: Record<MatchRecordKind, RecordRule> = {
   mvps: { value: (match) => match.mvps, eligible: () => true },
 };
 
+// The best single match for a record, the newest one on a tie
 export const matchRecord = (kind: MatchRecordKind, members: readonly SquadMember[]): MatchRecord | null => {
   const rule = RULES[kind];
   let best: MatchRecord | null = null;
@@ -47,6 +50,7 @@ export const matchRecord = (kind: MatchRecordKind, members: readonly SquadMember
   return best && best.value > 0 ? best : null;
 };
 
+// The longest run of wins by one player within the range
 export const longestWinStreak = (members: readonly SquadMember[]): PlayerRecord | null => {
   let best: PlayerRecord | null = null;
   for (const member of members) {
@@ -56,6 +60,7 @@ export const longestWinStreak = (members: readonly SquadMember[]): PlayerRecord 
   return best;
 };
 
+// The player with the most aces within the range
 export const mostAces = (members: readonly SquadMember[]): PlayerRecord | null => {
   let best: PlayerRecord | null = null;
   for (const member of members) {

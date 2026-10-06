@@ -5,6 +5,7 @@ import { useState } from "react";
 import { mapName } from "@/features/squad/model/maps";
 import { formatMetric, MATCH_METRIC_KEYS, METRICS, type MatchMetricKey } from "@/features/squad/model/metrics";
 import { active, ROLLING_WINDOW, squadAverage, trendSeries, type PlayerView } from "@/features/squad/model/squad";
+import MetricValue from "@/features/squad/ui/MetricValue/MetricValue";
 import PlayerName from "@/features/squad/ui/PlayerName/PlayerName";
 import { useTimeZone } from "@/shared/hooks/useClient";
 import { useI18n } from "@/shared/i18n/useI18n";
@@ -20,13 +21,16 @@ interface TrendsProps {
   views: readonly PlayerView[];
 }
 
+// A small chart per player on one scale, the best value of the metric first
 const Trends = ({ views }: TrendsProps) => {
   const { t, format } = useI18n();
   const [metric, setMetric] = useState<MatchMetricKey>("kd");
   const timeZone = useTimeZone();
   const definition = METRICS[metric];
   const average = squadAverage(views, metric);
-  const panels = active(views).map((view) => ({ view, trend: trendSeries(view.matches, metric) }));
+  const panels = active(views)
+    .toSorted((a, b) => b.summary[metric] - a.summary[metric])
+    .map((view) => ({ view, trend: trendSeries(view.matches, metric) }));
   const scale = niceScale(
     panels.flatMap(({ trend }) => trend.perMatch),
     3,
@@ -57,13 +61,15 @@ const Trends = ({ views }: TrendsProps) => {
       ) : (
         <>
           <ChartLegend series={legend} reference={t("trends.squadAverageValue", { value: show(average) })} />
-          <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <ul className="grid gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {panels.map(({ view, trend }) => (
               <li key={view.player.id} className="panel flex flex-col gap-3 p-4">
                 <div className="flex items-center justify-between gap-3">
                   <PlayerName player={view.player} size={28} />
                   <span className="flex shrink-0 flex-col items-end">
-                    <span className="text-lg leading-tight font-bold text-ink">{show(view.summary[metric])}</span>
+                    <span className="text-lg leading-tight font-bold text-ink">
+                      <MetricValue metric={metric} value={view.summary[metric]} />
+                    </span>
                     <Delta
                       value={view.summary[metric] - average}
                       digits={definition.digits}
@@ -107,10 +113,10 @@ const Trends = ({ views }: TrendsProps) => {
               key: view.player.id,
               header: view.player.nickname,
               cells: [
-                show(view.summary[metric]),
-                show(Math.max(...trend.perMatch)),
-                show(Math.min(...trend.perMatch)),
-                show(trend.rolling.at(-1) ?? 0),
+                <MetricValue key="average" metric={metric} value={view.summary[metric]} />,
+                <MetricValue key="best" metric={metric} value={Math.max(...trend.perMatch)} />,
+                <MetricValue key="worst" metric={metric} value={Math.min(...trend.perMatch)} />,
+                <MetricValue key="last" metric={metric} value={trend.rolling.at(-1) ?? 0} />,
               ],
             }))}
           />

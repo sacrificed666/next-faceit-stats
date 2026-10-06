@@ -5,6 +5,7 @@ import { rich } from "@/shared/i18n/rich";
 import { SITE } from "@/shared/lib/site";
 import ExternalLink from "@/shared/ui/ExternalLink/ExternalLink";
 
+// The year for the copyright line, cached for a day
 const currentYear = async (): Promise<number> => {
   "use cache";
   cacheLife("days");
@@ -15,6 +16,7 @@ interface FooterProps {
   i18n: I18n;
 }
 
+// Author, version, data source and source code
 const Footer = async ({ i18n: { t } }: FooterProps) => {
   const year = await currentYear();
   const link = "min-h-6 text-ink underline decoration-line-strong underline-offset-4 hover:text-accent-text";

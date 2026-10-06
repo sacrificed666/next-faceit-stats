@@ -8,6 +8,7 @@ interface RelativeTimeProps {
   className?: string;
 }
 
+// How long ago something happened, with the exact time on hover
 const RelativeTime = ({ timestamp, className }: RelativeTimeProps) => {
   const { format } = useI18n();
   const now = useNow();

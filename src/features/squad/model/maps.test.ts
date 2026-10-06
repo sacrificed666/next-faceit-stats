@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { mapId, mapKey, mapName } from "./maps";
+import { mapId, mapImages, mapKey, mapName } from "./maps";
 
 describe("maps", () => {
   it("uses the official names of known maps", () => {
@@ -18,5 +18,26 @@ describe("maps", () => {
     expect(mapKey("Dust2")).toBe("de_dust2");
     expect(mapKey("Mirage")).toBe("de_mirage");
     expect(mapKey("Poseidon")).toBe("de_poseidon");
+  });
+});
+
+const segment = (map: string, image: string | null) => ({
+  map,
+  image,
+  matches: 1,
+  winRate: 50,
+  kd: 1,
+  adr: null,
+  hsPercent: 40,
+});
+
+describe("mapImages", () => {
+  it("takes the first picture of every map from the squad's lifetime stats", () => {
+    expect(
+      mapImages([
+        { maps: [segment("de_mirage", "a.jpg"), segment("de_nuke", null)] },
+        { maps: [segment("de_mirage", "b.jpg"), segment("de_nuke", "c.jpg")] },
+      ]),
+    ).toEqual({ de_mirage: "a.jpg", de_nuke: "c.jpg" });
   });
 });

@@ -4,13 +4,15 @@ import { useState } from "react";
 
 import type { SquadMate } from "@/features/player/model/profile";
 import { mapName } from "@/features/squad/model/maps";
+import type { MatchMetricKey } from "@/features/squad/model/metrics";
 import type { PlayerView } from "@/features/squad/model/squad";
 import type { Match } from "@/features/squad/model/types";
+import MapThumb from "@/features/squad/ui/MapThumb/MapThumb";
+import MetricValue from "@/features/squad/ui/MetricValue/MetricValue";
 import ResultBadge from "@/features/squad/ui/ResultBadge/ResultBadge";
 import { compareBy, useSort } from "@/shared/hooks/useSort";
 import type { MessageKey, Translate } from "@/shared/i18n/translate";
 import { useI18n } from "@/shared/i18n/useI18n";
-import type { Formatter } from "@/shared/lib/format";
 import { faceitMatchUrl } from "@/shared/lib/urls";
 import Avatar from "@/shared/ui/Avatar/Avatar";
 import EmptyState from "@/shared/ui/EmptyState/EmptyState";
@@ -21,7 +23,7 @@ import SegmentedControl from "@/shared/ui/SegmentedControl/SegmentedControl";
 import SortHeader from "@/shared/ui/SortHeader/SortHeader";
 
 type ResultFilter = "all" | "wins" | "losses";
-type SortKey = "date" | "kills" | "kd" | "kr" | "adr" | "hsPercent";
+type SortKey = "date" | "kills" | MatchMetricKey;
 
 const RESULTS: ReadonlyArray<{ value: ResultFilter; label: MessageKey }> = [
   { value: "all", label: "history.all" },
@@ -33,32 +35,20 @@ const COLUMNS: ReadonlyArray<{
   key: Exclude<SortKey, "date">;
   label: MessageKey;
   title: MessageKey;
-  format: (format: Formatter, match: Match) => string;
+  digits?: number;
 }> = [
-  {
-    key: "kills",
-    label: "metric.kills",
-    title: "metric.kills.name",
-    format: (format, match) => format.integer(match.kills),
-  },
-  { key: "kd", label: "metric.kd", title: "metric.kd.name", format: (format, match) => format.decimal(match.kd, 2) },
-  { key: "kr", label: "metric.kr", title: "metric.kr.name", format: (format, match) => format.decimal(match.kr, 2) },
-  {
-    key: "adr",
-    label: "metric.adr",
-    title: "metric.adr.name",
-    format: (format, match) => format.decimal(match.adr, 1),
-  },
-  {
-    key: "hsPercent",
-    label: "metric.hsPercent",
-    title: "metric.hsPercent.name",
-    format: (format, match) => format.percent(match.hsPercent, 0),
-  },
+  { key: "rating", label: "metric.rating", title: "metric.rating.name" },
+  { key: "kills", label: "metric.kills", title: "metric.kills.name" },
+  { key: "kd", label: "metric.kd", title: "metric.kd.name" },
+  { key: "kr", label: "metric.kr", title: "metric.kr.name" },
+  { key: "adr", label: "metric.adr", title: "metric.adr.name" },
+  { key: "hsPercent", label: "metric.hsPercent", title: "metric.hsPercent.name", digits: 0 },
 ];
 
+// The number a column sorts by
 const sortValue = (match: Match, key: SortKey): number => (key === "date" ? match.finishedAt : match[key]);
 
+// Badges for the aces, 4K and 3K rounds of one match
 const multiKills = (match: Match, t: Translate): string[] => {
   const badges: string[] = [];
   if (match.pentaKills > 0) {
@@ -75,6 +65,7 @@ interface MatchHistoryProps {
   mates: ReadonlyMap<string, readonly string[]>;
 }
 
+// Every match in the range as a sortable table, filtered by result and map
 const MatchHistory = ({ view, squad, mates }: MatchHistoryProps) => {
   const { t, format } = useI18n();
   const [result, setResult] = useState<ResultFilter>("all");
@@ -120,7 +111,7 @@ const MatchHistory = ({ view, squad, mates }: MatchHistoryProps) => {
         {rows.length === 0 ? (
           <EmptyState icon="list" title={t("history.empty")} />
         ) : (
-          <table className="w-full min-w-[60rem] text-sm">
+          <table className="w-full min-w-[64rem] text-sm">
             <caption className="sr-only">
               {t("history.caption", {
                 player: view.player.nickname,
@@ -177,9 +168,16 @@ const MatchHistory = ({ view, squad, mates }: MatchHistoryProps) => {
                       scope="row"
                       className="sticky left-0 z-10 bg-surface px-3 py-2.5 text-left font-normal group-hover:bg-[color-mix(in_oklab,var(--surface),var(--ink)_4%)]"
                     >
-                      <span className="flex flex-col">
-                        <span className="font-semibold text-ink">{mapName(match.map)}</span>
-                        <LocalDate timestamp={match.finishedAt} format="datetime" className="text-xs text-ink-muted" />
+                      <span className="flex items-center gap-3">
+                        <MapThumb map={match.map} />
+                        <span className="flex flex-col">
+                          <span className="font-semibold text-ink">{mapName(match.map)}</span>
+                          <LocalDate
+                            timestamp={match.finishedAt}
+                            format="datetime"
+                            className="text-xs whitespace-nowrap text-ink-muted"
+                          />
+                        </span>
                       </span>
                     </th>
                     <td className="px-3 py-2.5">
@@ -209,7 +207,11 @@ const MatchHistory = ({ view, squad, mates }: MatchHistoryProps) => {
                         key={column.key}
                         className={`px-3 py-2.5 text-right font-semibold ${sort.key === column.key ? "text-ink" : "text-ink-secondary"}`}
                       >
-                        {column.format(format, match)}
+                        {column.key === "kills" ? (
+                          format.integer(match.kills)
+                        ) : (
+                          <MetricValue metric={column.key} value={match[column.key]} digits={column.digits} />
+                        )}
                       </td>
                     ))}
                     <td className="px-3 py-2.5">

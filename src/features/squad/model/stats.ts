@@ -13,9 +13,12 @@ export interface Summary {
   deaths: number;
   assists: number;
   mvps: number;
+  doubleKills: number;
   tripleKills: number;
   quadroKills: number;
   pentaKills: number;
+  rating: number;
+  survival: number;
 }
 
 export const EMPTY_SUMMARY: Summary = {
@@ -31,17 +34,23 @@ export const EMPTY_SUMMARY: Summary = {
   deaths: 0,
   assists: 0,
   mvps: 0,
+  doubleKills: 0,
   tripleKills: 0,
   quadroKills: 0,
   pentaKills: 0,
+  rating: 0,
+  survival: 0,
 };
 
+// The mean of a number over matches
 const average = (matches: readonly Match[], pick: (match: Match) => number): number =>
   matches.reduce((sum, match) => sum + pick(match), 0) / matches.length;
 
+// The sum of a number over matches
 const total = (matches: readonly Match[], pick: (match: Match) => number): number =>
   matches.reduce((sum, match) => sum + pick(match), 0);
 
+// Averages and totals of a list of matches
 export const summarize = (matches: readonly Match[]): Summary => {
   if (matches.length === 0) return EMPTY_SUMMARY;
   const wins = matches.filter((match) => match.won).length;
@@ -58,12 +67,16 @@ export const summarize = (matches: readonly Match[]): Summary => {
     deaths: average(matches, (match) => match.deaths),
     assists: average(matches, (match) => match.assists),
     mvps: total(matches, (match) => match.mvps),
+    doubleKills: total(matches, (match) => match.doubleKills),
     tripleKills: total(matches, (match) => match.tripleKills),
     quadroKills: total(matches, (match) => match.quadroKills),
     pentaKills: total(matches, (match) => match.pentaKills),
+    rating: average(matches, (match) => match.rating),
+    survival: average(matches, (match) => match.survival),
   };
 };
 
+// Places for a list of values, highest first; ties share a place
 export const rank = (entries: ReadonlyArray<{ id: string; value: number }>): Map<string, number> => {
   const sorted = entries.toSorted((a, b) => b.value - a.value);
   const ranks = new Map<string, number>();
@@ -77,6 +90,7 @@ export const rank = (entries: ReadonlyArray<{ id: string; value: number }>): Map
   return ranks;
 };
 
+// The average of every value with the ones before it in a window
 export const rollingAverage = (values: readonly number[], window: number): number[] => {
   const result: number[] = [];
   let sum = 0;
