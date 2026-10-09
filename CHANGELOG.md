@@ -28,6 +28,7 @@ The first release.
 - 🛡️ A server-only API key, validated FACEIT data, flags served by the app itself and strict security headers.
 - 🧪 Unit tests, end-to-end tests against a mock FACEIT API, axe checks and a Lighthouse budget in CI.
 - 🐳 Docker images for development, staging and production: a multi-stage Dockerfile, a Compose overlay per environment, a non-root standalone server and environment files passed to the build as secrets.
+- 🛠️ A Makefile with a coloured, grouped `make help`: setup that creates `.env` from `.env.example`, the dev server, checks, end-to-end tests and every Docker environment.
 
 [Unreleased]: https://github.com/sacrificed666/faceit-stats/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/sacrificed666/faceit-stats/releases/tag/v1.0.0

@@ -83,6 +83,27 @@ The same dev server runs in a container on port 3000 with the variables from `.e
 > [!TIP]
 > Install the browser for the end-to-end tests once with `npx playwright install chromium`.
 
+## 🛠️ make
+
+Every common task has a short `make` command with a coloured summary of what it is doing:
+
+| Command                                              | What it does                                                                                     |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `make` or `make help`                                | 📖 Every command, grouped and coloured                                                           |
+| `make setup`                                         | 🧰 Installs the packages, creates `.env` from `.env.example` and installs Chromium for the tests |
+| `make env`                                           | 🔐 Creates the env file from `.env.example` if it is missing, never overwrites one               |
+| `make doctor`                                        | 🩺 Checks Node.js, npm, Docker, the packages and the env file                                    |
+| `make dev`                                           | 🚀 Starts the dev server                                                                         |
+| `make dev-mock`                                      | 🧪 Starts the dev server against the mock FACEIT API, so no key is needed                        |
+| `make check` / `make ci`                             | ✅ The checks before pushing / everything CI runs, including the build and the end-to-end tests  |
+| `make fix`                                           | 🪄 Applies the lint fixes and formats every file                                                 |
+| `make up ENV=…`                                      | 🐳 Starts `development` (hot reload, the default), `staging` or `production` in Docker           |
+| `make logs` · `make ps` · `make shell` · `make down` | 📜 Follows, lists, enters or stops the containers of `ENV`                                       |
+| `make clean` · `make reset`                          | 🧹 Removes build output and reports / also reinstalls the packages                               |
+
+> [!NOTE]
+> The Makefile needs GNU Make and Bash, which macOS and Linux ship with; on Windows use WSL or the npm scripts above. Colours switch off in pipes and with `NO_COLOR=1`.
+
 ## 🗂️ Project layout
 
 ```text
@@ -125,6 +146,7 @@ faceit-stats/
 │   ├── test/                        Test setup, factories and FACEIT fixtures
 │   └── types/                       Global type augmentations
 ├── CHANGELOG.md                     Every release, newest first
+├── Makefile                         make help, setup, dev, checks and Docker commands
 ├── compose.yaml                     The Docker Compose service shared by every environment
 ├── next.config.ts                   Cache profiles, typed routes, images and security headers
 ├── playwright.config.ts             Browsers, the mock API and the production server for end-to-end tests

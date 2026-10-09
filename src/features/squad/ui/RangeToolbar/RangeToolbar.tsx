@@ -106,7 +106,7 @@ const RangeToolbar = ({ sections = NO_SECTIONS }: RangeToolbarProps) => {
                     <a
                       href={`#${section.id}`}
                       onClick={() => document.getElementById(menuId)?.hidePopover()}
-                      className="block rounded-lg px-3 py-2.5 text-sm font-semibold text-ink-secondary transition-colors hover:bg-hover hover:text-ink"
+                      className="block rounded-[1.125rem] px-3 py-2.5 text-sm font-semibold text-ink-secondary transition-colors hover:bg-hover hover:text-ink"
                     >
                       {section.label}
                     </a>

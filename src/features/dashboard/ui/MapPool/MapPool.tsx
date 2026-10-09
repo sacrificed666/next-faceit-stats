@@ -116,7 +116,7 @@ const MapPool = ({ views }: MapPoolProps) => {
         </div>
       ) : (
         <div className="panel flex flex-col gap-4 p-2 sm:p-3">
-          <div className="scroll-edges scrollbar-thin relative overflow-x-auto">
+          <div className="scroll-edges scrollbar-thin relative overflow-x-auto rounded-2xl sm:rounded-xl">
             <table className="w-full border-separate border-spacing-1 text-sm">
               <caption className="sr-only">{t("maps.caption", { metric: t(definition.label) })}</caption>
               <thead>

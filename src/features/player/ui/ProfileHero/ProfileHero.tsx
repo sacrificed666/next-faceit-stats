@@ -91,7 +91,7 @@ const ProfileHero = ({ player }: ProfileHeroProps) => {
             </Link>
           </div>
         </div>
-        <div className="flex w-full flex-col gap-3 rounded-2xl border border-line bg-surface/85 p-4 backdrop-blur reduced:bg-surface reduced:backdrop-blur-none lg:w-80">
+        <div className="flex w-full flex-col gap-3 rounded-lg border border-line sm:rounded-2xl bg-surface/85 p-4 backdrop-blur reduced:bg-surface reduced:backdrop-blur-none lg:w-80">
           <div className="flex items-center gap-3">
             <LevelBadge level={player.level} size={52} />
             <div>

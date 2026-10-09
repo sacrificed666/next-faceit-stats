@@ -11,7 +11,7 @@ interface AvatarProps {
   eager?: boolean;
 }
 
-// A round avatar that falls back to the initial when the image fails
+// A round avatar that never shrinks and falls back to the initial
 const Avatar = ({ src, name, size = 40, className = "", eager = false }: AvatarProps) => {
   const [failed, setFailed] = useState<string | null>(null);
   const style = { width: size, height: size };
@@ -20,7 +20,7 @@ const Avatar = ({ src, name, size = 40, className = "", eager = false }: AvatarP
       <span
         aria-hidden="true"
         style={{ ...style, fontSize: Math.round(size * 0.42) }}
-        className={`inline-flex shrink-0 items-center justify-center rounded-full bg-inset font-bold text-ink-secondary ring-1 ring-line ${className}`}
+        className={`inline-flex aspect-square max-w-none shrink-0 items-center justify-center rounded-full bg-inset font-bold text-ink-secondary ring-1 ring-line ${className}`}
       >
         {name.charAt(0).toUpperCase()}
       </span>
@@ -36,7 +36,7 @@ const Avatar = ({ src, name, size = 40, className = "", eager = false }: AvatarP
       loading={eager ? "eager" : "lazy"}
       onError={() => setFailed(src)}
       style={style}
-      className={`shrink-0 rounded-full bg-inset object-cover ring-1 ring-line ${className}`}
+      className={`aspect-square max-w-none shrink-0 rounded-full bg-inset object-cover ring-1 ring-line ${className}`}
     />
   );
 };

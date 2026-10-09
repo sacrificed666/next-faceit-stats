@@ -195,7 +195,7 @@ const MatchHistory = ({ view, squad, mates }: MatchHistoryProps) => {
                       <span className="flex items-center gap-2">
                         <ResultBadge won={match.won} score={`${match.teamScore}:${match.opponentScore}`} />
                         {team.length > 0 ? (
-                          <span className="flex -space-x-1.5" title={together}>
+                          <span className="flex shrink-0 -space-x-1.5" title={together}>
                             {team.map((mate) => (
                               <Avatar
                                 key={mate.id}

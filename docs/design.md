@@ -7,6 +7,7 @@
 - 🧑 **Identity through faces**: players are recognised by their avatar and nickname, never by a colour, which keeps the data colours free for meaning.
 - 🪶 **Quiet chrome**: hairline borders and gridlines, soft shadows, no decoration that is not data.
 - 📱 **One layout for every screen**: the same markup reflows from phones to wide screens; nothing is duplicated for mobile.
+- ⭕ **Concentric corners**: an inner radius is the outer radius minus the padding between them. Panels are rounded 1.5 rem and what sits 1 rem inside them 0.5 rem; menu items 6 px inside a panel are rounded 1.125 rem; the settings popover is rounded 0.75 rem plus the 1.1 rem around its language rows. Round avatars and buttons are left as circles.
 
 ## 🔤 Typography
 

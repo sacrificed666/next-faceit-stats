@@ -71,7 +71,7 @@ const Roster = ({ views }: RosterProps) => {
                     </div>
                     <LevelProgress elo={player.elo} />
                   </div>
-                  <dl className="grid grid-cols-4 gap-1 rounded-xl bg-inset px-1 py-1.5 text-center">
+                  <dl className="grid grid-cols-4 gap-1 rounded-lg bg-inset px-1 py-1.5 text-center">
                     {CARD_METRICS.map((key) => (
                       <div key={key} className="min-w-0">
                         <dt className="truncate text-[0.6875rem] font-semibold text-ink-muted">

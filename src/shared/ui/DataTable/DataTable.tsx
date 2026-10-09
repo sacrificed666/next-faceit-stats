@@ -30,7 +30,7 @@ const alignment = (column: DataTableColumn) => (column.align === "start" ? "text
 const DataTable = ({ caption, columns, rows }: DataTableProps) => {
   const { t } = useI18n();
   return (
-    <details className="group overflow-hidden rounded-xl border border-line bg-surface">
+    <details className="group overflow-hidden rounded-lg border border-line bg-surface">
       <summary className="flex cursor-pointer list-none items-center gap-2 px-4 py-2.5 text-sm font-semibold text-ink-secondary transition-colors select-none hover:text-ink [&::-webkit-details-marker]:hidden">
         <Icon name="table" size={16} />
         <span className="group-open:hidden">{t("table.show")}</span>

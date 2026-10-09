@@ -72,6 +72,14 @@ cp .env.example .env
 npm run dev
 ```
 
+🛠️ Or with `make`, which lists every command with `make help`:
+
+```bash
+make setup                   # packages, .env from .env.example and the test browser
+make dev                     # the dev server
+make dev-mock                # the dev server against the mock API, no key needed
+```
+
 Fill in `FACEIT_API_KEY` and `FACEIT_PLAYERS` in `.env`, then open `http://localhost:3000`, which redirects to your browser's language.
 
 > [!IMPORTANT]
@@ -86,7 +94,7 @@ npm run build && npm start   # production build
 🐳 The same app runs in Docker, with an overlay for every environment, see [Deployment](./docs/deployment.md#-docker):
 
 ```bash
-docker compose -f compose.yaml -f docker/development.yaml up --watch
+docker compose -f compose.yaml -f docker/development.yaml up --watch   # or: make up
 ```
 
 ## 📚 Documentation

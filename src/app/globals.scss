@@ -208,10 +208,10 @@
 
 // Panels, heatmap cells, meters and the settings popover
 @layer components {
-  // The card surface used by every block
+  // The card surface of every block; what sits 1rem inside is rounded 0.5rem
   .panel {
     border: 1px solid var(--line);
-    border-radius: 1.25rem;
+    border-radius: 1.5rem;
     background-color: var(--surface);
     box-shadow: var(--shadow);
   }
@@ -348,9 +348,10 @@
     }
   }
 
-  // The settings popover
+  // The settings popover: language rows 0.75rem plus the 1.1rem padding
   .settings-panel {
     position: fixed;
+    border-radius: calc(0.75rem + 1.1rem);
     inset: 4.5rem 1rem auto auto;
     inline-size: min(22rem, calc(100vw - 2rem));
     max-block-size: calc(100dvh - 6rem);
