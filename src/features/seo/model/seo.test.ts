@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { makePlayer } from "@/test/factories";
 import { i18nFor } from "@/test/render";
 
-import { alternates, playerSchema, serializeJsonLd, social, squadSchema } from "./seo";
+import { alternates, compareSchema, playerSchema, serializeJsonLd, social, squadSchema } from "./seo";
 
 const base = new URL("https://stats.example.com");
 
@@ -53,6 +53,21 @@ describe("structured data", () => {
           },
         },
         { "@type": "BreadcrumbList" },
+      ],
+    });
+  });
+
+  it("describes the compare page with breadcrumbs back to the squad", () => {
+    expect(compareSchema(base, i18nFor("en"))).toMatchObject({
+      "@graph": [
+        { "@type": "WebPage", url: "https://stats.example.com/en/compare" },
+        {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { position: 1, item: "https://stats.example.com/en" },
+            { position: 2, item: "https://stats.example.com/en/compare" },
+          ],
+        },
       ],
     });
   });

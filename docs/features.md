@@ -10,7 +10,7 @@ Every page shares one header with the logo, the **Squad** and **Compare** links 
 | 👤 `/en/players/<nickname>`           | One player in depth, compared with the rest of the squad |
 | ⚔️ `/en/compare?a=<first>&b=<second>` | Two players head to head                                 |
 
-Every address starts with a language, see [Localization](./i18n.md). Below the page title, a floating toolbar stays at the top of the screen while you scroll. It holds the **range** and, on wide screens, links to every section.
+Every address starts with a language, see [Localization](./i18n.md). Below the page title, a floating toolbar stays at the top of the screen while you scroll. It holds the **range** and links to every section: in a row on wide screens, behind a **Sections** button on smaller ones.
 
 ## 🎚️ Range
 
@@ -79,7 +79,7 @@ The latest matches of the whole squad in one table, newest first, with columns f
 
 - 🫂 A match that several squad members played is shown **once** and marked **Together**: the map, the result and the match room span a row for everyone who played.
 - ⚔️ When squad members met on opposite teams, each side gets its own result and the match is marked **Squad vs squad**.
-- 🔗 Every match has the map with its picture, how long ago it was and a link to the FACEIT match room; on phones the table scrolls sideways with the map column pinned.
+- 🔗 Every match has the map with its picture, how long ago it was and a link to the FACEIT match room; on phones each player shows K-D-A and the rating under the name, so the table fits the screen.
 - ➕ Eight matches are shown at first, **Show more matches** adds eight more.
 
 ![Recent matches, with matches played together shown once with both players](./images/activity-light.png)
@@ -100,7 +100,7 @@ Horizontal bars for one metric at a time (Rating, K/D, K/R, ADR, HS % or Win %),
 
 ### 📈 Trends
 
-Small multiples: one chart per player, four in a row on wide screens, all on the same scale and ordered from the best average down, so the shapes can be compared directly. Each chart shows the value of every match (Rating, K/D, K/R, ADR or HS %) and a **five-match rolling average**, with the squad average as a dashed reference. Hover, tap or use the arrow keys to read a single match, and open **Show data table** for the highlighted numbers: every player with their avatar, the average, the best and worst match and the last five, under a header that stays in view while the table scrolls.
+Small multiples: one chart per player, four in a row on wide screens, all on the same scale and ordered from the best average down, so the shapes can be compared directly. Each chart shows the value of every match (Rating, K/D, K/R, ADR or HS %) and a **five-match rolling average**, with the squad average as a dashed reference. Hover, tap or use the arrow keys to read a single match in the readout above the chart, and open **Show data table** for the highlighted numbers: every player with their avatar, the average, the best and worst match and the last five, under a header that stays in view while the table scrolls.
 
 ![Trend charts for every player on a shared scale](./images/trends-dark.png)
 

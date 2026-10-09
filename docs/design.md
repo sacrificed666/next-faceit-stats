@@ -75,7 +75,8 @@ Rules that keep the charts honest and readable:
 - 🎯 No colour per player. Ten players would need ten hues, and past eight they become indistinguishable, especially with colour blindness.
 - 📏 Bars are at most 20 px thick with a rounded data end and a square baseline.
 - ✏️ Lines are 2 px with round joins; gridlines are solid 1 px hairlines.
-- 🏷️ Values are written as text next to every bar and inside every heatmap cell; the tooltip only adds detail.
+- 🏷️ Values are written as text next to every bar and inside every heatmap cell; the readout only adds detail.
+- 🔍 A chart's readout floats above the plot, never over the lines it describes; a tap keeps it until the next tap elsewhere.
 - 📋 Every chart has a data table or an equivalent text alternative.
 - 🧮 Small samples are pale: a heatmap cell reaches its full colour only from five matches on, so one lucky game does not look like a strength.
 - 🚦 Values are coloured by fixed thresholds per metric, the same in every view, so a green K/D on a card is green in the leaderboard, the match history and the data tables too. The thresholds live next to the metric definitions; see [Features](./features.md#-highlighted-numbers).
@@ -110,7 +111,7 @@ The numbers are OKLab distances between the two poles after simulating each kind
 | `LevelBadge`               | FACEIT-style ring with the level number in the level colour |
 | `LevelProgress`, `Meter`   | Native `<meter>` styled with tokens                         |
 | `BarList`                  | Ranked bars with an optional reference line                 |
-| `LineChart`                | SVG line chart with crosshair, tooltip and slider           |
+| `LineChart`                | SVG line chart with crosshair, readout and slider           |
 | `DataTable`                | Collapsible table behind every chart, header kept in view   |
 | `Select`                   | Native select as a pill with a chevron and a picture        |
 | `ResultBadge`, `FormGuide` | W/L badges and the last results                             |
@@ -125,10 +126,13 @@ The numbers are OKLab distances between the two poles after simulating each kind
 ## 📐 Layout
 
 - 📏 Content is centred with a maximum width of 80 rem and 16-32 px side padding.
-- 🧱 Grids step up from one column on phones to two, three and four columns, and five for the player cards on very wide screens.
+- 🧱 Card grids pick their columns from the number of cards with `fitGrid()`, so ten players fill two rows of five instead of leaving two holes in a row of four. When a last row is short, its cards share the row evenly.
+- 🔢 The five overview numbers stay in one row on wide screens, show three and two on tablets, and on phones the average ELO leads over two pairs.
 - 🗜️ Blocks stay as tall as their content: lists share one panel with dividers instead of a card per row, side-by-side panels align to the top instead of stretching, and empty sections show one low line instead of a tall placeholder.
-- 📊 Wide tables scroll sideways inside their card with the first column pinned; the page itself never scrolls horizontally.
-- 📌 The range toolbar is a floating pill that sticks to the top while scrolling; days and matches are two clusters of one radio group, and on screens narrower than about 360 px the matches move to a second row.
+- 📊 Wide tables scroll sideways inside their card with the first column pinned, and a soft shadow at the edge shows there is more to see; the page itself never scrolls horizontally. On phones the recent matches fold K-D-A and the rating under each player instead, so the table fits without scrolling.
+- 📌 The range toolbar is a floating pill that sticks to the top while scrolling; days and matches are two clusters of one radio group that fit one row down to 360 px. On wide screens it links to every section; narrower screens get a **Sections** button that opens the same links as a menu.
+- 🎚️ On phones a segmented control takes the full width and shares it between its options, so six metrics fit without scrolling.
+- 🪪 On phones the player avatar sits beside the name, and the compare page stacks the two pickers and shows the two players facing each other.
 - 🧭 On phones the navigation moves to its own row under the logo. The settings panel opens under its button with CSS anchor positioning where supported, and as a bottom sheet below 640 px.
 - 🌍 Long words in German, Dutch or Polish wrap instead of widening the page; every page is checked for sideways scrolling at 320 px, the width of a 1280 px window zoomed to 400 %.
 

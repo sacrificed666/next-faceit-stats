@@ -275,13 +275,20 @@ const Contender = ({ view, align }: { view: PlayerView; align: "start" | "end" }
   const { t, format } = useI18n();
   const { player } = view;
   return (
-    <div className={`flex min-w-0 flex-col gap-3 ${align === "end" ? "sm:items-end sm:text-right" : ""}`}>
-      <Avatar src={player.avatar} name={player.nickname} size={72} className="ring-4 ring-accent-soft" />
-      <div className={`flex min-w-0 flex-col gap-1 ${align === "end" ? "sm:items-end" : ""}`}>
-        <PlayerName player={player} avatar={false} flag className="text-lg" />
-        <p className={`flex items-center gap-2 ${align === "end" ? "sm:flex-row-reverse" : ""}`}>
+    <div className={`flex min-w-0 flex-col gap-3 ${align === "end" ? "items-end text-right" : ""}`}>
+      <Avatar
+        src={player.avatar}
+        name={player.nickname}
+        size={72}
+        className="ring-4 ring-accent-soft max-sm:size-14!"
+      />
+      <div className={`flex min-w-0 max-w-full flex-col gap-1 ${align === "end" ? "items-end" : ""}`}>
+        <PlayerName player={player} avatar={false} flag className="max-w-full text-base sm:text-lg" />
+        <p className={`flex items-center gap-2 ${align === "end" ? "flex-row-reverse" : ""}`}>
           <LevelBadge level={player.level} size={30} />
-          <span className="text-2xl font-extrabold tracking-tight text-ink">{format.integer(player.elo)}</span>
+          <span className="text-xl font-extrabold tracking-tight text-ink sm:text-2xl">
+            {format.integer(player.elo)}
+          </span>
           <span className="text-xs font-semibold text-ink-muted">{t("metric.elo")}</span>
         </p>
       </div>
@@ -347,7 +354,8 @@ const ComparePage = ({ players, updatedAt, mapImages }: ComparePageProps) => {
         <RangeToolbar sections={sections} />
 
         <section aria-label={t("compare.pick")} className="panel flex flex-col gap-6 p-5 sm:p-8">
-          <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-end gap-3 sm:gap-6">
+          {/* Phones stack the pickers so whole nicknames fit */}
+          <div className="grid grid-cols-1 items-end gap-3 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:gap-6">
             <Picker
               label={t("compare.first")}
               value={first.nickname}
@@ -357,9 +365,9 @@ const ComparePage = ({ players, updatedAt, mapImages }: ComparePageProps) => {
             <button
               type="button"
               onClick={() => setSearchParams({ a: second.nickname, b: first.nickname })}
-              className="inline-flex size-10 items-center justify-center rounded-full border border-line-strong text-ink-secondary transition-colors hover:border-accent hover:text-accent-text"
+              className="inline-flex size-10 items-center justify-center justify-self-center rounded-full border border-line-strong text-ink-secondary transition-colors hover:border-accent hover:text-accent-text"
             >
-              <Icon name="swap" size={18} />
+              <Icon name="swap" size={18} className="max-sm:rotate-90" />
               <span className="sr-only">{t("compare.swap")}</span>
             </button>
             <Picker
@@ -369,7 +377,8 @@ const ComparePage = ({ players, updatedAt, mapImages }: ComparePageProps) => {
               onChange={(value) => choose("b", value)}
             />
           </div>
-          <div className="grid gap-6 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:items-center">
+          {/* The two players face each other on every screen, like a scoreboard */}
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:items-center sm:gap-6">
             <Contender view={a} align="start" />
             <span
               aria-hidden="true"
@@ -379,7 +388,7 @@ const ComparePage = ({ players, updatedAt, mapImages }: ComparePageProps) => {
             </span>
             <Contender view={b} align="end" />
           </div>
-          <dl className="grid gap-3 border-t border-line pt-5 text-sm sm:grid-cols-2">
+          <dl className="grid grid-cols-2 gap-3 border-t border-line pt-5 text-sm">
             <div className="flex flex-col gap-0.5">
               <dt className="text-xs font-semibold text-ink-muted">{t("compare.together")}</dt>
               <dd className="font-semibold text-ink">
@@ -391,7 +400,7 @@ const ComparePage = ({ players, updatedAt, mapImages }: ComparePageProps) => {
                   : t("compare.never")}
               </dd>
             </div>
-            <div className="flex flex-col gap-0.5 sm:items-end sm:text-right">
+            <div className="flex flex-col items-end gap-0.5 text-right">
               <dt className="text-xs font-semibold text-ink-muted">{t("compare.against")}</dt>
               <dd className="font-semibold text-ink">
                 {rival.against.matches > 0

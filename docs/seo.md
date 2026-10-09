@@ -58,6 +58,7 @@ Every page includes JSON-LD in its language (`inLanguage`), escaped so that a ni
 | ----------------- | ---------------------------------------------------------------------------------------------------------------- |
 | 🧑‍🤝‍🧑 Squad overview | `WebSite` and an `ItemList` of player pages                                                                      |
 | 👤 Player page    | `ProfilePage` with a `Person` (image, nationality and `sameAs` links to FACEIT and Steam) and a `BreadcrumbList` |
+| ⚔️ Compare        | `WebPage` that belongs to the site and a `BreadcrumbList` back to the squad                                      |
 
 > [!TIP]
 > Validate changes with the [Rich Results Test](https://search.google.com/test/rich-results) or the [Schema Markup Validator](https://validator.schema.org/), and check share cards with the preview of the network you post to.

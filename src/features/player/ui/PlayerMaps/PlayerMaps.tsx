@@ -4,6 +4,7 @@ import { mapName } from "@/features/squad/model/maps";
 import { mapCells, type PlayerView } from "@/features/squad/model/squad";
 import MetricValue from "@/features/squad/ui/MetricValue/MetricValue";
 import { useI18n } from "@/shared/i18n/useI18n";
+import { fitGrid } from "@/shared/lib/fitGrid";
 import BackdropImage from "@/shared/ui/BackdropImage/BackdropImage";
 import EmptyState from "@/shared/ui/EmptyState/EmptyState";
 import Section from "@/shared/ui/Section/Section";
@@ -20,6 +21,7 @@ const PlayerMaps = ({ view }: PlayerMapsProps) => {
   );
   const segments = new Map(view.player.maps.map((segment) => [segment.map, segment]));
   const columns = [t("metric.matches"), t("metric.winRate"), t("metric.kd"), t("metric.adr")];
+  const grid = fitGrid(cells.length, { sm: [2], lg: [3, 4], xl: [4] });
 
   return (
     <Section id="maps" title={t("playerMaps.title")} description={t("playerMaps.description")}>
@@ -28,11 +30,11 @@ const PlayerMaps = ({ view }: PlayerMapsProps) => {
           <EmptyState icon="map" title={t("empty.range")} />
         </div>
       ) : (
-        <ul className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
-          {cells.map(([map, summary]) => {
+        <ul className="fit-grid gap-3 sm:gap-4" style={grid.list}>
+          {cells.map(([map, summary], index) => {
             const segment = segments.get(map);
             return (
-              <li key={map} className="panel flex flex-col overflow-hidden">
+              <li key={map} className="panel flex flex-col overflow-hidden" style={grid.item(index)}>
                 <div className="relative isolate flex h-16 items-end bg-inset px-4 pb-2">
                   <BackdropImage
                     src={segment?.image ?? null}

@@ -34,15 +34,19 @@ const SegmentedControl = <T extends string | number>({
 }: SegmentedControlProps<T>) => {
   const name = useId();
   const descriptionId = useId();
-  const pad = size === "sm" ? "px-2 py-1 text-xs sm:px-2.5" : "px-3 py-1.5 text-sm";
+  const pad = size === "sm" ? "px-2 py-1 text-xs sm:px-2.5" : "px-1.5 py-1.5 text-[0.8125rem] sm:px-3 sm:text-sm";
+  // On phones the pills share the full width, so six fit without scrolling
   return (
-    <fieldset className={`min-w-0 ${className}`} aria-describedby={description ? descriptionId : undefined}>
+    <fieldset
+      className={`min-w-0 max-sm:w-full ${className}`}
+      aria-describedby={description ? descriptionId : undefined}
+    >
       <legend className={hideLabel ? "sr-only" : "mb-1.5 text-xs font-semibold text-ink-muted"}>{label}</legend>
       <div className="scrollbar-thin relative flex max-w-full gap-0.5 overflow-x-auto rounded-full bg-inset p-1">
         {options.map((option) => (
           <label
             key={String(option.value)}
-            className={fill ? "relative flex-1 text-center" : "relative shrink-0"}
+            className={fill ? "relative flex-1 text-center" : "relative shrink-0 max-sm:flex-1 max-sm:text-center"}
             title={option.title}
           >
             <input

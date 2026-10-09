@@ -23,8 +23,8 @@ const PAGE = 8;
 
 const STATS = ["rating", "kd", "adr"] as const;
 
-const HEAD = "px-3 py-2.5 text-xs font-semibold text-ink-muted";
-const CELL = "px-3 py-2";
+const HEAD = "px-2 py-2.5 text-xs font-semibold text-ink-muted sm:px-3";
+const CELL = "px-2 py-2 sm:px-3";
 
 interface MatchRowsProps {
   entry: FeedEntry;
@@ -58,12 +58,18 @@ const MatchRows = ({ entry, players }: MatchRowsProps) => {
                     {mapName(entry.map)}
                     <RelativeTime
                       timestamp={entry.finishedAt}
-                      className="text-xs font-normal whitespace-nowrap text-ink-muted"
+                      className="text-xs font-normal text-ink-muted sm:whitespace-nowrap"
                     />
                     {rivals || lines.length > 1 ? (
-                      <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-accent-soft px-1.5 py-px text-[0.6875rem] font-bold whitespace-nowrap text-accent-text">
+                      <span
+                        title={t(rivals ? "activity.squadVsSquad" : "activity.together")}
+                        className="mt-1 inline-flex items-center gap-1 rounded-full bg-accent-soft px-1.5 py-px text-[0.6875rem] font-bold whitespace-nowrap text-accent-text max-sm:py-1"
+                      >
                         <Icon name={rivals ? "swap" : "users"} size={11} />
-                        {t(rivals ? "activity.squadVsSquad" : "activity.together")}
+                        {/* Phones keep the icon and leave the words to screen readers */}
+                        <span className="max-sm:sr-only">
+                          {t(rivals ? "activity.squadVsSquad" : "activity.together")}
+                        </span>
                       </span>
                     ) : null}
                   </span>
@@ -71,24 +77,36 @@ const MatchRows = ({ entry, players }: MatchRowsProps) => {
               </th>
             ) : null}
             {opensSide ? (
-              <td rowSpan={side.players.length} className={CELL}>
+              <td rowSpan={side.players.length} className={`${CELL} max-sm:pr-0.5`}>
                 <ResultBadge won={side.won} score={`${side.teamScore}:${side.opponentScore}`} />
               </td>
             ) : null}
             <th scope="row" className={`${CELL} text-left font-normal`}>
               {player ? <PlayerName player={player} size={24} /> : null}
+              {/* Phones fold the numbers under the name instead of four more columns */}
+              <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 pl-8 text-xs whitespace-nowrap text-ink-muted tabular-nums sm:hidden">
+                <span aria-hidden="true">{t("activity.kda", kda)}</span>
+                <span className="sr-only">{t("activity.kdaSpoken", kda)}</span>
+                <span aria-hidden="true">·</span>
+                <span>
+                  {t("metric.rating")}{" "}
+                  <span className="font-semibold">
+                    <MetricValue metric="rating" value={match.rating} />
+                  </span>
+                </span>
+              </span>
             </th>
-            <td className={`${CELL} text-right whitespace-nowrap text-ink-secondary tabular-nums`}>
+            <td className={`${CELL} text-right whitespace-nowrap text-ink-secondary tabular-nums max-sm:hidden`}>
               <span aria-hidden="true">{t("activity.kda", kda)}</span>
               <span className="sr-only">{t("activity.kdaSpoken", kda)}</span>
             </td>
             {STATS.map((key) => (
-              <td key={key} className={`${CELL} text-right font-semibold text-ink tabular-nums`}>
+              <td key={key} className={`${CELL} text-right font-semibold text-ink tabular-nums max-sm:hidden`}>
                 <MetricValue metric={key} value={match[key]} />
               </td>
             ))}
             {index === 0 ? (
-              <td rowSpan={lines.length} className={`${CELL} text-right`}>
+              <td rowSpan={lines.length} className={`${CELL} text-right max-sm:pl-0`}>
                 <ExternalLink
                   href={faceitMatchUrl(entry.matchId)}
                   label={t("activity.roomFor", { map: mapName(entry.map) })}
@@ -123,8 +141,8 @@ const Activity = ({ views }: ActivityProps) => {
         </div>
       ) : (
         <div className="flex flex-col gap-3">
-          <div className="panel scrollbar-thin relative overflow-x-auto">
-            <table className="w-full min-w-[48rem] text-sm">
+          <div className="panel scroll-edges scrollbar-thin relative overflow-x-auto">
+            <table className="w-full text-sm sm:min-w-[48rem]">
               <caption className="sr-only">{t("activity.title")}</caption>
               <thead className="border-b border-line">
                 <tr>
@@ -137,13 +155,13 @@ const Activity = ({ views }: ActivityProps) => {
                   <th scope="col" className={`${HEAD} text-left`}>
                     {t("leaderboard.player")}
                   </th>
-                  <th scope="col" className={`${HEAD} text-right`}>
+                  <th scope="col" className={`${HEAD} text-right max-sm:hidden`}>
                     <abbr title={t("history.kdaName")} className="no-underline">
                       {t("history.kda")}
                     </abbr>
                   </th>
                   {STATS.map((key) => (
-                    <th key={key} scope="col" className={`${HEAD} text-right`}>
+                    <th key={key} scope="col" className={`${HEAD} text-right max-sm:hidden`}>
                       <abbr title={t(METRICS[key].name)} className="no-underline">
                         {t(METRICS[key].label)}
                       </abbr>

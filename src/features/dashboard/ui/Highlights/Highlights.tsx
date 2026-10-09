@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 import { longestWinStreak, matchRecord, mostAces, type MatchRecordKind } from "@/features/dashboard/model/records";
 import { mapName } from "@/features/squad/model/maps";
@@ -11,6 +11,7 @@ import PlayerName from "@/features/squad/ui/PlayerName/PlayerName";
 import ResultBadge from "@/features/squad/ui/ResultBadge/ResultBadge";
 import type { MessageKey } from "@/shared/i18n/translate";
 import { useI18n } from "@/shared/i18n/useI18n";
+import { fitGrid } from "@/shared/lib/fitGrid";
 import type { Formatter } from "@/shared/lib/format";
 import { faceitMatchUrl } from "@/shared/lib/urls";
 import EmptyState from "@/shared/ui/EmptyState/EmptyState";
@@ -39,14 +40,15 @@ interface RecordCardProps {
   value: string;
   player: Player;
   match?: Match;
+  style?: CSSProperties;
   children?: ReactNode;
 }
 
 // One record: what it is, the value, who set it and a link to the match room
-const RecordCard = ({ title, icon, value, player, match, children }: RecordCardProps) => {
+const RecordCard = ({ title, icon, value, player, match, style, children }: RecordCardProps) => {
   const { t } = useI18n();
   return (
-    <li className="panel flex flex-col gap-3 p-4">
+    <li className="panel flex flex-col gap-3 p-4" style={style}>
       <div className="flex items-center gap-2">
         <p className="flex min-w-0 flex-1 items-center gap-2 text-xs font-bold tracking-wide text-ink-muted uppercase">
           <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent-text">
@@ -103,6 +105,8 @@ const Highlights = ({ views }: HighlightsProps) => {
   const aces = mostAces(squad);
   const acePlayer = aces ? players.get(aces.playerId) : undefined;
   const empty = records.length === 0 && !streakPlayer && !acePlayer;
+  const count = records.length + (streak && streakPlayer ? 1 : 0) + (aces && acePlayer ? 1 : 0);
+  const grid = fitGrid(count, { sm: [2], lg: [3, 4], xl: [4] });
 
   return (
     <Section id="records" title={t("records.title")} description={t("records.description")}>
@@ -111,10 +115,11 @@ const Highlights = ({ views }: HighlightsProps) => {
           <EmptyState icon="trophy" title={t("records.empty")} />
         </div>
       ) : (
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {records.map(({ definition, record, player }) => (
+        <ul className="fit-grid gap-4" style={grid.list}>
+          {records.map(({ definition, record, player }, index) => (
             <RecordCard
               key={definition.kind}
+              style={grid.item(index)}
               title={t(definition.title)}
               icon={definition.icon}
               value={definition.format(format, record.value)}
@@ -126,6 +131,7 @@ const Highlights = ({ views }: HighlightsProps) => {
           ))}
           {streak && streakPlayer ? (
             <RecordCard
+              style={grid.item(records.length)}
               title={t("records.streak")}
               icon="flame"
               value={t("count.wins", { count: streak.value })}
@@ -136,6 +142,7 @@ const Highlights = ({ views }: HighlightsProps) => {
           ) : null}
           {aces && acePlayer ? (
             <RecordCard
+              style={grid.item(count - 1)}
               title={t("records.aces")}
               icon="medal"
               value={t("count.aces", { count: aces.value })}

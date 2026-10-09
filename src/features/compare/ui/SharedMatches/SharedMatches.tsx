@@ -43,7 +43,7 @@ const SharedMatches = ({ shared, firstName, secondName }: SharedMatchesProps) =>
   const { t } = useI18n();
   return (
     <Section id="shared" title={t("compare.sharedTitle")} description={t("compare.sharedDescription")}>
-      <div className="panel scrollbar-thin relative overflow-x-auto">
+      <div className="panel scroll-edges scrollbar-thin relative overflow-x-auto">
         {shared.length === 0 ? (
           <EmptyState icon="users" title={t("compare.sharedEmpty")} />
         ) : (

@@ -9,6 +9,7 @@ import MetricValue from "@/features/squad/ui/MetricValue/MetricValue";
 import PlayerName from "@/features/squad/ui/PlayerName/PlayerName";
 import { useTimeZone } from "@/shared/hooks/useClient";
 import { useI18n } from "@/shared/i18n/useI18n";
+import { fitGrid } from "@/shared/lib/fitGrid";
 import { niceScale } from "@/shared/lib/scale";
 import DataTable from "@/shared/ui/DataTable/DataTable";
 import Delta from "@/shared/ui/Delta/Delta";
@@ -42,6 +43,7 @@ const Trends = ({ views }: TrendsProps) => {
     label: t(METRICS[key].label),
     title: t(METRICS[key].name),
   }));
+  const grid = fitGrid(panels.length, { md: [2], lg: [3, 4], xl: [4, 5] });
   const legend = [
     { id: "match", label: t("trends.perMatch"), tone: "context" as const },
     { id: "rolling", label: rolling, tone: "data" as const },
@@ -61,9 +63,9 @@ const Trends = ({ views }: TrendsProps) => {
       ) : (
         <>
           <ChartLegend series={legend} reference={t("trends.squadAverageValue", { value: show(average) })} />
-          <ul className="grid gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {panels.map(({ view, trend }) => (
-              <li key={view.player.id} className="panel flex flex-col gap-3 p-4">
+          <ul className="fit-grid gap-3 sm:gap-4" style={grid.list}>
+            {panels.map(({ view, trend }, index) => (
+              <li key={view.player.id} className="panel flex flex-col gap-3 p-4" style={grid.item(index)}>
                 <div className="flex items-center justify-between gap-3">
                   <PlayerName player={view.player} size={28} />
                   <span className="flex shrink-0 flex-col items-end">

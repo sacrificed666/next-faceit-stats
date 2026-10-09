@@ -51,7 +51,7 @@ const Bar = ({
 const CompareRows = ({ caption, firstName, secondName, rows }: CompareRowsProps) => {
   const { t } = useI18n();
   return (
-    <div className="panel scrollbar-thin relative overflow-x-auto p-2 sm:p-4">
+    <div className="panel scroll-edges scrollbar-thin relative overflow-x-auto p-2 sm:p-4">
       <table className="w-full min-w-[22rem] text-sm">
         <caption className="sr-only">{caption}</caption>
         <thead>

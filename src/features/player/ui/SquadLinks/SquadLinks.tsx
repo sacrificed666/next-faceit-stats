@@ -6,6 +6,7 @@ import type { SquadMate } from "@/features/player/model/profile";
 import { useRange, withRange } from "@/features/squad/model/useRange";
 import LevelBadge from "@/features/squad/ui/LevelBadge/LevelBadge";
 import { useI18n } from "@/shared/i18n/useI18n";
+import { fitGrid } from "@/shared/lib/fitGrid";
 import { homePath, playerPath } from "@/shared/lib/urls";
 import Avatar from "@/shared/ui/Avatar/Avatar";
 import Icon from "@/shared/ui/Icon/Icon";
@@ -21,14 +22,15 @@ const SquadLinks = ({ squad, current }: SquadLinksProps) => {
   const range = useRange();
   const others = squad.filter((mate) => mate.id !== current).toSorted((a, b) => b.elo - a.elo);
   if (others.length === 0) return null;
+  const grid = fitGrid(others.length, { sm: [2], lg: [3], xl: [4, 5] });
   return (
     <nav aria-labelledby="squad-links-title" className="flex flex-col gap-4">
       <h2 id="squad-links-title" className="text-xl font-bold tracking-tight text-ink sm:text-2xl">
         {t("squadLinks.title")}
       </h2>
-      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        {others.map((mate) => (
-          <li key={mate.id}>
+      <ul className="fit-grid gap-3" style={grid.list}>
+        {others.map((mate, index) => (
+          <li key={mate.id} style={grid.item(index)}>
             <Link
               href={withRange(playerPath(locale, mate.nickname), range)}
               className="panel flex items-center gap-3 p-3 transition-colors hover:border-line-strong"

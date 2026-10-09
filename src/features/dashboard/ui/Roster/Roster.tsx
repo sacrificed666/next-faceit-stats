@@ -11,6 +11,7 @@ import MetricValue from "@/features/squad/ui/MetricValue/MetricValue";
 import { FormGuide } from "@/features/squad/ui/ResultBadge/ResultBadge";
 import { rich } from "@/shared/i18n/rich";
 import { useI18n } from "@/shared/i18n/useI18n";
+import { fitGrid } from "@/shared/lib/fitGrid";
 import { playerPath } from "@/shared/lib/urls";
 import Avatar from "@/shared/ui/Avatar/Avatar";
 import CountryFlag from "@/shared/ui/CountryFlag/CountryFlag";
@@ -28,13 +29,14 @@ const Roster = ({ views }: RosterProps) => {
   const { locale, t, format } = useI18n();
   const range = useRange();
   const ordered = views.toSorted((a, b) => b.player.elo - a.player.elo);
+  const grid = fitGrid(ordered.length, { sm: [2], md: [2, 3], lg: [3, 4], xl: [4, 5] });
   return (
     <Section id="players" title={t("roster.title")} description={t("roster.description")}>
-      <ul className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-        {ordered.map(({ player, summary, matches }) => {
+      <ul className="fit-grid gap-3 sm:gap-4" style={grid.list}>
+        {ordered.map(({ player, summary, matches }, index) => {
           const latest = player.matches[0];
           return (
-            <li key={player.id} className="h-full">
+            <li key={player.id} className="h-full" style={grid.item(index)}>
               <article className="panel group relative isolate flex h-full flex-col overflow-hidden transition-[border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-line-strong reduced:hover:translate-y-0 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-accent">
                 <div className="flex flex-1 flex-col gap-3 p-4">
                   <div className="flex items-center gap-3">
@@ -55,15 +57,18 @@ const Roster = ({ views }: RosterProps) => {
                           : (player.region ?? "FACEIT")}
                       </p>
                     </div>
-                    <LevelBadge level={player.level} size={34} />
                   </div>
+                  {/* The level sits by its ELO, leaving the name room on narrow cards */}
                   <div className="flex flex-col gap-1.5">
-                    <p className="flex items-baseline gap-1.5">
-                      <span className="text-xl font-extrabold tracking-tight text-ink">
-                        {format.integer(player.elo)}
-                      </span>
-                      <span className="text-xs font-semibold text-ink-muted">{t("metric.elo")}</span>
-                    </p>
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="flex items-baseline gap-1.5">
+                        <span className="text-xl font-extrabold tracking-tight text-ink">
+                          {format.integer(player.elo)}
+                        </span>
+                        <span className="text-xs font-semibold text-ink-muted">{t("metric.elo")}</span>
+                      </p>
+                      <LevelBadge level={player.level} size={30} />
+                    </div>
                     <LevelProgress elo={player.elo} />
                   </div>
                   <dl className="grid grid-cols-4 gap-1 rounded-xl bg-inset px-1 py-1.5 text-center">

@@ -21,7 +21,9 @@ const Section = ({ id, title, description, actions, children, className = "" }: 
           </h2>
           {description ? <p className="max-w-prose text-sm text-ink-muted">{description}</p> : null}
         </div>
-        {actions ? <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2">{actions}</div> : null}
+        {actions ? (
+          <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2 max-sm:w-full">{actions}</div>
+        ) : null}
       </div>
       {children}
     </section>

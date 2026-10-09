@@ -56,7 +56,7 @@ const Leaderboard = ({ views }: LeaderboardProps) => {
         count: spec.count,
       })}
     >
-      <div className="panel scrollbar-thin relative overflow-x-auto">
+      <div className="panel scroll-edges scrollbar-thin relative overflow-x-auto">
         <table className="w-full min-w-[56rem] text-sm">
           <caption className="sr-only">
             {t("leaderboard.caption", {

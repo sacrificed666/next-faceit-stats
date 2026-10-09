@@ -42,9 +42,9 @@ describe("LineChart", () => {
     renderChart();
     const slider = screen.getByRole("slider");
     fireEvent.focus(slider);
-    expect(screen.getByText("Ancient · Win 13:11")).toBeInTheDocument();
+    expect(screen.getByText(/Ancient · Win 13:11/)).toBeInTheDocument();
     fireEvent.blur(slider);
-    expect(screen.queryByText("Ancient · Win 13:11")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Ancient · Win 13:11/)).not.toBeInTheDocument();
   });
 
   it("labels the y axis with the scale ticks", () => {
@@ -60,9 +60,21 @@ describe("LineChart", () => {
     if (!(plot instanceof HTMLElement)) throw new Error("The chart needs a plot area");
     plot.getBoundingClientRect = () => DOMRect.fromRect({ x: 0, y: 0, width: 300, height: 100 });
     fireEvent.pointerMove(plot, { clientX: 10 });
-    expect(screen.getByText("Mirage · Win 13:7")).toBeInTheDocument();
+    expect(screen.getByText(/Mirage · Win 13:7/)).toBeInTheDocument();
     fireEvent.pointerLeave(plot);
-    expect(screen.queryByText("Mirage · Win 13:7")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Mirage · Win 13:7/)).not.toBeInTheDocument();
+  });
+
+  it("keeps a touched reading until the next touch somewhere else", () => {
+    const { container } = renderChart();
+    const plot = container.querySelector(".touch-pan-y");
+    if (!(plot instanceof HTMLElement)) throw new Error("The chart needs a plot area");
+    plot.getBoundingClientRect = () => DOMRect.fromRect({ x: 0, y: 0, width: 300, height: 100 });
+    fireEvent.pointerDown(plot, { clientX: 10, pointerType: "touch" });
+    fireEvent.pointerLeave(plot, { pointerType: "touch" });
+    expect(screen.getByText(/Mirage · Win 13:7/)).toBeInTheDocument();
+    fireEvent.pointerDown(document.body, { pointerType: "touch" });
+    expect(screen.queryByText(/Mirage · Win 13:7/)).not.toBeInTheDocument();
   });
 
   it("marks a single match with a dot", () => {

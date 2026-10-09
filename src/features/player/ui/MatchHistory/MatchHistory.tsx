@@ -118,7 +118,7 @@ const MatchHistory = ({ view, squad, mates }: MatchHistoryProps) => {
         </>
       }
     >
-      <div className="panel scrollbar-thin relative overflow-x-auto">
+      <div className="panel scroll-edges scrollbar-thin relative overflow-x-auto">
         {rows.length === 0 ? (
           <EmptyState icon="list" title={t("history.empty")} />
         ) : (

@@ -4,7 +4,7 @@ import type { Player } from "@/features/squad/model/types";
 import type { I18n } from "@/shared/i18n/context";
 import { LOCALE_INFO, LOCALES, type Locale } from "@/shared/i18n/locales";
 import { SITE } from "@/shared/lib/site";
-import { faceitProfileUrl, homePath, playerPath, steamProfileUrl } from "@/shared/lib/urls";
+import { comparePath, faceitProfileUrl, homePath, playerPath, steamProfileUrl } from "@/shared/lib/urls";
 
 type Schema = Record<string, unknown>;
 
@@ -124,6 +124,37 @@ export const playerSchema = (player: Player, base: URL, updatedAt: number, i18n:
             item: new URL(homePath(i18n.locale), base).href,
           },
           { "@type": "ListItem", position: 2, name: player.nickname, item: url },
+        ],
+      },
+    ],
+  };
+};
+
+// Structured data of the compare page: the page and its breadcrumbs
+export const compareSchema = (base: URL, i18n: I18n): Schema => {
+  const url = new URL(comparePath(i18n.locale), base).href;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": url,
+        url,
+        name: i18n.t("compare.title"),
+        description: i18n.t("meta.compare"),
+        inLanguage: i18n.locale,
+        isPartOf: { "@id": new URL(`${homePath(i18n.locale)}#website`, base).href },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: i18n.t("nav.squad"),
+            item: new URL(homePath(i18n.locale), base).href,
+          },
+          { "@type": "ListItem", position: 2, name: i18n.t("nav.compare"), item: url },
         ],
       },
     ],

@@ -38,9 +38,11 @@ const Overview = ({ views, lineups }: OverviewProps) => {
       <h2 id="overview-title" className="sr-only">
         {t("overview.title")}
       </h2>
-      <dl className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">
+      {/* Average ELO leads on phones, tablets show three then two: no half rows */}
+      <dl className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-6 lg:grid-cols-5">
         <StatTile
           label={t("overview.averageElo")}
+          className="col-span-2 lg:col-span-1"
           icon={<Icon name="chart" size={14} />}
           value={
             <span className="inline-flex items-center gap-2">
@@ -56,6 +58,7 @@ const Overview = ({ views, lineups }: OverviewProps) => {
         />
         <StatTile
           label={t("overview.squadKd")}
+          className="md:col-span-2 lg:col-span-1"
           icon={<Icon name="crosshair" size={14} />}
           value={<MetricValue metric="kd" value={squadAverage(views, "kd")} />}
           detail={
@@ -66,6 +69,7 @@ const Overview = ({ views, lineups }: OverviewProps) => {
         />
         <StatTile
           label={t("overview.squadWinRate")}
+          className="md:col-span-2 lg:col-span-1"
           icon={<Icon name="trophy" size={14} />}
           value={<MetricValue metric="winRate" value={squadAverage(views, "winRate")} />}
           detail={
@@ -76,6 +80,7 @@ const Overview = ({ views, lineups }: OverviewProps) => {
         />
         <StatTile
           label={t("overview.together")}
+          className="md:col-span-3 lg:col-span-1"
           icon={<Icon name="users" size={14} />}
           value={format.integer(together.length)}
           detail={
@@ -90,7 +95,7 @@ const Overview = ({ views, lineups }: OverviewProps) => {
         <StatTile
           label={t("overview.streak")}
           icon={<Icon name="flame" size={14} />}
-          className="col-span-2 lg:col-span-1"
+          className="md:col-span-3 lg:col-span-1"
           value={hot?.streak ? t("count.wins", { count: hot.streak.length }) : "-"}
           detail={hot ? hot.player.nickname : t("overview.noStreak")}
         />

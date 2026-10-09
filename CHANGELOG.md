@@ -11,15 +11,15 @@ The first release.
 ### Added
 
 - 🧑‍🤝‍🧑 A squad overview with the average ELO, squad K/D and win rate, matches played together and the hottest streak.
-- 🃏 Compact player cards with the level, ELO progress to the next level, region ranking, rating, K/D, ADR, win rate, recent results and the last match.
+- 🃏 Compact player cards with the level, ELO progress to the next level, region ranking, rating, K/D, ADR, win rate, recent results and the last match, in grids that fit the number of players without empty cells.
 - ⭐ A Rating 1.0 and the share of rounds survived for every match, calculated from the FACEIT match statistics.
 - 🚦 Good values in green and weak ones in red, with the same thresholds on cards, tables, bars, charts and data tables.
 - 🖼️ The FACEIT picture of every map next to its name, in the feed, the map pool, the match history and the comparison.
-- 🕹️ One feed of recent matches for the whole squad, a sortable leaderboard, rankings against the squad average and per-player trend charts.
+- 🕹️ One feed of recent matches for the whole squad, a sortable leaderboard, rankings against the squad average and per-player trend charts with a readout that never covers the lines.
 - 🗺️ A map pool heatmap of win rate, K/D or picks, duos and lineups detected from shared matches, and records such as the best rating, the most kills or the longest win streak.
 - 👤 Player pages with current form, a trend chart, maps, a filterable match history, teammates, lifetime and playstyle statistics.
 - ⚔️ A head-to-head comparison of two players, including every match they played together or against each other.
-- 🎚️ One range for every page: the last 7, 30 or 90 days, or the last 20, 50 or 100 matches, kept in the address.
+- 🎚️ One range for every page: the last 7, 30 or 90 days, or the last 20, 50 or 100 matches, kept in the address, in a floating toolbar with links to every section.
 - ⚙️ A settings panel with the theme (automatic, light or dark, without a flash), full or reduced effects (reduced by default outside capable Apple devices) and the language.
 - 🌍 Ten languages under their own addresses: English, Ukrainian, Czech, German, Spanish, French, Italian, Dutch, Polish and Portuguese, with correct plurals, numbers and dates.
 - ♿ WCAG AA support: landmarks, sortable table headers, native radio groups and meters, and charts with data tables.

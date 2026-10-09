@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type PointerEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 
 import { position, type Scale } from "@/shared/lib/scale";
 
@@ -102,12 +102,25 @@ export const ChartLegend = ({
   </ul>
 );
 
-// SVG line chart with a crosshair, a tooltip and a keyboard slider
+// SVG line chart with a crosshair, a readout above the plot and a keyboard slider
 const LineChart = ({ label, series, points, scale, format, reference = null, height = 220 }: LineChartProps) => {
   const [active, setActive] = useState<number | null>(null);
+  const plotRef = useRef<HTMLDivElement>(null);
   const count = points.length;
   const last = Math.max(count - 1, 0);
   const { domain, ticks } = scale;
+
+  // A reading picked by touch stays until the next touch somewhere else
+  useEffect(() => {
+    if (active === null) return;
+    // Clears the reading when a touch lands outside the plot
+    const dismiss = (event: globalThis.PointerEvent): void => {
+      const inside = event.target instanceof Node && plotRef.current?.contains(event.target);
+      if (event.pointerType === "touch" && !inside) setActive(null);
+    };
+    document.addEventListener("pointerdown", dismiss);
+    return () => document.removeEventListener("pointerdown", dismiss);
+  }, [active]);
 
   // Moves the crosshair to the match nearest to the pointer
   const onPointer = (event: PointerEvent<HTMLDivElement>): void => {
@@ -172,9 +185,12 @@ const LineChart = ({ label, series, points, scale, format, reference = null, hei
             className="peer sr-only"
           />
           <div
+            ref={plotRef}
             onPointerMove={onPointer}
             onPointerDown={onPointer}
-            onPointerLeave={() => setActive(null)}
+            onPointerLeave={(event) => {
+              if (event.pointerType !== "touch") setActive(null);
+            }}
             className="absolute inset-0 touch-pan-y rounded-sm peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-accent"
           >
             <svg
@@ -253,30 +269,27 @@ const LineChart = ({ label, series, points, scale, format, reference = null, hei
                     style={{ left: `${left}%`, top: `${(1 - position(value, domain)) * 100}%` }}
                   />
                 ))}
+                {/* The readout floats above the plot, so it never hides the lines it describes */}
                 <div
                   aria-hidden="true"
-                  className={`pointer-events-none absolute top-0 z-10 w-max max-w-56 rounded-xl border border-line bg-raised px-3 py-2 shadow-card ${tooltipAlign}`}
+                  className={`pointer-events-none absolute bottom-full z-10 mb-1.5 w-max max-w-64 rounded-lg border border-line bg-raised px-2.5 py-1.5 shadow-card ${tooltipAlign}`}
                   style={{ left: `${left}%` }}
                 >
-                  <p className="text-xs font-semibold text-ink">{point.label}</p>
-                  {point.detail ? <p className="text-[0.6875rem] text-ink-muted">{point.detail}</p> : null}
-                  <ul className="mt-1.5 flex flex-col gap-1">
+                  <p className="truncate text-[0.6875rem] font-semibold text-ink">
+                    {point.label}
+                    {point.detail ? <span className="font-medium text-ink-muted"> · {point.detail}</span> : null}
+                  </p>
+                  <ul className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5">
                     {readings.map(({ entry, value }) => (
-                      <li key={entry.id} className="flex items-center justify-between gap-4">
-                        <span className="flex items-center gap-1.5 text-[0.6875rem] text-ink-secondary">
-                          <LineKey tone={entry.tone} />
-                          {entry.label}
-                        </span>
-                        <span className="text-sm font-bold tabular-nums text-ink">{format(value)}</span>
+                      <li key={entry.id} className="flex items-center gap-1.5 text-sm font-bold tabular-nums text-ink">
+                        <LineKey tone={entry.tone} />
+                        {format(value)}
                       </li>
                     ))}
                     {reference ? (
-                      <li className="flex items-center justify-between gap-4">
-                        <span className="flex items-center gap-1.5 text-[0.6875rem] text-ink-secondary">
-                          <LineKey tone="reference" />
-                          {reference.label}
-                        </span>
-                        <span className="text-sm font-bold tabular-nums text-ink">{format(reference.value)}</span>
+                      <li className="flex items-center gap-1.5 text-xs font-semibold tabular-nums text-ink-secondary">
+                        <LineKey tone="reference" />
+                        {format(reference.value)}
                       </li>
                     ) : null}
                   </ul>

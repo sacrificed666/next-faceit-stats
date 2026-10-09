@@ -32,9 +32,12 @@ const BarList = ({ items, max, reference, ordered = true, className = "" }: BarL
             <div className="flex min-w-0 items-center gap-2">{item.label}</div>
             <div className="flex min-w-0 items-center gap-2.5">
               <div className="relative h-6 min-w-0 flex-1">
+                {/* The bar grows in, then glides to its new length when the metric changes */}
                 <div
-                  className={`absolute inset-y-0.5 left-0 rounded-r-[4px] ${item.emphasis === false ? "mark-muted bg-data-muted" : "mark bg-data"}`}
-                  style={{ width: `${Math.max((item.value / limit) * 100, item.value > 0 ? 1.5 : 0)}%` }}
+                  className={`absolute inset-y-0.5 left-0 w-(--bar) rounded-r-[4px] transition-[width] duration-500 ease-out starting:w-0 ${item.emphasis === false ? "mark-muted bg-data-muted" : "mark bg-data"}`}
+                  style={{
+                    "--bar": `${Math.max((item.value / limit) * 100, item.value > 0 ? 1.5 : 0)}%`,
+                  }}
                 />
                 {reference ? (
                   <div

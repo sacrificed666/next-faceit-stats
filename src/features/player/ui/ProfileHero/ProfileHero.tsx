@@ -24,7 +24,7 @@ interface ProfileHeroProps {
 }
 
 const BUTTON =
-  "inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface/80 px-3.5 py-2 text-sm font-semibold text-ink backdrop-blur reduced:bg-surface reduced:backdrop-blur-none transition-colors hover:border-accent hover:text-accent-text";
+  "inline-flex items-center gap-1.5 rounded-full border border-line-strong bg-surface/80 px-3 py-1.5 text-[0.8125rem] font-semibold sm:gap-2 sm:px-3.5 sm:py-2 sm:text-sm text-ink backdrop-blur reduced:bg-surface reduced:backdrop-blur-none transition-colors hover:border-accent hover:text-accent-text";
 
 // Avatar, name, links and the ELO progress of a player
 const ProfileHero = ({ player }: ProfileHeroProps) => {
@@ -39,42 +39,56 @@ const ProfileHero = ({ player }: ProfileHeroProps) => {
         className="absolute inset-0 -z-10"
         style={{ backgroundImage: "radial-gradient(48rem 18rem at 12% -6rem, var(--accent-soft), transparent 70%)" }}
       />
-      <div className="flex flex-col gap-6 p-5 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center">
-          <Avatar src={player.avatar} name={player.nickname} size={112} eager className="ring-4 ring-accent-soft" />
-          <div className="flex min-w-0 flex-col gap-2">
-            <p className="text-xs font-bold tracking-[0.18em] text-accent-text uppercase">
-              {player.region ? t("player.kickerRegion", { region: player.region }) : t("player.kicker")}
-            </p>
-            <h1 className="truncate text-4xl font-extrabold tracking-tight text-ink sm:text-5xl">{player.nickname}</h1>
-            <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-ink-secondary">
-              {player.country ? (
-                <span className="inline-flex items-center gap-1.5">
-                  <CountryFlag code={player.country} size={14} />
-                  {format.country(player.country)}
-                </span>
-              ) : null}
-              {player.regionRank && player.region ? (
-                <span className="inline-flex items-center gap-1.5">
-                  <Icon name="trophy" size={15} className="text-ink-muted" />
-                  {t("roster.regionRank", { rank: format.integer(player.regionRank), region: player.region })}
-                </span>
-              ) : null}
-            </p>
-            <div className="mt-1 flex flex-wrap gap-2">
-              <ExternalLink href={faceitProfileUrl(player.nickname)} className={BUTTON}>
-                {t("player.faceit")}
-              </ExternalLink>
-              {player.steamId ? (
-                <ExternalLink href={steamProfileUrl(player.steamId)} className={BUTTON}>
-                  {t("player.steam")}
-                </ExternalLink>
-              ) : null}
-              <Link href={`${comparePath(locale)}?${compare.toString()}`} className={BUTTON}>
-                <Icon name="users" size={15} />
-                {t("player.compare")}
-              </Link>
+      <div className="flex flex-col gap-5 p-4 sm:gap-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex min-w-0 flex-col gap-4">
+          {/* Avatar and name share a row even on phones; the links follow under the name */}
+          <div className="flex min-w-0 items-center gap-4 sm:gap-6">
+            <Avatar
+              src={player.avatar}
+              name={player.nickname}
+              size={112}
+              eager
+              className="ring-4 ring-accent-soft max-sm:size-18!"
+            />
+            <div className="flex min-w-0 flex-col gap-1.5 sm:gap-2">
+              <p className="text-xs font-bold tracking-[0.18em] text-accent-text uppercase">
+                {player.region ? t("player.kickerRegion", { region: player.region }) : t("player.kicker")}
+              </p>
+              <h1 className="truncate text-3xl font-extrabold tracking-tight text-ink sm:text-5xl">
+                {player.nickname}
+              </h1>
+              <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-ink-secondary">
+                {player.country ? (
+                  <span className="inline-flex items-center gap-1.5">
+                    <CountryFlag code={player.country} size={14} />
+                    {format.country(player.country)}
+                  </span>
+                ) : null}
+                {player.regionRank && player.region ? (
+                  <span className="inline-flex items-center gap-1.5">
+                    <Icon name="trophy" size={15} className="text-ink-muted" />
+                    {t("roster.regionRank", {
+                      rank: format.integer(player.regionRank),
+                      region: player.region,
+                    })}
+                  </span>
+                ) : null}
+              </p>
             </div>
+          </div>
+          <div className="flex flex-wrap gap-1.5 sm:gap-2 sm:pl-34">
+            <ExternalLink href={faceitProfileUrl(player.nickname)} className={BUTTON}>
+              {t("player.faceit")}
+            </ExternalLink>
+            {player.steamId ? (
+              <ExternalLink href={steamProfileUrl(player.steamId)} className={BUTTON}>
+                {t("player.steam")}
+              </ExternalLink>
+            ) : null}
+            <Link href={`${comparePath(locale)}?${compare.toString()}`} className={BUTTON}>
+              <Icon name="users" size={15} />
+              {t("player.compare")}
+            </Link>
           </div>
         </div>
         <div className="flex w-full flex-col gap-3 rounded-2xl border border-line bg-surface/85 p-4 backdrop-blur reduced:bg-surface reduced:backdrop-blur-none lg:w-80">
